@@ -1,0 +1,13 @@
+Ideas for buttons:
+-Side-toolbar:
+	-Zoom in
+	-Zoom out
+	-Move tool
+	-Clone tool
+	-Edit component
+	-Link tool (draws a wire between parts)
+-Search bar (For look for certain values of components :
+	-Contain a text entry
+	-search button
+-Sync button (this makes changes across the two canvases and allows you
+to switch between which ever one you're working on)
