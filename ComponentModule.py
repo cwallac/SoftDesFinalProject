@@ -12,15 +12,15 @@ class Component(object):
 		self.x1 = x1
 
 	def __str__ (self):
-    	return '%s of %s' % (self.name,self.value)
+		return '%s of %s' % (self.name,self.value)
 
 	def placement(self,orientation = 'v'):
-    	if orientation == 'h':
-    		self.x2 = x1+pin_gap
-    		self.y2 = y1
-    	else:
-    		self.y2 = y1+pin_gap
-    		self.x2 = x1
+		if orientation == 'h':
+			self.x2 = x1+pin_gap
+			self.y2 = y1
+		else:
+			self.y2 = y1+pin_gap
+			self.x2 = x1
 
 
 class resistor(Component):
