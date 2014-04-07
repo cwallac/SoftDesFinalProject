@@ -11,7 +11,30 @@ class gui(tk.Tk):
     def __init__(self,parent):
         tk.Tk.__init__(self,parent)
         self.parent = parent
+        self.about_messageprog = "AN INTERACTIVE CIRCUIT DESIGN STUDIO SUITE FOR CREATION OF BREADBOARD AND SCHEMATIC PROTOTYPES."
+        self.about_messagecreat = "CREATED BY DENIZ CELIK, SUBHASH GUBBA, CHRIS WALLACE, AND RADMER VAN DER HEYDE. ALL STUDENTS ARE FRESHMAN AT THE FRANKLIN W. OLIN COLLEGE OF ENGINEERING IN NEEDHAM, MA."        
         self.initialize()
+        
+    def aboutprog(self):
+        popup = tk.Toplevel()
+        popup.title("About this program")
+        
+        msg = tk.Message(popup,text=self.about_messagecreat)
+        msg.pack()
+        
+        button = tk.Button(popup,text="Close", command = popup.destroy)
+        button.pack()
+        
+    def aboutcreat(self):
+        popup = tk.Toplevel()
+        popup.title("About the creators")
+        
+        msg = tk.Message(popup,text=self.about_messageprog)
+        msg.pack()
+        
+        button = tk.Button(popup,text="Close", command = popup.destroy)
+        button.pack()
+
 
     def initialize(self):
         #initialize grid
@@ -33,16 +56,50 @@ class gui(tk.Tk):
         top = self.winfo_toplevel()
         self.menuBar = tk.Menu(top)
         top['menu'] = self.menuBar
-        self.subMenu = tk.Menu(self.menuBar)
-        self.menuBar.add_cascade(label='Help', menu=self.subMenu)
-        self.subMenu.add_command(label='About', command=self.quit)        
+                
+        #creating submenus for each item        
+        self.filesubMenu = tk.Menu(self.menuBar)
+        self.editsubMenu = tk.Menu(self.menuBar)
+        self.viewsubMenu = tk.Menu(self.menuBar)
+        self.toolssubMenu = tk.Menu(self.menuBar)
+        self.aboutsubMenu = tk.Menu(self.menuBar)
         
-        #menu button creation testing
-        self.mb=tk.Menubutton(self.parent,text='File',bg='grey',activebackground='white',height=2,relief=tk.RAISED)
-        self.mb.grid(column=0,row=0,columnspan=2,sticky='NEWS')
-        self.mb.menu = tk.Menu(self.mb, tearoff=0)
-        self.mb['menu'] = self.mb.menu
-        self.mb.menu.add_command(label='quit',command=self.quit)
+        #creating menubar items
+        self.menuBar.add_cascade(label='File', menu=self.filesubMenu)
+        self.menuBar.add_cascade(label='Edit', menu=self.editsubMenu)
+        self.menuBar.add_cascade(label='View', menu=self.viewsubMenu)
+        self.menuBar.add_cascade(label='Tools', menu=self.toolssubMenu)
+        self.menuBar.add_cascade(label='About', menu=self.aboutsubMenu)
+        
+        #creating commands for each submenu option
+        
+        #file submenu commands
+        self.filesubMenu.add_command(label='New', command=self.quit)
+        self.filesubMenu.add_command(label='Open', command=self.quit)
+        self.filesubMenu.add_command(label='Save', command=self.quit)
+        self.filesubMenu.add_command(label='Quit', command=self.quit)
+        
+        #edit submenu commands
+        self.editsubMenu.add_command(label='Cut', command=self.quit)
+        self.editsubMenu.add_command(label='Copy', command=self.quit)
+        self.editsubMenu.add_command(label='Paste', command=self.quit)
+        self.editsubMenu.add_command(label='Insert', command=self.quit)
+        
+        #view submenu commands
+        self.viewsubMenu.add_command(label='Resistors', command=self.quit)
+        self.viewsubMenu.add_command(label='Capacitors', command=self.quit)
+        self.viewsubMenu.add_command(label='Dips', command=self.quit)
+        self.viewsubMenu.add_command(label='Wires', command=self.quit)
+        
+        #tools submenu commands
+        self.toolssubMenu.add_command(label='Move', command=self.quit)
+        self.toolssubMenu.add_command(label='Rotate', command=self.quit)
+        self.toolssubMenu.add_command(label='Erase', command=self.quit)
+        self.toolssubMenu.add_command(label='Text', command=self.quit)
+        
+        #about submenu commands
+        self.aboutsubMenu.add_command(label='About the Program', command=self.aboutprog)
+        self.aboutsubMenu.add_command(label='About the Creators',command=self.aboutcreat)
         
         #column weight configuration
         self.grid_columnconfigure(0,weight=1)
@@ -58,19 +115,4 @@ if __name__ == "__main__":
     app = gui(None)
     app.title('C.I.R.C.U.I.T')
     app.mainloop()
-    
-    
-    
-    
-    self.mb.grid()
-
-    self.mb.menu = tk.Menu(self.mb, tearoff=0)
-    self.mb['menu'] = self.mb.menu
-
-    self.mayoVar  = tk.IntVar()
-    self.ketchVar = tk.IntVar()
-    self.mb.menu.add_checkbutton(label='mayo',
-        variable=self.mayoVar)
-    self.mb.menu.add_checkbutton(label='ketchup',
-        variable=self.ketchVar)
     
