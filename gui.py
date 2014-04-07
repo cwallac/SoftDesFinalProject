@@ -18,16 +18,17 @@ class gui(tk.Tk):
         
         self.bbcanvas=tk.Canvas(self.parent,bg='black')
         self.scanvas=tk.Canvas(self.parent,bg='red')
-
-        self.bbcanvas.grid(column=0,row=0,sticky='NS')  
-        self.scanvas.grid(column=1,row=0,sticky='NS')              
-            
+        self.menu=tk.Menubutton(self.parent,bg='blue')
+        
+        self.bbcanvas.grid(column=0,row=1,sticky='NEWS')  
+        self.scanvas.grid(column=1,row=1,sticky='NEWS')              
+        self.menu.grid(column=0,row=0,columnspan=2,sticky='NEWS')        
+        
         self.grid_columnconfigure(0,weight=1)
         self.resizable(True,True)
         self.update()
         self.geometry(self.geometry())     
         
-
 if __name__ == "__main__":
     app = gui(None)
     app.title('C.I.R.C.U.I.T')
