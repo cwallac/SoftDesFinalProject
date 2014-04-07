@@ -6,6 +6,7 @@ Created on Mon Apr  7 03:21:32 2014
 """
 
 import Tkinter as tk
+import PIL
 
 class gui(tk.Tk):
     def __init__(self,parent):
@@ -19,7 +20,7 @@ class gui(tk.Tk):
         popup = tk.Toplevel()
         popup.title("About this program")
         
-        msg = tk.Message(popup,text=self.about_messagecreat)
+        msg = tk.Message(popup,text=self.about_messageprog)
         msg.pack()
         
         button = tk.Button(popup,text="Close", command = popup.destroy)
@@ -29,7 +30,7 @@ class gui(tk.Tk):
         popup = tk.Toplevel()
         popup.title("About the creators")
         
-        msg = tk.Message(popup,text=self.about_messageprog)
+        msg = tk.Message(popup,text=self.about_messagecreat)
         msg.pack()
         
         button = tk.Button(popup,text="Close", command = popup.destroy)
@@ -100,6 +101,11 @@ class gui(tk.Tk):
         #about submenu commands
         self.aboutsubMenu.add_command(label='About the Program', command=self.aboutprog)
         self.aboutsubMenu.add_command(label='About the Creators',command=self.aboutcreat)
+        
+        #creating breadboard
+        self.bbimage = PIL.Image.open("bb.png")
+        self.bbphoto = PIL.ImageTk.PhotoImage(self.bbimage)
+        self.bbcanvas.create_image(0,0,image=self.bbphoto)     
         
         #column weight configuration
         self.grid_columnconfigure(0,weight=1)
