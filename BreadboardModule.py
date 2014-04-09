@@ -40,3 +40,25 @@ class rows(object):
 
 	def __str__ (self):
 		return ' Row %s on the %s side with value of  %s' % (self.ypos,self.side,self.value)
+
+
+def createBreadboard():
+
+	leftRail1 =  rails(0)
+	leftRail2 = rails(1)
+	rightRail1 = rails(17)
+	rightRail2 = rails(18)
+
+	leftBuildZone = []
+
+	for i in range(leftRail1.length):
+		leftBuildZone.append(rows((i),4,'left', 'leftrow' + str(i)))
+
+	rightBuildZone = []
+
+	for i in range(leftRail1.length):
+		rightBuildZone.append(rows((i),11,'right', 'rightrow' + str(i)))
+
+	breadboard = [leftRail1,leftRail2,leftBuildZone,rightBuildZone,rightRail1,rightRail2]
+
+	return breadboard

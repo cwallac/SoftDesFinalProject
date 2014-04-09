@@ -11,6 +11,7 @@ class Component(object):
 		self.pin_gap = pin_gap
 		self.value = value
 		self.x1 = x1
+		self.y1 = y1
 
 	def __str__ (self):
 		return '%s of %s' % (self.name,self.value)
@@ -53,9 +54,10 @@ class trace(object):
 		self.y2 = y2
 		self.value1 = value1
 		self.value2 = value2
+if __name__ == '__main__':
 
-RES = resistor(45,1,1,{1:'GRD',2:'VSS'},5)
-print RES.pin_gap
-DIP = dip(1,1,{1:'VREF'},'POOP')
-print DIP.name
-print DIP.number_of_pins
+	RES = resistor(45,1,1,{1:'GRD',2:'VSS'},5)
+	print RES.pin_gap
+	DIP = dip(1,1,{1:'VREF'},'POOP')
+	print DIP.name
+	print DIP.number_of_pins
