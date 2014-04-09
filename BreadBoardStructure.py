@@ -8,7 +8,7 @@
 class Component(object):
 	"""A component to be placed on the breadboard or in the circuit schematic"""
 
-	def __init__ (self,value,x1,y1,pinValues,number_of_pins,pin_gap,name ):
+	def __init__ (self,value,x1,y1,pinValues,number_of_pins,pin_gap,name):
 		self.name = name
 		self.number_of_pins = number_of_pins
 		
