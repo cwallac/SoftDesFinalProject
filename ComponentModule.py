@@ -1,5 +1,4 @@
-#Model of Program
-# v.1 created 4/2/2014 8:52 pm. 
+#Component Related Classes
 
 class Component(object):
 	"""A component to be placed on the breadboard or in the circuit schematic"""
