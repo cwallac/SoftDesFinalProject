@@ -6,7 +6,7 @@ Created on Mon Apr  7 03:21:32 2014
 """
 
 import Tkinter as tk
-import PIL
+from PIL import Image, ImageTk
 
 class gui(tk.Tk):
     def __init__(self,parent):
@@ -47,11 +47,11 @@ class gui(tk.Tk):
         
         #create and place breadboard canvas in grid
         self.bbcanvas=tk.Canvas(self.parent,bg='black')
-        self.bbcanvas.grid(column=0,row=1,sticky='NEWS')  
+        self.bbcanvas.grid(column=1,row=1,sticky='NEWS')  
         
         #create and place schematic canvas in grid
         self.scanvas=tk.Canvas(self.parent,bg='red')
-        self.scanvas.grid(column=1,row=1,sticky='NEWS')     
+        self.scanvas.grid(column=0,row=1,sticky='NEWS')     
         
         #top level gui creation
         top = self.winfo_toplevel()
@@ -103,9 +103,10 @@ class gui(tk.Tk):
         self.aboutsubMenu.add_command(label='About the Creators',command=self.aboutcreat)
         
         #creating breadboard
-        self.bbimage = PIL.Image.open("bb.png")
-        self.bbphoto = PIL.ImageTk.PhotoImage(self.bbimage)
-        self.bbcanvas.create_image(0,0,image=self.bbphoto)     
+        self.bbimage = Image.open("bb.bmp")
+        self.bbimage = self.bbimage.resize((250,800),Image.ANTIALIAS)
+        self.bbphoto = ImageTk.PhotoImage(self.bbimage)
+        self.bbcanvas.create_image(325,407,image=self.bbphoto)
         
         #column weight configuration
         self.grid_columnconfigure(0,weight=1)
