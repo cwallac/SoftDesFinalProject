@@ -6,10 +6,11 @@ Created on Mon Apr  7 03:21:32 2014
 """
 
 import Tkinter as tk
+import ttk
 from PIL import Image, ImageTk
 
 class gui(tk.Tk):
-    def __init__(self,parent):
+    def __init__(self,parent): 
         tk.Tk.__init__(self,parent)
         self.parent = parent
         self.about_messageprog = "AN INTERACTIVE CIRCUIT DESIGN STUDIO SUITE FOR CREATION OF BREADBOARD AND SCHEMATIC PROTOTYPES."
@@ -23,7 +24,7 @@ class gui(tk.Tk):
         msg = tk.Message(popup,text=self.about_messageprog)
         msg.pack()
         
-        button = tk.Button(popup,text="Close", command = popup.destroy)
+        button = ttk.Button(popup,text="Close", command = popup.destroy)
         button.pack()
         
     def aboutcreat(self):
@@ -36,28 +37,7 @@ class gui(tk.Tk):
         button = tk.Button(popup,text="Close", command = popup.destroy)
         button.pack()
 
-
-    def initialize(self):
-        #initialize grid
-        self.grid()
-        
-        #set minimum size and prevent resizing
-        self.minsize(1280,800)
-        self.resizable(False,False)
-        
-        #create and place breadboard canvas in grid
-        self.bbcanvas=tk.Canvas(self.parent,bg='black')
-        self.bbcanvas.grid(column=1,row=1,sticky='NEWS')  
-        
-        #create and place schematic canvas in grid
-        self.scanvas=tk.Canvas(self.parent,bg='red')
-        self.scanvas.grid(column=0,row=1,sticky='NEWS')     
-        
-        #top level gui creation
-        top = self.winfo_toplevel()
-        self.menuBar = tk.Menu(top)
-        top['menu'] = self.menuBar
-                
+    def makemenu(self):
         #creating submenus for each item        
         self.filesubMenu = tk.Menu(self.menuBar)
         self.editsubMenu = tk.Menu(self.menuBar)
@@ -101,15 +81,38 @@ class gui(tk.Tk):
         #about submenu commands
         self.aboutsubMenu.add_command(label='About the Program', command=self.aboutprog)
         self.aboutsubMenu.add_command(label='About the Creators',command=self.aboutcreat)
+
+    def initialize(self):
+        #initialize grid
+        self.grid()
+        
+        #set minimum size and prevent resizing
+        self.minsize(1280,800)
+        self.resizable(False,False)
+        
+        #create and place breadboard canvas in grid
+        self.bbcanvas=tk.Canvas(self.parent,bg='black')
+        self.bbcanvas.grid(column=1,row=1,sticky='NEWS')  
+        
+        #create and place schematic canvas in grid
+        self.scanvas=tk.Canvas(self.parent,bg='red')
+        self.scanvas.grid(column=0,row=1,sticky='NEWS')     
+        
+        #top level gui creation
+        top = self.winfo_toplevel()
+        self.menuBar = tk.Menu(top)
+        top['menu'] = self.menuBar
+        
+        self.makemenu()    
         
         #creating breadboard
         self.bbimage = Image.open("bb.bmp")
         self.bbimage = self.bbimage.resize((250,800),Image.ANTIALIAS)
         self.bbphoto = ImageTk.PhotoImage(self.bbimage)
-        self.bbcanvas.create_image(325,407,image=self.bbphoto)
+        self.bbcanvas.create_image(200,407,image=self.bbphoto)
         
         #column weight configuration
-        self.grid_columnconfigure(0,weight=1)
+        self.grid_columnconfigure(0,weight=9)
         self.grid_columnconfigure(1,weight=1)
         self.grid_rowconfigure(0,weight=0)
         self.grid_rowconfigure(1,weight=1)
@@ -117,6 +120,8 @@ class gui(tk.Tk):
         #update and geometry
         self.update()
         self.geometry(self.geometry())     
+        
+    
         
 if __name__ == "__main__":
     app = gui(None)
