@@ -3,13 +3,19 @@ from ComponentModule import *
 from BreadboardModule import *
 def placingCD(list_of_components):
 	list_of_components[0].x1 = 0
-	list_of_components[1].y1 = 0
+	list_of_components[0].y1 = 0
 	for i in range(len(list_of_components)):
+		if list_of_components[i].connections == '':
+			if list_of_components[i].orientation == 'v':
+				list_of_components[i].x2 = list_of_components[i].x1
+				list_of_components[i].y2 = list_of_components[i].y1+list_of_components[i].pin_gap
+			else:
+				list_of_components[i].x2 = list_of_components[i].x1+list_of_components[i].pin_gap
+				list_of_components[i].y2 = list_of_components[i].y1
 		for j in list_of_components[i].connections: 
-			if list_of_components[i].connections[j] == '':
-				if list_of_components[i].orientation == 'v':
-					list_of_components[i].x2 = list_of_components[i].x1
-					list_of_components[i].y2 = list_of_components[i].y1+
+			for k in list_of_components[i].connections[j]:
+				
+
 
 
 if __name__ == '__main__':

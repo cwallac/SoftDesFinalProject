@@ -10,19 +10,13 @@ class Component(object):
 		self.connections = connections
 		self.pin_gap = pin_gap
 		self.value = value
-		self.x1 = x1
-		self.y1 = y1
+		self.x = {1:x1}
+		self.y = {1:y1}
+
+		
 
 	def __str__ (self):
 		return '%s of %s' % (self.name,self.value)
-
-	def placement(self,orientation = 'v'):
-		if orientation == 'h':
-			self.x2 = self.x1+self.pin_gap
-			self.y2 = self.y1
-		else:
-			self.y2 = self.y1+self.pin_gap
-			self.x2 = self.x1
 
 
 class resistor(Component):
@@ -40,11 +34,6 @@ class dip(Component):
 	def __init__(self,x1,y1,connections,name,number_of_pins = 8, pin_gap = 3):
 		super(dip,self).__init__('none',x1,y1,connections,number_of_pins,pin_gap,name)
 		self.pinlist = {}
-
-	def dip_placement(self):
-		for i in range(1,self.number_of_pins):
-			self.pinlist[i] = (x1,y1+(i-1))
-			self.pinlist[i+1] = (x1+pin_gap,y1+(i-1))
 
 class trace(object): 
 	def __init__(self,x1,y1,x2,y2,value1,value2):
