@@ -18,11 +18,11 @@ class Component(object):
 
 	def placement(self,orientation = 'v'):
 		if orientation == 'h':
-			self.x2 = x1+pin_gap
-			self.y2 = y1
+			self.x2 = self.x1+self.pin_gap
+			self.y2 = self.y1
 		else:
-			self.y2 = y1+pin_gap
-			self.x2 = x1
+			self.y2 = self.y1+self.pin_gap
+			self.x2 = self.x1
 
 
 class resistor(Component):
