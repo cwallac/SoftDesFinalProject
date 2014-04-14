@@ -2,7 +2,7 @@
 from ComponentModule import *
 from BreadboardModule import *
 def placingCD(list_of_components):
-	list_of_components[1].x1 = 0
+	list_of_components[0].x1 = 0
 	list_of_components[1].y1 = 0
 	for i in range(len(list_of_components)):
 		for j in list_of_components[i].connections: 
