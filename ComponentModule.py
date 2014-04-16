@@ -10,8 +10,8 @@ class Component(object):
 		self.connections = connections
 		self.pin_gap = pin_gap
 		self.value = value
-		self.x = {1:x1}
-		self.y = {1:y1}
+		self.x = {0:x1}
+		self.y = {0:y1}
 
 		
 
