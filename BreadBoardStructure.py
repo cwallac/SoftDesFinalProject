@@ -6,20 +6,21 @@ from BreadboardModule import *
 def placeFirstComponent(component,breadboard):
 
 	
-	for i in range(component.number_of_pins):
-		if i % 2 == 1:
+	for i in range(component.number_of_pins+1):
+		if i == 0:
+			pass
+		elif i % 2 == 1:
 			component.x[i] = 8
 		else:
 			component.x[i] = component.x[1] + component.pin_gap
 
-		component.y[1] = 0
 		
-		component.y[2] = 0
 		
 
 	for i in range(component.number_of_pins/2):
-		component.y[i*2] = i
+
 		component.y[i*2+1] = i
+		component.y[i*2+2] = i
 		breadboard[2][i].Occupied[4] = True
 		for j in range(5):
 			if -3+component.pin_gap >= j:
@@ -65,7 +66,7 @@ if __name__ == '__main__':
 	
 	
 print DIP.y
-print Resistor1.y
+print DIP.x
 
 
 
