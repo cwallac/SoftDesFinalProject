@@ -205,11 +205,11 @@ if __name__ == '__main__':
 
 	board = createBreadboard()
 
-	Resistor1 = resistor(45000,4,5,{1:[],2:[]})
-	DIP = dip(4,5,{1:[Resistor1]},'dip',number_of_pins = 8, pin_gap = 3)
+	Resistor1 = resistor(45000,4,5,'h',{1:[],2:[]})
+	DIP = dip(4,5,'h',{1:[Resistor1]},'dip',number_of_pins = 8, pin_gap = 3)
 	Resistor1.connections[1] = [DIP]
 	component = Resistor1
-	Resistor2 = resistor(5,4,4,{1:[Resistor1],2:[]})
+	Resistor2 = resistor(5,4,4,'h',{1:[Resistor1],2:[]})
 	Resistor1.connections[2].append(Resistor2)
 
 
