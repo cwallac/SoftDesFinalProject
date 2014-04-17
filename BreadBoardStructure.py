@@ -3,7 +3,11 @@ from BreadboardModule import *
 
 #BREADBOARD[2] = left, [3] = right
 
-'''I need to add all conditions for everything only left has been done for them, some not even all possible scenarios '''
+"""I need to add all conditions for everything only left has been done for them, some not even all possible scenarios 
+IE:
+-THere isn't teh connection value pin_gap away from a component in placeSecodnpin
+-whereDaConnectionAt returns False
+-FUTURE: BLOCKED, FILLED AREAS, BETTER DIP PLACEMENT, POWER RAILS"""
 
 def placeFirstComponent(component,breadboard):
 
@@ -141,6 +145,7 @@ def placeSecondPin(component,breadboard):
 							
 							return "PLACED"
 
+
 			
 
 			
@@ -219,13 +224,13 @@ if __name__ == '__main__':
 	
 
 
-
-print DIP.y
-print Resistor1.y
-print Resistor1.x
-print Resistor2.y
-print Resistor2.x
-print board[2][3].Occupied
+print 'Dips x pos is' + str(DIP.x) 
+print 'Dips y pos is' + str(DIP.y)
+print 'First resistor x position is' + str(Resistor1.y)
+print 'First resistor y position is' + str(Resistor1.x)
+#print Resistor2.y
+#print Resistor2.x
+#print board[2][3].Occupied
 
 	
 	
