@@ -2,20 +2,27 @@
 from ComponentModule import *
 from BreadboardModule import *
 def placingCD(list_of_components):
-	list_of_components[0].x1 = 0
-	list_of_components[0].y1 = 0
 	for i in range(len(list_of_components)):
 		if list_of_components[i].connections == '':
-			if list_of_components[i].orientation == 'v':
-				list_of_components[i].x2 = list_of_components[i].x1
-				list_of_components[i].y2 = list_of_components[i].y1+list_of_components[i].pin_gap
-			else:
-				list_of_components[i].x2 = list_of_components[i].x1+list_of_components[i].pin_gap
-				list_of_components[i].y2 = list_of_components[i].y1
-		for j in list_of_components[i].connections: 
-			for k in list_of_components[i].connections[j]:
-				
+			place_first_component(list_of_components[i],i,i)
+		else:
+			for j in list_of_components[i].connections: 
+				for k in list_of_components[i].connections[j]:
 
+def place_first_component(component,x,y):
+	component.x[1] = x
+	component.y[1] = y
+	for l in range(component.number_of_pins):
+		if l % 2 == 0:
+			if component.orientation == 'v':
+				component.x[l] = component.x[l-1]
+				component.y[l] = component.y[l-1]+list_of_components[i].pin_gap
+			else:
+				component.x[l] = component.x[l-1]+list_of_components[i].pin_gap
+				component.y[l] = component.y[l-1]
+		else:
+			component.x[l] = component.x[1]+component.pin_gap
+			component.y[l] = component.y[1]+1
 
 
 if __name__ == '__main__':
