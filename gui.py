@@ -8,9 +8,11 @@ Created on Mon Apr  7 03:21:32 2014
 import Tkinter as tk
 import ttk
 from PIL import Image, ImageTk
+import bbnode
+import menumethods
 
-RHEIGHT = 800
-RWIDTH  = 1540
+RHEIGHT = 810
+RWIDTH  = 1540/3
 
 class gui(tk.Tk):
     def __init__(self,parent): 
@@ -70,10 +72,10 @@ class gui(tk.Tk):
         self.editsubMenu.add_command(label='Insert', command=self.quit)
         
         #view submenu commands
-        self.viewsubMenu.add_command(label='Resistors', command=self.quit)
-        self.viewsubMenu.add_command(label='Capacitors', command=self.quit)
-        self.viewsubMenu.add_command(label='Dips', command=self.quit)
-        self.viewsubMenu.add_command(label='Wires', command=self.quit)
+        self.viewsubMenu.add_checkbutton(label='Resistors', command=menumethods.insertResistor)
+        self.viewsubMenu.add_checkbutton(label='Capacitors', command=self.quit)
+        self.viewsubMenu.add_checkbutton(label='Dips', command=self.quit)
+        self.viewsubMenu.add_checkbutton(label='Wires', command=self.quit)
         
         #tools submenu commands
         self.toolssubMenu.add_command(label='Move', command=self.quit)
@@ -84,11 +86,7 @@ class gui(tk.Tk):
         #about submenu commands
         self.aboutsubMenu.add_command(label='About the Program', command=self.aboutprog)
         self.aboutsubMenu.add_command(label='About the Creators',command=self.aboutcreat)
-        
-    def processMouseEvent(self, event):
-        mouse_coordinates= str(event.x) + ", " + str(event.y)
-        self.bbcanvas.create_text(event.x,event.y, text = mouse_coordinates)
-    
+            
     def initialize(self):
         #initialize grid
         self.grid()
@@ -98,13 +96,15 @@ class gui(tk.Tk):
         self.resizable(False,False)
         
         #create and place breadboard canvas in grid
+        self.bbimageheight = 1110
+        self.bbimagewidth = 557
         self.bbcanvas=tk.Canvas(self.parent,bg='white')
         self.bbcanvas.grid(column=1,row=0,sticky='NEWS')
-        self.bbcanvas.configure(width=575,height=RHEIGHT)
+        self.bbcanvas.configure(width=self.bbimagewidth+75,height=RHEIGHT)
         
         #create and place schematic canvas in grid
         self.scanvas=tk.Canvas(self.parent,bg='red')
-        self.scanvas.grid(column=0,row=0,sticky='NEWS')     
+        #self.scanvas.grid(column=0,row=0,sticky='NEWS')     
         self.scanvas.configure(width=RWIDTH-575,height=RHEIGHT)
         
         #top level gui creation
@@ -115,24 +115,32 @@ class gui(tk.Tk):
         self.makemenu()    
         
         #creating breadboard
-        self.bbimage = Image.open("bb.bmp")
-        self.bbimage = self.bbimage.resize((500,1600),Image.ANTIALIAS)
+        self.bbimage = Image.open("bb1.bmp")
+        
+        #self.bbimage = self.bbimage.resize((self.bbimagewidth,self.bbimageheight),Image.ANTIALIAS)
         self.bbphoto = ImageTk.PhotoImage(self.bbimage)
-        self.bbcanvas.create_image(250,800,image=self.bbphoto)
-            
+        self.bbcanvas.create_image(self.bbimagewidth/2,self.bbimageheight/2,image=self.bbphoto)
+          
         #column weight configuration
         #self.grid_columnconfigure(0,weight=1)
         #self.grid_columnconfigure(1,weight=1)
         #self.grid_rowconfigure(0,weight=1)
         #self.grid_rowconfigure(1,weight=1)
         
-        self.bbcanvas.bind("<Button-1>", self.processMouseEvent)
-        self.bbcanvas.focus_set()
-
         self.bbcanvas.columnconfigure        
         
-        #self.circbutt = ttk.Checkbutton(self.bbcanvas,style = 'TCheckbutton')
-        #self.circbutt.grid(column=0,row=0)
+        
+        #for i in range(40,800,20):
+        #   for j in range(125,500,20):
+        xrag = [i for i in range(120,450,30) if i!=270]
+        for i in xrag:
+            for j in range(8,800,30):
+                node = bbnode.bbnode(self.bbcanvas,i,j)
+    
+        yrag = [i for i in range(68,818,30) if i!=218 and i!=398 and i!=578 and i!=758]
+        for i in [30,60,480,510]:
+            for j in yrag:
+                node = bbnode.bbnode(self.bbcanvas,i,j)
         
         #update and geometry
         self.update()
