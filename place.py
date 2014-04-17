@@ -29,8 +29,13 @@ def place_component(component,x=0,y=0):
 	print component.y
 
 
+# if __name__ == '__main__':
+# 	breadboard = createBreadboard()
+# 	resistor1 = resistor(10,0,0,'h',{})
+# 	capacitor1 = capacitor(10,5,5,'v',{1:resistor1})
+# 	placingCD([resistor1,capacitor1])
+
 if __name__ == '__main__':
-	breadboard = createBreadboard()
-	resistor1 = resistor(10,0,0,'h',{})
-	capacitor1 = capacitor(10,5,5,'v',{1:resistor1})
+	resistor1 = resistor(10,0,0,'v',{})
+	capacitor1 = capacitor(10,5,5,'h',{})
 	placingCD([resistor1,capacitor1])
