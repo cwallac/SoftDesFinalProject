@@ -6,22 +6,26 @@ Created on Thu Apr 17 01:29:59 2014
 """
 
 about_messageSaveCheck = "Do you want to save your current project first?"
-
-def save():
+res_go=False
+res_coords=[]
 
 def insertResistor():
-    if res_go:
-         
+    global res_go
+    res_go= not res_go
+    global res_coords
+    res_coords = []    
+    print res_go
+    
 def insertCapacitor():
-    if cap_go:
+    pass#if cap_go:
         
 def insertDip():
-    if dip_go:
+    pass#if dip_go:
         
 def inserWire():
-    if wire_go:
+    pass#if wire_go:
         
 def createNew():
-    if fileStatus == 'unsaved':
-        msg = tk.Message(popup,text=self.about_messageSaveCheck)
-        msg.pack()
+    pass#if fileStatus == 'unsaved':
+    #    msg = tk.Message(popup,text=self.about_messageSaveCheck)
+    #    msg.pack()

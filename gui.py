@@ -9,6 +9,7 @@ import Tkinter as tk
 import ttk
 from PIL import Image, ImageTk
 import bbnode
+import menumethods
 
 RHEIGHT = 810
 RWIDTH  = 1540/3
@@ -71,10 +72,10 @@ class gui(tk.Tk):
         self.editsubMenu.add_command(label='Insert', command=self.quit)
         
         #view submenu commands
-        self.viewsubMenu.add_command(label='Resistors', command=self.quit)
-        self.viewsubMenu.add_command(label='Capacitors', command=self.quit)
-        self.viewsubMenu.add_command(label='Dips', command=self.quit)
-        self.viewsubMenu.add_command(label='Wires', command=self.quit)
+        self.viewsubMenu.add_checkbutton(label='Resistors', command=menumethods.insertResistor)
+        self.viewsubMenu.add_checkbutton(label='Capacitors', command=self.quit)
+        self.viewsubMenu.add_checkbutton(label='Dips', command=self.quit)
+        self.viewsubMenu.add_checkbutton(label='Wires', command=self.quit)
         
         #tools submenu commands
         self.toolssubMenu.add_command(label='Move', command=self.quit)
@@ -85,8 +86,7 @@ class gui(tk.Tk):
         #about submenu commands
         self.aboutsubMenu.add_command(label='About the Program', command=self.aboutprog)
         self.aboutsubMenu.add_command(label='About the Creators',command=self.aboutcreat)
-        
-    
+            
     def initialize(self):
         #initialize grid
         self.grid()
