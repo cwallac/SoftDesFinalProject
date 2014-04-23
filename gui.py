@@ -74,9 +74,9 @@ class gui(tk.Tk):
         
         #view submenu commands
         self.viewsubMenu.add_checkbutton(label='Resistors', command=menumethods.insertResistor)
-        self.viewsubMenu.add_checkbutton(label='Capacitors', command=self.quit)
-        self.viewsubMenu.add_checkbutton(label='Dips', command=self.quit)
-        self.viewsubMenu.add_checkbutton(label='Wires', command=self.quit)
+        self.viewsubMenu.add_checkbutton(label='Capacitors', command=menumethods.insertCapacitor)
+        self.viewsubMenu.add_checkbutton(label='Dips', command=menumethods.insertDip)
+        self.viewsubMenu.add_checkbutton(label='Wires', command=menumethods.insertWire)
         
         #tools submenu commands
         self.toolssubMenu.add_command(label='Move', command=self.quit)
