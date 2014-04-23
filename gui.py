@@ -20,6 +20,7 @@ class gui(tk.Tk):
         self.parent = parent
         self.about_messageprog = "AN INTERACTIVE CIRCUIT DESIGN STUDIO SUITE FOR CREATION OF BREADBOARD AND SCHEMATIC PROTOTYPES."
         self.about_messagecreat = "CREATED BY DENIZ CELIK, SUBHASH GUBBA, CHRIS WALLACE, AND RADMER VAN DER HEYDE. ALL STUDENTS ARE FRESHMAN AT THE FRANKLIN W. OLIN COLLEGE OF ENGINEERING IN NEEDHAM, MA."        
+        self.buttonlist = []        
         self.initialize()
         
     def aboutprog(self):
@@ -135,12 +136,14 @@ class gui(tk.Tk):
         xrag = [i for i in range(120,450,30) if i!=270]
         for i in xrag:
             for j in range(8,800,30):
-                node = bbnode.bbnode(self.bbcanvas,i,j)
+                n = bbnode.bbnode(self.bbcanvas,i,j)
+                self.buttonlist.append(n)
     
         yrag = [i for i in range(68,818,30) if i!=218 and i!=398 and i!=578 and i!=758]
         for i in [30,60,480,510]:
             for j in yrag:
-                node = bbnode.bbnode(self.bbcanvas,i,j)
+                bbnode.bbnode(self.bbcanvas,i,j)  
+                self.buttonlist.append(n)
         
         #update and geometry
         self.update()
