@@ -50,7 +50,7 @@ class trace(object):
 class power(object):
 	def __init__(self,value,connections):
 		self.value = value
-		self.connections = {}
+		self.connections = {1:[]}
 		
 if __name__ == '__main__':
 
