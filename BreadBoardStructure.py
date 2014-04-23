@@ -213,7 +213,8 @@ def defaultSecondPlacementFailed(breadboard,component,side):
 				component.x[2] = breadboard[2][0].xpos+4 
 				breadboard[2][openSpot].Occupied[4] = component
 				breadboard[2][openSpot+component.pin_gap].Occupied[4] = component
-				#CREATE TRACE
+				trace(component.x[1],component.y[1],component.x[1],component.y[2],[component.connections[1]],[component.connections[1]])
+				breadboard[2][component.y[2]].Occupied[component.x[1]] = component
 		
 		elif side == 'RIGHT':
 			for k in range(5):
@@ -230,7 +231,7 @@ def defaultSecondPlacementFailed(breadboard,component,side):
 				return 'PLACED'
 
 			else:
-				OpenSpot = findOpenSpace(component,breadboard,3)
+				openSpot = findOpenSpace(component,breadboard,3)
 				oldCord = (component.x[1],component.y[1])
 				component.y[1] = openSpot
 				component.y[2] = openSpot+component.pin_gap
@@ -238,11 +239,12 @@ def defaultSecondPlacementFailed(breadboard,component,side):
 				component.x[2] = breadboard[3][0].xpos+4 
 				breadboard[3][openSpot].Occupied[0] = component
 				breadboard[3][openSpot+component.pin_gap].Occupied[0] = component
-				#CREATE TRACE
+				trace(component.x[1],component.y[1],component.x[1],component.y[2],[component.connections[1]],[component.connections[1]])
+				breadboard[3][component.y[2]].Occupied[component.x[1]] = component
 
 
 		else:
-			#THIS MEANS RIGHT SIDE
+			#THIS MEANS POWER-RAIL
 			print 'NO PLACE'
 			#findOpenSpace(component,breadboard,side)
 
@@ -295,9 +297,9 @@ def placeSecondPin(coordinate,distance,component,breadboard):
 				defaultSecondPlacementFailed(breadboard,component,side)
 
 		else:
-			#THIS MEANS RIGHT SIDE
+			#THIS MEANS POWER RAIL
 			print 'NO PLACE'
-			defaultSecondPlacementFailed(breadboard,component,3)
+			
 
 
 	else:
@@ -388,15 +390,15 @@ if __name__ == '__main__':
 	Resistor1 = resistor(45000,4,5,'h',{1:[],2:[]})
 	Resistor2 = resistor(4500,4,5,'h',{1:[],2:[]},4)
 	Resistor3 = resistor(400,4,5,'h',{1:[],2:[]})
-	DIP = dip(4,5,'h',{11:[Resistor1]},'dip',number_of_pins = 12, pin_gap = 3)
+	DIP = dip(4,5,'h',{12:[Resistor1]},'dip',number_of_pins = 12, pin_gap = 3)
 	DIP2 = dip(4,5,'h',{3:[Resistor2]},'dip',number_of_pins = 8, pin_gap = 3)
 	Resistor1.connections[1] = [DIP]
 	Resistor2.connections[1] = [Resistor1]
 	Resistor1.connections[2] = [Resistor2]
 	Resistor3.connections[1] = [Resistor2]
 	Resistor2.connections[2] = [Resistor3]
-	board[2][15].Occupied[0] = True
-	board[2][9].Occupied[0] = True
+	board[3][15].Occupied[0] = True
+	board[3][9].Occupied[0] = True
 	placeFirstComponent(DIP,board)
 	placeComponent(Resistor1,board)
 	placeComponent(Resistor2,board)
@@ -410,7 +412,9 @@ if __name__ == '__main__':
 	print Resistor2.y
 	print Resistor3.x
 	print Resistor3.y
-	print findOpenSpace(Resistor1,board,2)
+	
+	print board[3][13].Occupied
+	print board[3][13].Occupied
 	#print DIP2.x
 	#print DIP2.y
 #	if isinstance(DIP,dip):
