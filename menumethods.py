@@ -30,15 +30,13 @@ def insertCapacitor():
     print cap_coords
     
 def insertDip():
-    pass#if dip_go:
     global dip_go
     dip_go= not dip_go
     global dip_coords
     dip_coords = []
     print dip_coords
     
-def inserWire():
-    pass#if dip_go:
+def insertWire():
     global wire_go
     wire_go= not wire_go
     global wire_coords
