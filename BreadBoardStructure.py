@@ -140,9 +140,116 @@ def SetPosValues(placedComponent,componentToPlace,placedPin,ToPlacePin,breadboar
 	else:
 		pass
 		#POWER RAIL
+def findOpenSpace(component,breadboard,side):
+	closest = []
+	poop = []
+	found = 0
+	if side == 2 or side == 3:
+		for i in range(component.y[1],breadboard[0].length-component.pin_gap):
+			empty = 0
+			bad = 0
+			for j in range(5):
+			
+				if breadboard[side][i].Occupied[j] != False or breadboard[side][i+component.pin_gap].Occupied[j] != False:
+					bad += 1
+
+				else:
+					empty += 1
+			if empty == 5 and found == 0:
+				closest.append(i)
+		found = 0
+
+		for i in range(component.pin_gap,component.y[1]):
+			empty = 0
+			bad = 0
+			for j in range(5):
+			
+				if breadboard[side][i].Occupied[j] != False or breadboard[side][i+component.pin_gap].Occupied[j] != False:
+					bad += 1
+
+				else:
+					empty += 1
+			if empty == 5 and found == 0:
+				closest.append(i)
+		poop[:] = [abs(x - component.y[1]) for x in closest]
+		
+		
+		minimum = min(poop)
+		for j in range(len(poop)):
+			if poop[j] == minimum:
+				
+				return closest[j]
+
+	else:
+		pass
+
+def defaultSecondPlacementFailed(breadboard,component,side):
+	occupiedFlag = 0
+	if component.y[1] < component.pin_gap:
+		pass
+		#FIND NEXT OPEN SPOT TO PLACE COMPONENT THEN DRAW TRACE DO DRAW TRACE FUNCTION
+	else:
+		if side == 'LEFT':
+			for k in range(5):
+				if breadboard[2][component.y[1]-component.pin_gap].Occupied[k] != False:
+					occupiedFlag = 1
+					print "FOUND IT CHRIS"
+					#DO MORE STUFF
+
+			if occupiedFlag == 0:	
+				component.y[2] = breadboard[2][component.y[1]-component.pin_gap].ypos
+					
+				component.x[2] = component.x[1]
+				breadboard[2][component.y[1]-component.pin_gap].Occupied[component.x[2]-breadboard[2][0].xpos] = component
+				return 'PLACED'
+			else: 
+				
+				print 'NO PLACE'
+				openSpot =findOpenSpace(component,breadboard,2)
+				oldCord = (component.x[1],component.y[1])
+				component.y[1] = openSpot
+				component.y[2] = openSpot+component.pin_gap
+				component.x[1] = breadboard[2][0].xpos+4 
+				component.x[2] = breadboard[2][0].xpos+4 
+				breadboard[2][openSpot].Occupied[4] = component
+				breadboard[2][openSpot+component.pin_gap].Occupied[4] = component
+				#CREATE TRACE
+		
+		elif side == 'RIGHT':
+			for k in range(5):
+				if breadboard[3][component.y[1]-component.pin_gap].Occupied[k] != False:
+					occupiedFlag = 1
+					print "FOUND IT CHRIS"
+					#DO MORE STUFF
+
+			if occupiedFlag == 0:
+				component.y[2] = breadboard[3][component.y[1]-component.pin_gap].ypos
+					
+				component.x[2] = component.x[1]
+				breadboard[3][component.y[1]-component.pin_gap].Occupied[component.x[2]-breadboard[3][0].xpos] = component
+				return 'PLACED'
+
+			else:
+				OpenSpot = findOpenSpace(component,breadboard,3)
+				oldCord = (component.x[1],component.y[1])
+				component.y[1] = openSpot
+				component.y[2] = openSpot+component.pin_gap
+				component.x[1] = breadboard[3][0].xpos+4 
+				component.x[2] = breadboard[3][0].xpos+4 
+				breadboard[3][openSpot].Occupied[0] = component
+				breadboard[3][openSpot+component.pin_gap].Occupied[0] = component
+				#CREATE TRACE
+
+
+		else:
+			#THIS MEANS RIGHT SIDE
+			print 'NO PLACE'
+			#findOpenSpace(component,breadboard,side)
+
 
 def placeSecondPin(coordinate,distance,component,breadboard):
 	side = leftOrRight(component,1)
+
 	print side
 	
 	occupiedFlag = 0
@@ -165,7 +272,8 @@ def placeSecondPin(coordinate,distance,component,breadboard):
 			else: 
 				
 				print 'NO PLACE'
-				#OCCUPIED BY SOMETHING ELSE
+				defaultSecondPlacementFailed(breadboard,component,side)
+				#OCCUPIED BY SOMETHING ELSE, TRY THE REVERSE DIRECTION, IF FAIL DRAW A TRACE Up TO PIN GAP AWAY FROM EMPTY SPACE
 		
 		if side == 'RIGHT':
 			for k in range(5):
@@ -174,20 +282,25 @@ def placeSecondPin(coordinate,distance,component,breadboard):
 					print "FOUND IT CHRIS"
 					#DO MORE STUFF
 
-				else:
-					component.y[2] = breadboard[3][component.y[1]+component.pin_gap].ypos
+			if occupiedFlag == 0:
+				component.y[2] = breadboard[3][component.y[1]+component.pin_gap].ypos
 					
-					component.x[2] = component.x[1]
-					breadboard[3][component.y[1]+component.pin_gap].Occupied[component.x[2]-breadboard[3][0].xpos] = component
-					return 'PLACED'
+				component.x[2] = component.x[1]
+				breadboard[3][component.y[1]+component.pin_gap].Occupied[component.x[2]-breadboard[3][0].xpos] = component
+				return 'PLACED'
+
+			else: 
+				
+				print 'NO PLACE'
+				defaultSecondPlacementFailed(breadboard,component,side)
 
 		else:
 			#THIS MEANS RIGHT SIDE
 			print 'NO PLACE'
+			defaultSecondPlacementFailed(breadboard,component,3)
 
 
 	else:
-
 		pass
 		# FOUND A CONNECTION SOMEWHERE
 def dipStartingPoint(breadboard,placeDip):
@@ -273,23 +386,33 @@ if __name__ == '__main__':
 	board = createBreadboard()
 
 	Resistor1 = resistor(45000,4,5,'h',{1:[],2:[]})
-	Resistor2 = resistor(4500,4,5,'h',{1:[],2:[]})
-	DIP = dip(4,5,'h',{1:[Resistor1]},'dip',number_of_pins = 12, pin_gap = 3)
+	Resistor2 = resistor(4500,4,5,'h',{1:[],2:[]},4)
+	Resistor3 = resistor(400,4,5,'h',{1:[],2:[]})
+	DIP = dip(4,5,'h',{11:[Resistor1]},'dip',number_of_pins = 12, pin_gap = 3)
 	DIP2 = dip(4,5,'h',{3:[Resistor2]},'dip',number_of_pins = 8, pin_gap = 3)
 	Resistor1.connections[1] = [DIP]
 	Resistor2.connections[1] = [Resistor1]
 	Resistor1.connections[2] = [Resistor2]
-	
+	Resistor3.connections[1] = [Resistor2]
+	Resistor2.connections[2] = [Resistor3]
+	board[2][15].Occupied[0] = True
+	board[2][9].Occupied[0] = True
 	placeFirstComponent(DIP,board)
 	placeComponent(Resistor1,board)
-	#placeComponent(Resistor2,board)
+	placeComponent(Resistor2,board)
+	placeComponent(Resistor3,board)
 	#placeComponent(DIP2,board)
 	#board[2][8].Occupied[1] = DIP
 	print board[2][8].Occupied.values()
 	print Resistor1.x
 	print Resistor1.y
-	print DIP2.x
-	print DIP2.y
+	print Resistor2.x
+	print Resistor2.y
+	print Resistor3.x
+	print Resistor3.y
+	print findOpenSpace(Resistor1,board,2)
+	#print DIP2.x
+	#print DIP2.y
 #	if isinstance(DIP,dip):
 #		print "FUCLK CRHIS"
 #	component = Resistor1
