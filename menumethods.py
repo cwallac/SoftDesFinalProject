@@ -44,7 +44,7 @@ def inserWire():
     global wire_coords
     wire_coords = []
     print wire_coords
-        
+    
 def createNew():
     pass#if fileStatus == 'unsaved':
     #    msg = tk.Message(popup,text=self.about_messageSaveCheck)
