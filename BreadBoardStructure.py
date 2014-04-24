@@ -390,7 +390,7 @@ if __name__ == '__main__':
 	Resistor1 = resistor(45000,4,5,'h',{1:[],2:[]})
 	Resistor2 = resistor(4500,4,5,'h',{1:[],2:[]},4)
 	Resistor3 = resistor(400,4,5,'h',{1:[],2:[]})
-	DIP = dip(4,5,'h',{12:[Resistor1]},'dip',number_of_pins = 12, pin_gap = 3)
+	DIP = dip(4,5,'h',{11:[Resistor1]},'dip',number_of_pins = 12, pin_gap = 3)
 	DIP2 = dip(4,5,'h',{3:[Resistor2]},'dip',number_of_pins = 8, pin_gap = 3)
 	Resistor1.connections[1] = [DIP]
 	Resistor2.connections[1] = [Resistor1]
@@ -415,6 +415,7 @@ if __name__ == '__main__':
 	
 	print board[3][13].Occupied
 	print board[3][13].Occupied
+	print closestConnections(Resistor1,board)
 	#print DIP2.x
 	#print DIP2.y
 #	if isinstance(DIP,dip):
