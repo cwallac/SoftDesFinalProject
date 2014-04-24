@@ -48,8 +48,9 @@ class trace(object):
 		self.value2 = value2
 
 class power(object):
-	def __init__(self,value):
+	def __init__(self,value,connections):
 		self.value = value
+		self.connections = {1:[]}
 		
 if __name__ == '__main__':
 
