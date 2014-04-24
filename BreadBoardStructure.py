@@ -44,6 +44,7 @@ def placeFirstComponent(component,breadboard):
 
 def identifyConnections(component,breadboard):
 	'''Returns a tuple of rail connection found at,row connection found at and assoaicated tile it was found at '''
+	print "RUNNING IDENTIFY CONNECTIONS"
 	returnRail = []
 	returnRow = []
 	returnTile = []
@@ -67,6 +68,7 @@ def identifyConnections(component,breadboard):
 	return (returnRail,returnRow,returnTile)
 
 def closestConnections(component,breadboard):
+	print "RUNNING CLOSESTCONNECTIONS"
 	
 	if component.x[1] < 10:
 		compSide = 2
@@ -77,17 +79,20 @@ def closestConnections(component,breadboard):
 	for panel in range(len(breadboard)):
 		if 1 < panel < 4:
 			for row in range(len(breadboard[panel])):
+
 				for tile in range(5):
+
 					if compSide == panel and component.y[1] == row:
 						pass
 					else:
 						if breadboard[panel][row].Occupied[tile] == component:
 							connectionList.append((panel,row))
+							print breadboard[panel][row].Occupied[tile], component, "THIS IS BREADBOARD NAME AND COMPONENT"
 						
 
 		else:
 			pass
-
+	print connectionList, "CONNECTION LIST"
 	if len(connectionList) == 0:
 			return False
 		
@@ -107,9 +112,13 @@ def closestConnections(component,breadboard):
 	return (connectionList[space],distanceList[space])
 
 def SetPosValues(placedComponent,componentToPlace,placedPin,ToPlacePin,breadboard):
+	print "RUNNING SET POS VALUES"
+	print componentToPlace, "component to place", ToPlacePin, "IS THE PIN We are palcing"
+	print  placedComponent, "and component it amtched with is", placedPin, "IS THE PIN IT MATCHED WITH"
 	if breadboard[1].xpos < placedComponent.x[placedPin] < breadboard[4].xpos:
 		componentToPlace.y[ToPlacePin] = placedComponent.y[placedPin]
 		if  1 < placedComponent.x[placedPin] <= breadboard[2][0].xpos+4:
+			print "THE PIN IS WITHIN THE LEFT BREADBOARD SPACE"
 			for k in range(4,-1,-1):
 				if breadboard[2][componentToPlace.y[ToPlacePin]].Occupied[k] != False:
 					pass
@@ -117,12 +126,13 @@ def SetPosValues(placedComponent,componentToPlace,placedPin,ToPlacePin,breadboar
 							
 					componentToPlace.x[ToPlacePin] = breadboard[2][0].xpos + k
 					breadboard[2][componentToPlace.y[ToPlacePin]].Occupied[k] = componentToPlace
-							
+					print 	componentToPlace.x[ToPlacePin], "IS THE X POSITION OF THIS PIN"
 					return "PLACED"
 
 
 
 		elif breadboard[2][0].xpos+4 < placedComponent.x[placedPin] <= breadboard[4].xpos:
+			print "THE PIN IS WITHIN THE RIGHT BREADBOARD SPACE"
 			for k in range(5):
 				if breadboard[3][componentToPlace.y[ToPlacePin]].Occupied[k] != False:
 					pass
@@ -130,7 +140,7 @@ def SetPosValues(placedComponent,componentToPlace,placedPin,ToPlacePin,breadboar
 							
 					componentToPlace.x[ToPlacePin] = breadboard[3][0].xpos + k
 					breadboard[3][componentToPlace.y[ToPlacePin]].Occupied[k] = componentToPlace
-							
+					print 	componentToPlace.x[ToPlacePin], "IS THE X POSITION OF THIS PIN"		
 					return "PLACED"
 
 		else:
@@ -141,6 +151,7 @@ def SetPosValues(placedComponent,componentToPlace,placedPin,ToPlacePin,breadboar
 		pass
 		#POWER RAIL
 def findOpenSpace(component,breadboard,side):
+	print "RUNNING FIND OPEN SPACE"
 	closest = []
 	poop = []
 	found = 0
@@ -184,6 +195,7 @@ def findOpenSpace(component,breadboard,side):
 		pass
 
 def defaultSecondPlacementFailed(breadboard,component,side):
+	print "RUNNING DEFAULT SECOND PLACEMENT FAILED"
 	occupiedFlag = 0
 	if component.y[1] < component.pin_gap:
 		pass
@@ -249,46 +261,68 @@ def defaultSecondPlacementFailed(breadboard,component,side):
 			#findOpenSpace(component,breadboard,side)
 
 
-def placeSecondPin(coordinate,distance,component,breadboard):
+def placeSecondPin(coordinate,distance,component,breadboard,rail):
+	print "RUNNING PLACE SECOND PIN"
 	side = leftOrRight(component,1)
 
 	print side
 	
 	occupiedFlag = 0
-	print coordinate
+	goodToPlace = 0
+	print coordinate, "IS THE COORDINATE"
 	if coordinate == False:
+		print "ITS FALSE" + str(component)
 		#THERE IS NO OTHER CONNECTION ON THE BOARD
 		if side == 'LEFT':
+			print "OPERATING IN THE LEFT SIDE IN THE LOCATION", breadboard[2][component.y[1]+component.pin_gap]
+			print breadboard[2][component.y[1]+component.pin_gap].Occupied, " THIS IS THIS ROWS OCCUPIED STATUS"
 			for k in range(5):
-				if breadboard[2][component.y[1]+component.pin_gap].Occupied[k] != False:
-					occupiedFlag = 1
-					print "FOUND IT CHRIS"
-					#DO MORE STUFF
+				if breadboard[2][component.y[1]+component.pin_gap].Occupied[k] in component.connections[2]: # FIX THIS TO CREATE A TRIGGER TO AUTOMATICALLY PLACE IT
+					goodToPlace = 1
+					print "THERE IS A CONNCTION FOR THIS PIN HERE, YOU NEED TO ADD SOMETHING TO DO THIS"
 
-			if occupiedFlag == 0:	
+				elif breadboard[2][component.y[1]+component.pin_gap].Occupied[k] != False: #FIX THIS TO ALSO BE APPROVED IF ITS VALUE IS THE
+					occupiedFlag = 1
+					print "THIS SPACE IS OCCUPIED"
+					#DO MORE STUFF
+				
+
+
+			if occupiedFlag == 0 or goodToPlace == 1:	
+				print "THE ROW IS UNOCCUPIED"
 				component.y[2] = breadboard[2][component.y[1]+component.pin_gap].ypos
-					
+				
+				
 				component.x[2] = component.x[1]
-				breadboard[2][component.y[1]+component.pin_gap].Occupied[component.x[2]-breadboard[2][0].xpos] = component
-				return 'PLACED'
+				
+				breadboard[2][component.y[1]+component.pin_gap].Occupied[component.x[2]-breadboard[2][0].xpos] = component # MIGHT CAUSE STACKING ISSUE
+				return None
 			else: 
 				
 				print 'NO PLACE'
 				defaultSecondPlacementFailed(breadboard,component,side)
 				#OCCUPIED BY SOMETHING ELSE, TRY THE REVERSE DIRECTION, IF FAIL DRAW A TRACE Up TO PIN GAP AWAY FROM EMPTY SPACE
 		
-		if side == 'RIGHT':
+		elif side == 'RIGHT':
+			print breadboard[3][component.y[1]+component.pin_gap].Occupied, "THIS IS THE OCCUPIED IT SHOULD HAVE SOMETHING THAT AMTCHES TO 3"
 			for k in range(5):
-				if breadboard[3][component.y[1]+component.pin_gap].Occupied[k] != False:
+				if breadboard[3][component.y[1]+component.pin_gap].Occupied[k] in component.connections[2]: #FIX THIS
+					goodToPlace = 1
+					print "THERE IS A CONNCTION FOR THIS PIN HERE, YOU NEED TO ADD SOMETHING TO DO THIS"
+
+				elif breadboard[3][component.y[1]+component.pin_gap].Occupied[k] != False:
 					occupiedFlag = 1
 					print "FOUND IT CHRIS"
-					#DO MORE STUFF
 
-			if occupiedFlag == 0:
+				
+					#DO MORE STUFF
+				
+
+			if occupiedFlag == 0 or goodToPlace == 1:
 				component.y[2] = breadboard[3][component.y[1]+component.pin_gap].ypos
 					
 				component.x[2] = component.x[1]
-				breadboard[3][component.y[1]+component.pin_gap].Occupied[component.x[2]-breadboard[3][0].xpos] = component
+				breadboard[3][component.y[1]+component.pin_gap].Occupied[component.x[2]-breadboard[3][0].xpos] = component #POTENTIAL STACKING ERROR.
 				return 'PLACED'
 
 			else: 
@@ -306,6 +340,7 @@ def placeSecondPin(coordinate,distance,component,breadboard):
 		pass
 		# FOUND A CONNECTION SOMEWHERE
 def dipStartingPoint(breadboard,placeDip):
+	print "RUNNING DIPSTARTINGPOINT"
 	for i in range(30):
 		empty = 0
 		bad = 0
@@ -320,6 +355,7 @@ def dipStartingPoint(breadboard,placeDip):
 			return i+2
 
 def placeComponent(component,breadboard):
+	print "RUNNNING PLACE COMPONENT"
 	#CURRENTLY NOT DEALING WIHT POWER RAILS
 	if component.name == 'dip':
 		#DIP PLACEMENT
@@ -346,26 +382,49 @@ def placeComponent(component,breadboard):
 		
 
 	else:
+		flag = 0
+		CorrectIndex = 0
 		matchingComponent = component.connections[1][0]
 		identifyingTuple = identifyConnections(matchingComponent,breadboard)
-		rail = identifyingTuple[0][0]
-		Row = identifyingTuple[1][0]
-		Tile = identifyingTuple[2][0]
+		print "BACK IN PLACE COMPONENT"
+		for Connections in matchingComponent.connections:
+			for comp in matchingComponent.connections[Connections]:
+				if comp == component:
+					CorrectIndex = Connections-1
+					print CorrectIndex, "IS THE CORRECT INDEX"
+
+			print Connections, "THESE ARE THE MATCHED CONNECTIONS"
+		# FIND PIN IN EACH SPOT, CHECK ITS CONNECTION, RAIL ROW AND TILE BECOME THE TUPLE THAT MATCHES IT
+		rail = identifyingTuple[0][CorrectIndex]#THIS IS THE PROBLEM
+		Row = identifyingTuple[1][CorrectIndex]
+		Tile = identifyingTuple[2][CorrectIndex]
 		print rail, Row, Tile
+		print identifyingTuple[0],identifyingTuple[1],identifyingTuple[2]
+		
 		for i in breadboard[rail][Row].Occupied[Tile].connections:
-			print breadboard[rail][Row].Occupied[Tile].connections[i]
+			print breadboard[rail][Row].Occupied[Tile].connections[i], "IS ITS CONNECTIONS"
 			print component
-			if breadboard[rail][Row].Occupied[Tile].connections[i][0] == component:
-				print 'MATCh'
+			for test in range(len(breadboard[rail][Row].Occupied[Tile].connections[i])):
+				if breadboard[rail][Row].Occupied[Tile].connections[i][test] == component: 
+					print "FLAG RAISED" #THIS WORKS
+					flag = 1
+			if flag ==1:	
+				
 				SetPosValues(breadboard[rail][Row].Occupied[Tile],component,i,1,breadboard)
+				print "BACK IN PLACE COMPONENT"
 				values = closestConnections(component,breadboard)
+				print "BACK IN PLACE COMPONENT"
 				if values == False:
 					distance = False
 					coordinate = False
 				else:
 					distance = values[1]
 					coordinate = values[0]
-				placeSecondPin(coordinate,distance,component,breadboard)
+				print component, "Trying to place second pin"
+				placeSecondPin(coordinate,distance,component,breadboard,rail)
+				print "BACK IN PLACE COMPONENT"
+				print component.x[1]
+				return None
 				
 
 			
@@ -387,35 +446,44 @@ if __name__ == '__main__':
 
 	board = createBreadboard()
 
-	Resistor1 = resistor(45000,4,5,'h',{1:[],2:[]})
-	Resistor2 = resistor(4500,4,5,'h',{1:[],2:[]},4)
-	Resistor3 = resistor(400,4,5,'h',{1:[],2:[]})
-	DIP = dip(4,5,'h',{11:[Resistor1]},'dip',number_of_pins = 12, pin_gap = 3)
-	DIP2 = dip(4,5,'h',{3:[Resistor2]},'dip',number_of_pins = 8, pin_gap = 3)
+	Resistor1 = resistor(1,4,5,'h',{1:[],2:[]})
+	Resistor2 = resistor(2,4,7,'h',{1:[],2:[]})
+	Resistor3 = resistor(3,4,5,'h',{1:[],2:[]})
+	DIP = dip(4,5,'h',{12:[Resistor1]},'dip',number_of_pins = 12, pin_gap = 3)
+	#DIP2 = dip(4,5,'h',{3:[Resistor2]},'dip',number_of_pins = 8, pin_gap = 3)
+	Resistor1.connections[2] = [Resistor2,Resistor3]
 	Resistor1.connections[1] = [DIP]
-	Resistor2.connections[1] = [Resistor1]
-	Resistor1.connections[2] = [Resistor2]
-	Resistor3.connections[1] = [Resistor2]
+	Resistor2.connections[1] = [Resistor1,Resistor3]
 	Resistor2.connections[2] = [Resistor3]
+	Resistor3.connections[1] = [Resistor1,Resistor2]
+	Resistor3.connections[2] = [Resistor2]
+
 	board[3][15].Occupied[0] = True
 	board[3][9].Occupied[0] = True
 	placeFirstComponent(DIP,board)
 	placeComponent(Resistor1,board)
+	print "FIRST COMPONENT PLACED"
 	placeComponent(Resistor2,board)
+	print "SECOND COMPONENT PLACED"
 	placeComponent(Resistor3,board)
+	print "THIRD COMPONENT PLACED"
+	#placeComponent(Resistor3,board)
+	#placeComponent(Resistor3,board)
 	#placeComponent(DIP2,board)
 	#board[2][8].Occupied[1] = DIP
-	print board[2][8].Occupied.values()
+	print DIP.x
+	print DIP.y
 	print Resistor1.x
 	print Resistor1.y
 	print Resistor2.x
 	print Resistor2.y
 	print Resistor3.x
 	print Resistor3.y
+	print board[2][3].Occupied
 	
-	print board[3][13].Occupied
-	print board[3][13].Occupied
-	print closestConnections(Resistor1,board)
+	#print board[3][13].Occupied
+	#print board[3][13].Occupied
+	
 	#print DIP2.x
 	#print DIP2.y
 #	if isinstance(DIP,dip):
