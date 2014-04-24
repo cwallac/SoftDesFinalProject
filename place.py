@@ -6,9 +6,9 @@ def placingCD(list_of_components):
 		if list_of_components[i].connections == {}:
 			place_component(list_of_components[i],list_of_components[i].x1,list_of_components[i].y1)
 		else: 
-		 	for j in list_of_components[i].connections: 
-				k = list_of_components[i].connections[j]
-				place_component(list_of_components[i],k.x[2],k.y[2])
+		 	for j in list_of_components[i].connections:
+		 		k = list_of_components[i].connections[j]
+				place_component(list_of_components[i],k[0].x[2],k[0].y[2])
 
 
 def place_component(component,x=0,y=0):
@@ -30,7 +30,14 @@ def place_component(component,x=0,y=0):
 
 
 if __name__ == '__main__':
+<<<<<<< HEAD
+	resistor1 = resistor(10,0,0,'v',{})
+	resistor2 = resistor(10,10,10,'v',{1:[resistor1]})
+	capacitor1 = capacitor(10,5,5,'h',{1:[resistor1,resistor2]})
+	placingCD([resistor1, resistor2, capacitor1])
+=======
 	breadboard = createBreadboard()
 	resistor1 = resistor(10,0,0,'h',{})
 	capacitor1 = capacitor(10,5,5,'v',{1:resistor1})
  	placingCD([resistor1,capacitor1])
+>>>>>>> 817b5f53d9e4d0ea81348bdede276c22afde3df5

@@ -53,30 +53,40 @@ res_go=False
 cap_go=False
 dip_go=False
 wire_go=False
+add = False
 res_coords=[]
 cap_coords=[]
 dip_coords=[]
 wire_coords=[]
 
+def addcomps():
+    global add
+    add = not add
+    
+
 def insertResistor():
-    clearall()
     global res_go
-    res_go= True
+    temp = res_go
+    clearall()
+    res_go= not temp
     
 def insertCapacitor():
-    clearall()
     global cap_go
-    cap_go= True
+    temp = cap_go
+    clearall()
+    cap_go= not temp
     
 def insertDip():
-    clearall()    
     global dip_go
-    dip_go= True
+    temp = dip_go
+    clearall()
+    dip_go= not temp
     
 def insertWire():
-    clearall()    
     global wire_go
-    wire_go= True
+    temp = wire_go
+    clearall()
+    wire_go= not temp
     
 def clearall():
     boolsfalse()
@@ -101,7 +111,7 @@ def coordsempty():
     dip_coords=[]
     global wire_coords
     wire_coords=[]
-    
+
 def createNew():
     pass#if fileStatus == 'unsaved':
     #    msg = tk.Message(popup,text=self.about_messageSaveCheck)
