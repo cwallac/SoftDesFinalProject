@@ -63,7 +63,7 @@ def identifyConnections(component,breadboard):
 			for tile in range(breadboard[rail].length):
 						if breadboard[rail].Occupied[tile] == component:
 							returnRail.append(rail)
-							returnRow.append(row)
+							returnRow.append(tile)
 							returnTile.append(0)
 	return (returnRail,returnRow,returnTile)
 
@@ -418,7 +418,27 @@ def placeComponent(component,breadboard):
 		Tile = identifyingTuple[2][CorrectIndex]
 		print rail, Row, Tile
 		print identifyingTuple[0],identifyingTuple[1],identifyingTuple[2]
-		
+		if rail ==2 or rail ==3:
+			pass
+		else:
+			matchingComponent = component.connections[2][0]
+			print matchingComponent
+			identifyingTuple = identifyConnections(matchingComponent,breadboard)
+			print identifyingTuple, "This is teh spot of the connection"
+			rail = identifyingTuple[0][CorrectIndex]#THIS IS THE PROBLEM
+			Row = identifyingTuple[1][CorrectIndex]
+			Tile = identifyingTuple[2][CorrectIndex]
+			current1 = component.connections[1]
+			current2 = component.connections[2]
+			component.connections[1] = current2
+			component.connections[2] = current1
+			for Connections in matchingComponent.connections:
+				for comp in matchingComponent.connections[Connections]:
+					if comp == component:
+						CorrectIndex = Connections-1
+						print CorrectIndex, "IS THE CORRECT INDEX"
+
+
 		for i in breadboard[rail][Row].Occupied[Tile].connections:
 			print breadboard[rail][Row].Occupied[Tile].connections[i], "IS ITS CONNECTIONS"
 			print component
@@ -468,9 +488,20 @@ if __name__ == '__main__':
 
 	board = createBreadboard()
 
+	#SET RAIL VALUES INITIALLY DO THAT
+	GND = power('GROUND',[])
+	V5 = power('5 volts',[])
+	V2 = power('2 volts',[])
+	board[0].Occupied[0] = GND
+	board[1].Occupied[0] = V2
+	board[4].Occupied[0] = V2
+	board[5].Occupied[0] = V5
+
+
 	Resistor1 = resistor(1,4,5,'h',{1:[],2:[]})
 	Resistor2 = resistor(2,4,7,'h',{1:[],2:[]})
 	Resistor3 = resistor(3,4,5,'h',{1:[],2:[]})
+	Resistor4 = resistor(4,4,5,'h',{1:[],2:[]})
 	DIP = dip(4,5,'h',{},'dip',number_of_pins = 12, pin_gap = 3)
 	#DIP2 = dip(4,5,'h',{3:[Resistor2]},'dip',number_of_pins = 8, pin_gap = 3)
 	
@@ -504,6 +535,12 @@ if __name__ == '__main__':
 
 	placeComponent(Resistor3,board)
 	print "THIRD COMPONENT PLACED"
+
+	Resistor4.connections[1] = [GND]
+	Resistor4.connections[2] = [Resistor3]
+	Resistor3.connections[2].append(Resistor4)
+	GND.connections[1].append(Resistor4)
+	placeComponent(Resistor4,board)
 	
 
 	#placeComponent(Resistor3,board)
@@ -518,9 +555,12 @@ if __name__ == '__main__':
 	print Resistor2.y
 	print Resistor3.x
 	print Resistor3.y
+	print Resistor4.x
+	print Resistor4.y
 	print board[3][12].Occupied
 	print board[3][15].Occupied
 	print board[3][11].Occupied
+	
 	
 	
 	#print board[3][13].Occupied
