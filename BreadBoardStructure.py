@@ -365,19 +365,34 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail):
 
 		else:
 			if component.x[1] < 10:
+				if breadboard[2][component.y[1]].Occupied[4] == False:
+					pass
+				else:
+					moveComponentOneFromEdge(component,breadboard,sideNumber)
 
-				moveComponentOneFromEdge(component,breadboard)
+				component.x[1] = breadboard[2][4].xpos
+				breadboard[2][component.y[1]].Occupied[4] = component
+				component.x[2] = component.x[1] + component.pin_gap
+				component.y[2] = component.y[1]
+				breadboard[3][component.y[1]].Occupied[component.x[2]-breadboard[2][0].xpos] = component
+				finalTrace = trace(breadboard[3][0].xpos,component.y[1],component.connections[2][0].x[1],component.y[1],component.connections[2][0],component.connections[2][0])
+				breadboard[3][component.y[1]].Occupied[4] = component.connections[2][0]
+			
 			else:
 				if breadboard[3][component.y[1]].Occupied[0] == False:
 					print "WERE GONNA DO TRACE REALTED STUFF HERE"
 
 				else: 
 					moveComponentOneFromEdge(component,breadboard,sideNumber)
-					if sideNumber == 2:
-						print "ADD THIS IN ALTER"
-					else:
-						component.x[1] = breadboard[3][0].xpos
-						breadboard[3][component.y[1]].Occupied[0] = component
+					
+				component.x[1] = breadboard[3][0].xpos
+				breadboard[3][component.y[1]].Occupied[0] = component
+				component.x[2] = component.x[1] - component.pin_gap
+				component.y[2] = component.y[1]
+				breadboard[2][component.y[1]].Occupied[component.x[2]-breadboard[2][0].xpos] = component
+				finalTrace = trace(breadboard[2][0].xpos,component.y[1],component.connections[2][0].x[1],component.y[1],component.connections[2][0],component.connections[2][0])
+				breadboard[2][component.y[1]].Occupied[0] = component.connections[2][0]
+
 						# MAKE IT GO ACROSS GAP AND TRACE TO ITS CONNECTION
 
 
@@ -629,7 +644,7 @@ if __name__ == '__main__':
 	print Resistor4.y
 	print board[3][12].Occupied
 	print board[3][15].Occupied
-	print board[3][11].Occupied
+	print board[2][15].Occupied
 	
 	#IF OCCUPIED DRAW TRACE TO NEXT? THEN TO UNOCCUPIED 
 	
