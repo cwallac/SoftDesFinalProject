@@ -70,10 +70,15 @@ def identifyConnections(component,breadboard):
 def closestConnections(component,breadboard,componentToPlace):
 	print "RUNNING CLOSESTCONNECTIONS"
 	
-	if component.x[1] < 10:
+	if 1 < component.x[1] < 10:
 		compSide = 2
-	else:
+	elif 10 < component.x[1] < 17:
 		compSide = 3
+
+	elif component.x[1] < 2:
+		compSide = component.x[1]
+	else:
+		compSide = component.x[1] -13
 	connectionList = []
 	#FIRST CHECK FOR SAME PANEL
 	for panel in range(len(breadboard)):
@@ -91,6 +96,10 @@ def closestConnections(component,breadboard,componentToPlace):
 						
 
 		else:
+			for tile in range(breadboard[0].length):
+				if breadboard[compSide].Occupied[tile] == component:
+					connectionList.append((compSide,component.y[1]))
+
 	#		for tile in range(len(breadboard[0].length)):
 	#			if breadboard[panel].Occupied[tile] ==
 			pass 
@@ -266,6 +275,10 @@ def defaultSecondPlacementFailed(breadboard,component,side):
 def placeSecondPin(coordinate,distance,component,breadboard,rail):
 	print "RUNNING PLACE SECOND PIN"
 	side = leftOrRight(component,1)
+	if side == 'LEFT':
+		sideNumber = 2
+	else:
+		sideNumber = 3
 
 	print side
 	
@@ -337,8 +350,39 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail):
 			print 'NO PLACE'
 			
 
+	elif 2 > coordinate[0] or coordinate[0] > 17:
+		print "WE ON A RAIL BROSKI" 
+		direction = (coordinate[0] - component.x[1])/abs(coordinate[0] - component.x[1])
+
+		if abs(coordinate[0] - component.x[1]) > 9:
+			spaces = 2
+			
+		else:
+			spaces = 1
+
+		if spaces == 1:
+			print "ONE GAP BROSKI"
+
+		else:
+			if component.x[1] < 10:
+
+				moveComponentOneFromEdge(component,breadboard)
+			else:
+				if breadboard[3][component.y[1]].Occupied[0] == False:
+					print "WERE GONNA DO TRACE REALTED STUFF HERE"
+
+				else: 
+					moveComponentOneFromEdge(component,breadboard,sideNumber)
+					if sideNumber == 2:
+						print "ADD THIS IN ALTER"
+					else:
+						component.x[1] = breadboard[3][0].xpos
+						breadboard[3][component.y[1]].Occupied[0] = component
+						# MAKE IT GO ACROSS GAP AND TRACE TO ITS CONNECTION
+
 
 	else:
+
 		if distance == component.pin_gap:
 			print "THIS IS GOING TO PLACE NICELY"
 			if rail == coordinate[0]:
@@ -471,17 +515,41 @@ def placeComponent(component,breadboard):
 
 			
 def leftOrRight(component,pin):
-	if pin % 2 == 0:
-		if component.x[pin] <= 8:
-			return 'LEFT'
-		else: 
-			return 'RIGHT'
+	
+	if 1 < component.x[pin] <= 8:
+		return 'LEFT'
+	elif 10 <component.x[pin] < 17: 
+		return 'RIGHT'
 
 	else :
-		if component.x[pin] <= 8:
-			return 'LEFT'
-		else: 
-			return 'RIGHT'
+		return "RAIL"
+
+
+def moveComponentOneFromEdge(component,breadboard,side):
+	print "RUNNING MOVE COMPONENT ONE FROM EDGE"
+	if side == 2:
+		componentToMove = breadboard[side][component.y[1]].Occupied[4]
+		InitialTile = 4
+	else:
+
+		componentToMove = breadboard[side][component.y[1]].Occupied[0]
+		InitialTile = 0
+
+
+
+	for tile in range(5):
+		if breadboard[side][componentToMove.y[1]].Occupied[tile] == False and breadboard[side][componentToMove.y[2]].Occupied[tile] == False:
+			breadboard[side][componentToMove.y[1]].Occupied[tile] = componentToMove
+			breadboard[side][componentToMove.y[2]].Occupied[tile] = componentToMove
+			breadboard[side][componentToMove.y[1]].Occupied[InitialTile] = False
+			breadboard[side][componentToMove.y[2]].Occupied[InitialTile] = False
+			componentToMove.x[1] = breadboard[side][0].xpos + tile
+			componentToMove.x[2] = breadboard[side][0].xpos + tile
+			print "SUCCESSFULLY SWAPPED POSITIONS"
+			return None
+		else:
+			pass
+
 
 
 if __name__ == '__main__':
@@ -493,6 +561,8 @@ if __name__ == '__main__':
 	V5 = power('5 volts',[])
 	V2 = power('2 volts',[])
 	board[0].Occupied[0] = GND
+	GND.x[1] = 0
+	GND.y[1] = 0
 	board[1].Occupied[0] = V2
 	board[4].Occupied[0] = V2
 	board[5].Occupied[0] = V5
@@ -561,7 +631,7 @@ if __name__ == '__main__':
 	print board[3][15].Occupied
 	print board[3][11].Occupied
 	
-	
+	#IF OCCUPIED DRAW TRACE TO NEXT? THEN TO UNOCCUPIED 
 	
 	#print board[3][13].Occupied
 	#print board[3][13].Occupied
