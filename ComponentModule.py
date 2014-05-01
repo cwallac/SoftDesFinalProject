@@ -35,8 +35,13 @@ class capacitor(Component):
 class dip(Component):
 	"""A component for the breadboard, representative of a variety of devices with multiple pins. Always oriented horrizontally.""" 
 	def __init__(self,x1,y1,orientation,connections,name,number_of_pins = 8, pin_gap = 3):
-		super(dip,self).__init__('none',x1,y1,orientation,connections,number_of_pins,pin_gap,name)
+		super(dip,self).__init__('none',x1,y1,orientation,connections,name,number_of_pins,pin_gap)
 		self.pinlist = {}
+
+class potentiometer(Component):
+	"""A component for the breadboard, representative of a device that has a variable resistance"""
+	def __init__(self,value,x1,y1,orientation,connections,name,number_of_pins = 3, pin_gap = 2):
+		super(potentiometer,self).__init__(value,x1,y1,orientation,connections,name,number_of_pins,pin_gap)
 
 class trace(object): 
 	def __init__(self,x1,y1,x2,y2,value1,value2):
