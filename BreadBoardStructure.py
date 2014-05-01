@@ -48,6 +48,8 @@ def identifyConnections(component,breadboard):
 	returnRail = []
 	returnRow = []
 	returnTile = []
+	print "WITHIN IDENTIFY CONNECTIONS COMP IS",component
+	print breadboard[4].Occupied
 	for rail in range(len(breadboard)):
 		if 1 < rail < 4:
 				for row in range(breadboard[0].length):
@@ -62,6 +64,7 @@ def identifyConnections(component,breadboard):
 		else:
 			for tile in range(breadboard[rail].length):
 						if breadboard[rail].Occupied[tile] == component:
+							print 'THERE IS A FRICKEN CONNECTION'
 							returnRail.append(rail)
 							returnRow.append(tile)
 							returnTile.append(0)
@@ -209,10 +212,34 @@ def defaultSecondPlacementFailed(breadboard,component,side):
 	print "RUNNING DEFAULT SECOND PLACEMENT FAILED"
 	occupiedFlag = 0
 	if component.y[1] < component.pin_gap:
-		pass
+		if component.x[1] < 10:
+			openSpot =findOpenSpace(component,breadboard,2)
+			print "NEXT OPEN SPOT IS", openSpot
+			xpos = component.x[1]
+			ypos = component.y[1]
+			Trace = trace(xpos,ypos,xpos,openSpot,component.connections[1][-1],component.connections[1][-1])
+			breadboard[2][ypos].Occupied[xpos-breadboard[2][0].xpos] = Trace
+			breadboard[2][openSpot].Occupied[xpos-breadboard[2][0].xpos] = Trace
+			print "WE PLACED A TRACE"
+			for k in range(4,1,-1):
+				if breadboard[2][openSpot].Occupied[k] == False:
+
+					component.x[1] = breadboard[2][0].xpos + k
+					component.y[1] = openSpot
+					component.x[2] = component.x[1]
+					component.y[2] = openSpot + component.pin_gap
+					breadboard[2][openSpot].Occupied[k] = component
+					breadboard[2][component.y[2]].Occupied[k] = component
+					return None
+
+
+		else:
+			openSpot =findOpenSpace(component,breadboard,3)
+			print "NEXT OPEN SPOT IS", openSpot
 		#FIND NEXT OPEN SPOT TO PLACE COMPONENT THEN DRAW TRACE DO DRAW TRACE FUNCTION
 	else:
 		if side == 'LEFT':
+			print "WE ARE ON THE LEFT"
 			for k in range(5):
 				if breadboard[2][component.y[1]-component.pin_gap].Occupied[k] != False:
 					occupiedFlag = 1
@@ -240,6 +267,7 @@ def defaultSecondPlacementFailed(breadboard,component,side):
 				breadboard[2][component.y[2]].Occupied[component.x[1]] = component
 		
 		elif side == 'RIGHT':
+			print "WE ARE ON THE RIGHT"
 			for k in range(5):
 				if breadboard[3][component.y[1]-component.pin_gap].Occupied[k] != False:
 					occupiedFlag = 1
@@ -350,7 +378,7 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail):
 			print 'NO PLACE'
 			
 
-	elif 2 > coordinate[0] or coordinate[0] > 17:
+	elif 2 > coordinate[0] or coordinate[0] > 3:
 		print "WE ON A RAIL BROSKI" 
 		direction = (coordinate[0] - component.x[1])/abs(coordinate[0] - component.x[1])
 
@@ -362,36 +390,67 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail):
 
 		if spaces == 1:
 			print "ONE GAP BROSKI"
+			if component.x[1] < 10:
+				#LEFT
+				
+				if breadboard[2][component.y[1]].Occupied[0]  != False:
+					pass
+				else:
+					breadboard[2][component.y[1]].Occupied[component.x[1]-breadboard[2][0].xpos] = False
+					component.x[1] = breadboard[2][0].xpos
+					breadboard[2][component.y[1]].Occupied[0] = component
+
+					component.x[2] = component.connections[2][-1].x[1]
+					component.y[2] = component.y[1]
+
+					breadboard[component.connections[2][-1].x[1]].Occupied[component.y[1]] = True
+
+				
+			else:
+				#right
+				if breadboard[3][component.y[1]].Occupied[4]  != False:
+					print "RUNNING MOVECOMPONENTFROMEDGE"
+					moveComponentOneFromEdge(component,breadboard,sideNumber,-1)
+				else:
+					pass
+				breadboard[3][component.y[1]].Occupied[component.x[1]-breadboard[3][0].xpos] = False
+				component.x[1] = breadboard[3][0].xpos+4
+				breadboard[3][component.y[1]].Occupied[4] = component
+
+				component.x[2] = component.connections[2][-1].x[1]
+				component.y[2] = component.y[1]
+
+				breadboard[component.connections[2][-1].x[1]-13].Occupied[component.y[1]] = True
 
 		else:
 			if component.x[1] < 10:
 				if breadboard[2][component.y[1]].Occupied[4] == False:
 					pass
 				else:
-					moveComponentOneFromEdge(component,breadboard,sideNumber)
+					moveComponentOneFromEdge(component,breadboard,sideNumber,1)
 
 				component.x[1] = breadboard[2][4].xpos
 				breadboard[2][component.y[1]].Occupied[4] = component
 				component.x[2] = component.x[1] + component.pin_gap
 				component.y[2] = component.y[1]
 				breadboard[3][component.y[1]].Occupied[component.x[2]-breadboard[2][0].xpos] = component
-				finalTrace = trace(breadboard[3][0].xpos,component.y[1],component.connections[2][0].x[1],component.y[1],component.connections[2][0],component.connections[2][0])
-				breadboard[3][component.y[1]].Occupied[4] = component.connections[2][0]
+				finalTrace = trace(breadboard[3][0].xpos,component.y[1],component.connections[2][-1].x[1],component.y[1],component.connections[2][-1],component.connections[2][-1])
+				breadboard[3][component.y[1]].Occupied[4] = component.connections[2][-1]
 			
 			else:
 				if breadboard[3][component.y[1]].Occupied[0] == False:
 					print "WERE GONNA DO TRACE REALTED STUFF HERE"
 
 				else: 
-					moveComponentOneFromEdge(component,breadboard,sideNumber)
+					moveComponentOneFromEdge(component,breadboard,sideNumber,1)
 					
 				component.x[1] = breadboard[3][0].xpos
 				breadboard[3][component.y[1]].Occupied[0] = component
 				component.x[2] = component.x[1] - component.pin_gap
 				component.y[2] = component.y[1]
 				breadboard[2][component.y[1]].Occupied[component.x[2]-breadboard[2][0].xpos] = component
-				finalTrace = trace(breadboard[2][0].xpos,component.y[1],component.connections[2][0].x[1],component.y[1],component.connections[2][0],component.connections[2][0])
-				breadboard[2][component.y[1]].Occupied[0] = component.connections[2][0]
+				finalTrace = trace(breadboard[2][0].xpos,component.y[1],component.connections[2][-1].x[1],component.y[1],component.connections[2][-1],component.connections[2][-1])
+				breadboard[2][component.y[1]].Occupied[0] = component.connections[2][-1]
 
 						# MAKE IT GO ACROSS GAP AND TRACE TO ITS CONNECTION
 
@@ -461,10 +520,12 @@ def placeComponent(component,breadboard):
 	else:
 		flag = 0
 		CorrectIndex = 0
-		matchingComponent = component.connections[1][0]
+		matchingComponent = component.connections[1][-1]
+		print matchingComponent , "IS THE MATCHING COMPONENT WHY DO WE HAVE AN ERROR"
 		identifyingTuple = identifyConnections(matchingComponent,breadboard)
-		print "BACK IN PLACE COMPONENT"
+		print "BACK IN PLACE COMPONENT", identifyingTuple
 		for Connections in matchingComponent.connections:
+			print matchingComponent.connections, "THESE ARE TEH CONNECTIONS WHY IS THERE AN ERROR"
 			for comp in matchingComponent.connections[Connections]:
 				if comp == component:
 					CorrectIndex = Connections-1
@@ -540,15 +601,23 @@ def leftOrRight(component,pin):
 		return "RAIL"
 
 
-def moveComponentOneFromEdge(component,breadboard,side):
+def moveComponentOneFromEdge(component,breadboard,side,tile):
 	print "RUNNING MOVE COMPONENT ONE FROM EDGE"
 	if side == 2:
-		componentToMove = breadboard[side][component.y[1]].Occupied[4]
-		InitialTile = 4
+		if tile == 1:
+			componentToMove = breadboard[side][component.y[1]].Occupied[4]
+			InitialTile = 4
+		else:
+			componentToMove = breadboard[side][component.y[1]].Occupied[0]
+			InitialTile = 0
 	else:
 
-		componentToMove = breadboard[side][component.y[1]].Occupied[0]
-		InitialTile = 0
+		if tile == 1:
+			componentToMove = breadboard[side][component.y[1]].Occupied[0]
+			InitialTile = 0
+		else:
+			componentToMove = breadboard[side][component.y[1]].Occupied[4]
+			InitialTile = 4
 
 
 
@@ -575,11 +644,11 @@ if __name__ == '__main__':
 	GND = power('GROUND',[])
 	V5 = power('5 volts',[])
 	V2 = power('2 volts',[])
-	board[0].Occupied[0] = GND
-	GND.x[1] = 0
+	board[4].Occupied[0] = GND
+	GND.x[1] = 17
 	GND.y[1] = 0
 	board[1].Occupied[0] = V2
-	board[4].Occupied[0] = V2
+	board[0].Occupied[0] = V2
 	board[5].Occupied[0] = V5
 
 
@@ -587,7 +656,7 @@ if __name__ == '__main__':
 	Resistor2 = resistor(2,4,7,'h',{1:[],2:[]})
 	Resistor3 = resistor(3,4,5,'h',{1:[],2:[]})
 	Resistor4 = resistor(4,4,5,'h',{1:[],2:[]})
-	DIP = dip(4,5,'h',{},'dip',number_of_pins = 12, pin_gap = 3)
+	DIP = dip(4,5,'h',{},'dip',number_of_pins = 8, pin_gap = 3)
 	#DIP2 = dip(4,5,'h',{3:[Resistor2]},'dip',number_of_pins = 8, pin_gap = 3)
 	
 
@@ -596,7 +665,7 @@ if __name__ == '__main__':
 	
 
 	placeFirstComponent(DIP,board)
-	DIP.connections[12] = [Resistor1]
+	DIP.connections[8] = [Resistor1]
 	Resistor1.connections[1] = [DIP]
 	
 	placeComponent(Resistor1,board)
@@ -604,7 +673,7 @@ if __name__ == '__main__':
 	
 	Resistor1.connections[2] = [Resistor2]
 	Resistor2.connections[1] = [Resistor1]
-	DIP.connections[12].append(Resistor2)
+	DIP.connections[8].append(Resistor2)
 	placeComponent(Resistor2,board)
 
 	print "SECOND COMPONENT PLACED"
@@ -626,8 +695,12 @@ if __name__ == '__main__':
 	Resistor3.connections[2].append(Resistor4)
 	GND.connections[1].append(Resistor4)
 	placeComponent(Resistor4,board)
-	
-
+	print "FOURTH COMPONENT PALCED"
+	Resistor5 = resistor(5,4,5,'h',{1:[],2:[]})
+	DIP.connections[1] = []
+	DIP.connections[1].append(Resistor5)
+	Resistor5.connections[1].append(DIP)
+	placeComponent(Resistor5,board)
 	#placeComponent(Resistor3,board)
 	#placeComponent(Resistor3,board)
 	#placeComponent(DIP2,board)
@@ -642,9 +715,12 @@ if __name__ == '__main__':
 	print Resistor3.y
 	print Resistor4.x
 	print Resistor4.y
+	print Resistor5.x
+	print Resistor5.y
 	print board[3][12].Occupied
+	print board[2][14].Occupied
 	print board[3][15].Occupied
-	print board[2][15].Occupied
+	print board[2][4].Occupied
 	
 	#IF OCCUPIED DRAW TRACE TO NEXT? THEN TO UNOCCUPIED 
 	
