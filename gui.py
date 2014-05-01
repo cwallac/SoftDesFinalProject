@@ -12,7 +12,7 @@ import bbnode
 import menumethods
 
 RHEIGHT = 810
-RWIDTH  = 1540/3
+RWIDTH  = 980
 class gui(tk.Tk):
     def __init__(self,parent): 
         tk.Tk.__init__(self,parent)
@@ -85,12 +85,12 @@ class gui(tk.Tk):
         self.bbimagewidth = 557
         self.bbcanvas=tk.Canvas(self.parent,bg='white')
         self.bbcanvas.grid(column=1,row=0,sticky='NEWS')
-        self.bbcanvas.configure(width=self.bbimagewidth+75,height=RHEIGHT)
+        self.bbcanvas.configure(width=self.bbimagewidth+3,height=RHEIGHT)
         
         #create and place schematic canvas in grid
-        self.scanvas=tk.Canvas(self.parent,bg='red')
+        self.scanvas=tk.Canvas(self.parent,bg='black')
         self.scanvas.grid(column=0,row=0,sticky='NEWS')     
-        self.scanvas.configure(width=RWIDTH-575,height=RHEIGHT)
+        self.scanvas.configure(width=RWIDTH,height=RHEIGHT)
         
         #top level gui creation
         top = self.winfo_toplevel()
@@ -111,7 +111,8 @@ class gui(tk.Tk):
         #self.grid_rowconfigure(0,weight=1)
         #self.grid_rowconfigure(1,weight=1)
         
-        self.bbcanvas.columnconfigure        
+        self.bbcanvas.columnconfigure
+        self.scanvas.columnconfigure        
         
         xrag = [i for i in range(120,450,30) if i!=270]
         for i in xrag:

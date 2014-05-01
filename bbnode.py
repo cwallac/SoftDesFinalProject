@@ -19,7 +19,14 @@ class bbnode(tk.Button):
         self.place(x=self.xpix,y=self.ypix,height=self.height,width=self.width)
         
     def getloc(self):
-        return (self.xloc,self.yloc)  
+        return (self.xloc,self.yloc)
+class scnode(bbnode):
+    def __init__(self,frame,x,y):
+        bbnode.__init__(self,frame,x,y)
+        self.xloc = x/30
+        self.yloc = y/30
+    def getloc(self):
+        return (self.xloc,self.yloc) 
 #    def xpixtoloc(self,val):
 #        v = val/30
 #        if v>=3:
