@@ -14,6 +14,8 @@ class Component(object):
 		self.value = value
 		self.x = {}
 		self.y = {}
+		self.cx = {}
+		self.cy = {}
 		self.x1 = x1
 		self.y1 = y1
 
