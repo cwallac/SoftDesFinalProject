@@ -13,7 +13,7 @@ IE:
 
 def placeFirstComponent(component,breadboard):
 
-	
+	print component.number_of_pins
 	for i in range(component.number_of_pins+1):
 		if i == 0:
 			pass
@@ -236,6 +236,22 @@ def defaultSecondPlacementFailed(breadboard,component,side):
 		else:
 			openSpot =findOpenSpace(component,breadboard,3)
 			print "NEXT OPEN SPOT IS", openSpot
+			xpos = component.x[1]
+			ypos = component.y[1]
+			Trace = trace(xpos,ypos,xpos,openSpot,component.connections[1][-1],component.connections[1][-1])
+			breadboard[3][ypos].Occupied[xpos-breadboard[2][0].xpos] = Trace
+			breadboard[3][openSpot].Occupied[xpos-breadboard[2][0].xpos] = Trace
+			print "WE PLACED A TRACE"
+			for k in range(5):
+				if breadboard[3][openSpot].Occupied[k] == False:
+
+					component.x[1] = breadboard[2][0].xpos + k
+					component.y[1] = openSpot
+					component.x[2] = component.x[1]
+					component.y[2] = openSpot + component.pin_gap
+					breadboard[3][openSpot].Occupied[k] = component
+					breadboard[3][component.y[2]].Occupied[k] = component
+					return None
 		#FIND NEXT OPEN SPOT TO PLACE COMPONENT THEN DRAW TRACE DO DRAW TRACE FUNCTION
 	else:
 		if side == 'LEFT':
