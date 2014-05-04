@@ -765,6 +765,20 @@ class gui(tk.Tk):
 #        self.scbuttonlist = [i for i in self.buttonlist if i not in resbut]
 #        for i in resbut:
 #            i.destroy()
+
+    def addcomponent(self,origin,end,ident):
+        if ident == "r":
+            menumethods.res_coords.append(origin)
+            menumethods.res_coords.append(end)
+        if ident == "c":
+            menumethods.cap_coords.append(origin)
+            menumethods.cap_coords.append(end)
+        if ident == "d":
+            menumethods.dip_coords.append(origin)
+            menumethods.dip_coords.append(end)
+        if ident == "w":
+            menumethods.wire_coords.append(origin)
+            menumethods.wire_coords.append(end)
        
 if __name__ == "__main__":
     app = gui(None)
