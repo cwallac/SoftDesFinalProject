@@ -221,6 +221,7 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 			ypos = component.y[1]
 			Trace = trace(xpos,ypos,xpos,openSpot,component.connections[1][-1],component.connections[1][-1])
 			compList.append(Trace)
+			print "ADDED TRACE LINE 223"
 			breadboard[2][ypos].Occupied[xpos-breadboard[2][0].xpos] = Trace
 			breadboard[2][openSpot].Occupied[xpos-breadboard[2][0].xpos] = Trace
 			print "WE PLACED A TRACE"
@@ -243,6 +244,7 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 			ypos = component.y[1]
 			Trace = trace(xpos,ypos,xpos,openSpot,component.connections[1][-1],component.connections[1][-1])
 			compList.append(Trace)
+			print "ADDED TRACE LINE 246"
 			breadboard[3][ypos].Occupied[xpos-breadboard[2][0].xpos] = Trace
 			breadboard[3][openSpot].Occupied[xpos-breadboard[2][0].xpos] = Trace
 			print "WE PLACED A TRACE"
@@ -285,6 +287,7 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 				breadboard[2][openSpot+component.pin_gap].Occupied[4] = component
 				Tracer = trace(component.x[1],component.y[1],component.x[1],component.y[2],[component.connections[1]],[component.connections[1]])
 				compList.append(Tracer)
+				print "ADDED TRACE LINE 288"
 				breadboard[2][component.y[2]].Occupied[component.x[1]] = component
 		
 		elif side == 'RIGHT':
@@ -313,6 +316,7 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 				breadboard[3][openSpot+component.pin_gap].Occupied[0] = component
 				Trace = trace(component.x[1],component.y[1],component.x[1],component.y[2],[component.connections[1]],[component.connections[1]])
 				compList.append(Trace)
+				print "ADDED TRACE LINE 315"
 				breadboard[3][component.y[2]].Occupied[component.x[1]-breadboard[3][0].xpos] = component
 
 
@@ -466,6 +470,7 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail,compList):
 					if breadboard[2][component.y[1]+1].Occupied[component.x[1]- breadboard[2][4].xpos] == False:
 						Trace = trace(component.x[1],component.y[1],component.x[1],component.y[1]+1,component,component)
 						compList.append(Trace)
+						print "ADDED TRACE LINE 469"
 						component.y[1] = component.y[1] + 1 # ADD MORE HERE
 						breadboard[2][component.y[1]+1].Occupied[component.x[1]-breadboard[2][0].xpos] = component					
 
@@ -474,8 +479,12 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail,compList):
 				component.x[2] = component.x[1] + component.pin_gap
 				component.y[2] = component.y[1]
 				breadboard[3][component.y[1]].Occupied[component.x[2]-breadboard[2][0].xpos] = component
+				#DETERMINE CORRECT INDEX
+				index = indexFinder(component,component.connections[2][-1])
+				
 				finalTrace = trace(breadboard[3][0].xpos,component.y[1],component.connections[2][-1].x[1],component.y[1],component.connections[2][-1],component.connections[2][-1])
 				compList.append(finalTrace)
+				print "ADDED TRACE LINE 481"
 				breadboard[3][component.y[1]].Occupied[4] = component.connections[2][-1]
 			
 			else:
@@ -492,6 +501,7 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail,compList):
 						print "THE NEXT SPACE IS UNOCCUPIED"
 						Trace = trace(component.x[1],component.y[1],component.x[1],component.y[1]+1,component,component)
 						compList.append(Trace)
+						print "ADDED TRACE LINE 498"
 						print "THIS IS THE COMPONENTS INITIAL Y VALUE", component.y[1]
 						component.y[1] = component.y[1] + 1 # ADD MORE HERE
 						breadboard[3][component.y[1]+1].Occupied[component.x[1]-breadboard[3][0].xpos] = component
@@ -503,6 +513,7 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail,compList):
 				breadboard[2][component.y[1]].Occupied[component.x[2]-breadboard[2][0].xpos] = component
 				finalTrace = trace(breadboard[2][0].xpos,component.y[1],component.connections[2][-1].x[1],component.y[1],component.connections[2][-1],component.connections[2][-1])
 				compList.append(finalTrace)
+				print "ADDED TRACE LINE 509"
 				breadboard[2][component.y[1]].Occupied[0] = component.connections[2][-1]
 
 						# MAKE IT GO ACROSS GAP AND TRACE TO ITS CONNECTION
@@ -539,14 +550,21 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail,compList):
 				
 
 				if direction == 1:
-					if breadboard[2][component.y[1]].Occupied[4]  == False or breadboard[2][component.y[1]].Occupied[4] == component:
+					if (breadboard[2][component.y[1]].Occupied[4]  == False or breadboard[2][component.y[1]].Occupied[4] == component) and breadboard[3][component.y[1]].Occupied[0] == False:
 						pass
+					elif breadboard[3][component.y[1]].Occupied[0] == False:
+						moveComponentOneFromEdge(component,breadboard,sideNumber,1) 
 					else:
-						res = moveComponentOneFromEdge(component,breadboard,sideNumber,1) 
-						if res != None:
-							flag = res/2
-						else:
-							flag = 0
+						for k in range(10):
+							if breadboard[2][component.y[1]+k].Occupied[component.x[1]- breadboard[2][4].xpos] == False and breadboard[3][component.y[1]+k].Occupied[0] == False:
+								Trace = trace(component.x[1],component.y[1],component.x[1],component.y[1]+k,component,component)
+								compList.append(Trace)
+								print "ADDED TRACE LINE 554"
+								component.y[1] = component.y[1] + k # ADD MORE HERE
+								breadboard[2][component.y[1]+k].Occupied[component.x[1]-breadboard[2][0].xpos] = component
+								break
+
+						
 					print component.y[1], "THIS SHOULD BE 4"
 					breadboard[2][component.y[1]].Occupied[component.x[1]-breadboard[2][0].xpos] = False
 					component.x[1] = breadboard[2][0].xpos+4
@@ -556,12 +574,25 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail,compList):
 					component.y[2] = component.y[1]
 
 					breadboard[3][component.y[1]].Occupied[0] = component
+
+					index = indexFinder(component,component.connections[2][-1])
+
 					
 				else:
-					if breadboard[3][component.y[1]].Occupied[0]  == False or breadboard[3][component.y[1]].Occupied[0] == component:
+					if (breadboard[3][component.y[1]].Occupied[0]  == False or breadboard[3][component.y[1]].Occupied[0] == component) and breadboard[2][component.y[1]].Occupied[4] == False:
 						pass
-					else:
+					elif breadboard[2][component.y[1]].Occupied[4] == False:
 						moveComponentOneFromEdge(component,breadboard,sideNumber,1) 
+					else:
+						for k in range(10):
+							if breadboard[3][component.y[1]+k].Occupied[component.x[1]- breadboard[3][0].xpos] == False and breadboard[2][component.y[1]+k].Occupied[4] == False:
+								Trace = trace(component.x[1],component.y[1],component.x[1],component.y[1]+k,component,component)
+								compList.append(Trace)
+								print "ADDED TRACE LINE 581"
+								component.y[1] = component.y[1] + k # ADD MORE HERE
+								breadboard[3][component.y[1]+k].Occupied[component.x[1]-breadboard[3][0].xpos] = component
+								break
+
 					print component.y[1], "THIS SHOULD BE 4"
 					breadboard[3][component.y[1]].Occupied[component.x[1]-breadboard[3][0].xpos] = False
 					component.x[1] = breadboard[3][0].xpos
@@ -585,8 +616,10 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail,compList):
 						if breadboard[rail][component.y[2]].Occupied[k] == False and breadboard[rail][component.y[2]+upOrDown].Occupied[k] == False:
 							Trace = trace(breadboard[rail][0].xpos + k, component.y[2], breadboard[rail][0].xpos + k, component.y[2]+upOrDown,component,component)
 							compList.append(Trace)
+							print "ADDED RACE LINE 618"
 							breadboard[rail][component.y[2]].Occupied[k] = component
 							breadboard[rail][component.y[2]+upOrDown].Occupied[k] = component
+							return None
 
 
 				
@@ -759,7 +792,11 @@ def moveComponentOneFromEdge(component,breadboard,side,tile):
 		else:
 			pass
 
-
+def indexFinder(component,matchedComp):
+	for number in matchedComp.connections:
+		for index in matchedComp.connections[number]:
+			if index == component:
+				return number
 
 if __name__ == '__main__':
 
@@ -845,8 +882,8 @@ if __name__ == '__main__':
 
 
 	compList = []
-	placeFirstComponent(Resistor1,board,compList)
-
+	#placeFirstComponent(Resistor1,board,compList)
+	"""
 	Resistor1.connections[2].append(Resistor2)
 	Resistor2.connections[1].append(Resistor1)
 	Resistor2.connections[2].append(GND)
@@ -864,7 +901,15 @@ if __name__ == '__main__':
 	Resistor4.connections[2].append(GND)
 
 	placeComponent(Resistor4,board,compList)
-
+	"""
+	placeFirstComponent(DIP,board,compList)
+	for i in range(DIP.number_of_pins+1):
+		DIP.connections[i] = []
+	Resistor1.connections[1].append(DIP)
+	Resistor1.connections[2].append(DIP)
+	DIP.connections[5].append(Resistor1)
+	DIP.connections[8].append(Resistor1)
+	placeComponent(Resistor1,board,compList)
 	print DIP.x
 	print DIP.y
 	print Resistor1.x
