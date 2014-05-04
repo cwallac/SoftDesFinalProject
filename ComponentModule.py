@@ -63,6 +63,12 @@ class power(object):
 		self.x = {}
 		self.y = {}
 		self.connections = connections
+		self.name = 'power'
+
+class ground(power):
+	def __init__(self,value,connections):
+		super(ground,self).__init__(value,connections)
+		self.name = 'ground'
 		
 if __name__ == '__main__':
 
