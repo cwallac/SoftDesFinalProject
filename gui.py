@@ -8,7 +8,7 @@ Created on Mon Apr  7 03:21:32 2014
 import Tkinter as tk
 #import ttk
 from PIL import Image, ImageTk
-import bbnode
+import nodes
 import menumethods
 
 RHEIGHT = 810
@@ -18,6 +18,7 @@ class gui(tk.Tk):
         tk.Tk.__init__(self,parent)
         self.parent = parent
         self.buttonlist = []  
+        self.scbuttonlist = []
         self.DFTCLR = ""
         self.initialize()
 
@@ -114,25 +115,36 @@ class gui(tk.Tk):
         self.bbcanvas.columnconfigure
         self.scanvas.columnconfigure        
         
+        #adding buttons to bbcanvas
         xrag = [i for i in range(120,450,30) if i!=270]
         for i in xrag:
             for j in range(8,800,30):
-                n = bbnode.bbnode(self.bbcanvas,i,j)
-                n.bind("<Button-1>",self.processMouseEvent)
+                n = nodes.bbnode(self.bbcanvas,i,j)
+                n.bind("<Button-1>",self.processbbMouseEvent)
                 self.buttonlist.append(n)
     
         yrag = [i for i in range(68,818,30) if i!=218 and i!=398 and i!=578 and i!=758]
         for i in [30,60,480,510]:
             for j in yrag:
-                n=bbnode.bbnode(self.bbcanvas,i,j)  
-                n.bind("<Button-1>",self.processMouseEvent)
+                n=nodes.bbnode(self.bbcanvas,i,j)  
+                n.bind("<Button-1>",self.processbbMouseEvent)
                 self.buttonlist.append(n)
         self.DFTCLR = self.buttonlist[0].cget('bg')
+        
+        #adding buttons to scanvas
+        xrag = [i for i in range(12,980,73)]
+        yrag = [i for i in range(11,810,65)]
+        for i in xrag:
+            for j in yrag:
+                n = nodes.scnode(self.scanvas,i,j)
+                n.bind("<Button-1>",self.processbbMouseEvent)
+                self.scbuttonlist.append(n)
+                
         #update and geometry
         self.update()
         self.geometry(self.geometry())     
         
-    def processMouseEvent(self,event):
+    def processbbMouseEvent(self,event):
         w=event.widget
         if menumethods.add:
             if menumethods.res_go and len(menumethods.res_coords)<2:
@@ -281,6 +293,12 @@ class gui(tk.Tk):
                 menumethods.dip_coords=[]
         else:
             print "not adding!"
+            
+    def processscMouseEvent(self,event):
+        w=event.widget
+        if menumethods.add:
+            
+        
     def xpixtoloc(self,val):
 #        v = val/30
 #        if v>=3:
