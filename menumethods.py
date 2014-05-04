@@ -55,15 +55,18 @@ dip_go=False
 wire_go=False
 add = False
 res_coords=[]
+res_coordssc=[]
 cap_coords=[]
+cap_coordssc=[]
 dip_coords=[]
+dip_coordssc=[]
 wire_coords=[]
+wire_coordssc=[]
 
 def addcomps():
     global add
     add = not add
     
-
 def insertResistor():
     global res_go
     temp = res_go
@@ -105,12 +108,20 @@ def boolsfalse():
 def coordsempty():
     global res_coords
     res_coords=[]
+    global res_coordssc
+    res_coordssc=[]
     global cap_coords
     cap_coords=[]
+    global cap_coordssc
+    cap_coordssc=[]
     global dip_coords
     dip_coords=[]
+    global dip_coordssc
+    dip_coordssc=[]
     global wire_coords
     wire_coords=[]
+    global wire_coordssc
+    wire_coordssc=[]
 
 def createNew():
     pass#if fileStatus == 'unsaved':
