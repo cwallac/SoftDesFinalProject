@@ -1,7 +1,8 @@
 #Placement model 
 from ComponentModule import *
 from BreadboardModule import *
-def placingCD(list_of_components):
+def placingCD(new_component,list_of_components):
+	list_of_components.append(new_component)
 	for i in range(len(list_of_components)):
 		if list_of_components[i].connections == {}:
 			place_component(list_of_components[i],list_of_components[i].cx1,list_of_components[i].cy1)
@@ -30,6 +31,7 @@ def placingCD(list_of_components):
 							update_connections(k[b],1,list_of_components[i])
 							print k[b].connections
 							place_component(k[b],list_of_components[i].cx[2],list_of_components[i].cy[2])
+
 		 		
 
 
@@ -68,6 +70,6 @@ if __name__ == '__main__':
 	resistor2 = resistor(10,10,10,0,0,'h',{})
 	resistor3 = resistor(10,15,15,0,0,'h',{1:[resistor1],2:[]})
 	capacitor1 = capacitor(10,5,5,0,0,'v',{1:[resistor1], 2:[resistor2]})
+	resistor4 = resistor(20,20,20,0,0,'v',{1:[resistor2]})
 	
-	
- 	placingCD([resistor1,resistor2,resistor3,capacitor1])
+ 	placingCD(resistor4,[resistor1,resistor2,resistor3,capacitor1])
