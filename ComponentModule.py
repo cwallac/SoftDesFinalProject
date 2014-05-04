@@ -69,6 +69,9 @@ class ground(power):
 	def __init__(self,value,connections):
 		super(ground,self).__init__(value,connections)
 		self.name = 'ground'
+
+class guiComponent(Component):
+    
 		
 if __name__ == '__main__':
 
