@@ -25,8 +25,8 @@ class scnode(bbnode):
         bbnode.__init__(self,frame,x,y)
         self.height = 7
         self.width = 8
-        self.xloc = x/30
-        self.yloc = y/30
+        self.xloc = (x+11)/73
+        self.yloc = (y+12)/65
         self.place(x=self.xpix,y=self.ypix,height=self.height,width=self.width)
     def getloc(self):
         return (self.xloc,self.yloc) 

@@ -137,7 +137,7 @@ class gui(tk.Tk):
         for i in xrag:
             for j in yrag:
                 n = nodes.scnode(self.scanvas,i,j)
-                n.bind("<Button-1>",self.processbbMouseEvent)
+                n.bind("<Button-1>",self.processscMouseEvent)
                 self.scbuttonlist.append(n)
                 
         #update and geometry
@@ -297,7 +297,152 @@ class gui(tk.Tk):
     def processscMouseEvent(self,event):
         w=event.widget
         if menumethods.add:
-            
+            if menumethods.res_go and len(menumethods.res_coords)<2:
+                if len(menumethods.res_coords)==1:
+                    org = menumethods.res_coords[0]
+                    opt = [i for i in self.scbuttonlist if (i.getloc()==(org[0]-2,org[1])) or (i.getloc()==(org[0]+2,org[1])) or (i.getloc()==(org[0],org[1]+2)) or (i.getloc()==(org[0],org[1]-2))]
+                    locs = [i.getloc() for i in opt]                
+                    if (w.xloc,w.yloc) in locs:
+                        for i in opt:
+                            i.configure(bg=self.DFTCLR)
+                        menumethods.res_coords.append((w.xloc,w.yloc))
+                else:
+                    menumethods.res_coords.append((w.xloc,w.yloc))
+                
+                if len(menumethods.res_coords)==1:
+                    org = menumethods.res_coords[0]
+                    opt = [i for i in self.scbuttonlist if (i.getloc()==(org[0]-1,org[1])) or (i.getloc()==(org[0]+1,org[1])) or (i.getloc()==(org[0],org[1]+1)) or (i.getloc()==(org[0],org[1]-1))]
+                    for i in opt:
+                        i.configure(bg="green")
+                        
+            if len(menumethods.res_coords)>=2:
+                org = menumethods.res_coords[0]
+                end = menumethods.res_coords[1]
+                if org[0]==end[0]:
+                    if end[1]<org[1]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawressc(org,end,w,"v","red")
+                if org[1]==end[1]:
+                    if end[0]<org[0]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawressc(org,end,w,"h","red")
+                menumethods.res_coords=[]
+                
+            if menumethods.cap_go and len(menumethods.cap_coords)<2:
+                if len(menumethods.cap_coords)==1:
+                    org = menumethods.cap_coords[0]
+                    opt = [i for i in self.scbuttonlist if (i.getloc()==(org[0]-2,org[1])) or (i.getloc()==(org[0]+2,org[1])) or (i.getloc()==(org[0],org[1]+2)) or (i.getloc()==(org[0],org[1]-2))]
+                    locs = [i.getloc() for i in opt]                
+                    if (w.xloc,w.yloc) in locs:
+                        for i in opt:
+                            i.configure(bg=self.DFTCLR)
+                        menumethods.cap_coords.append((w.xloc,w.yloc))
+                else:
+                    menumethods.cap_coords.append((w.xloc,w.yloc))
+                
+                if len(menumethods.cap_coords)==1:
+                    org = menumethods.cap_coords[0]
+                    opt = [i for i in self.scbuttonlist if (i.getloc()==(org[0]-2,org[1])) or (i.getloc()==(org[0]+2,org[1])) or (i.getloc()==(org[0],org[1]+2)) or (i.getloc()==(org[0],org[1]-2))]
+                    for i in opt:
+                        i.configure(bg="green")
+                        
+            if len(menumethods.cap_coords)>=2:
+                org = menumethods.cap_coords[0]
+                end = menumethods.cap_coords[1]
+                if org[0]==end[0]:
+                    if end[1]<org[1]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawressc(org,end,w,"v","blue")
+                if org[1]==end[1]:
+                    if end[0]<org[0]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawressc(org,end,w,"h","blue")
+                menumethods.cap_coords=[]  
+                
+            if menumethods.wire_go and len(menumethods.wire_coords)<2:
+                if len(menumethods.wire_coords)==1:
+                    org = menumethods.wire_coords[0]
+                    opt = [i for i in self.scbuttonlist if (i.xloc==org[0] or i.yloc==org[1]) and not i.getloc() == org]
+                    locs = [i.getloc() for i in opt]                
+                    if (w.xloc,w.yloc) in locs:
+                        for i in opt:
+                            i.configure(bg=self.DFTCLR)
+                        menumethods.wire_coords.append((w.xloc,w.yloc))
+                else:
+                    menumethods.wire_coords.append((w.xloc,w.yloc))
+                
+                if len(menumethods.wire_coords)==1:
+                    org = menumethods.wire_coords[0]
+                    opt = [i for i in self.scbuttonlist if (i.xloc==org[0] or i.yloc==org[1]) and not i.getloc() == org]
+                    for i in opt:
+                        i.configure(bg="green")  
+                        
+            if len(menumethods.wire_coords)>=2:
+                org = menumethods.wire_coords[0]
+                end = menumethods.wire_coords[1]
+                if org[0]==end[0]:
+                    if end[1]<org[1]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawressc(org,end,w,"v","yellow")
+                if org[1]==end[1]:
+                    if end[0]<org[0]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawressc(org,end,w,"h","yellow")
+                menumethods.wire_coords=[] 
+                
+            if menumethods.dip_go and len(menumethods.dip_coords)<2:
+                if len(menumethods.dip_coords)==1:
+                    org = menumethods.dip_coords[0]
+                    if org[0]==8:
+                        opt = [i for i in self.scbuttonlist if i.xloc==10]
+                    if org[0]==10:
+                        opt = [i for i in self.scbuttonlist if i.xloc==8]
+                    locs = [i.getloc() for i in opt]                
+                    if (w.xloc,w.yloc) in locs:
+                        for i in opt:
+                            i.configure(bg=self.DFTCLR)
+                        menumethods.dip_coords.append((w.xloc,w.yloc))
+                elif w.xloc==8 or w.xloc==10:
+                    menumethods.dip_coords.append((w.xloc,w.yloc))
+                else:
+                    print 'not appropriate location for a dip'
+                
+                if len(menumethods.dip_coords)==1:
+                    org = menumethods.dip_coords[0]
+                    opt = [i for i in self.scbuttonlist if (i.xloc==org[0] or i.yloc==org[1]) and not i.getloc() == org]
+                    for i in opt:
+                        i.configure(bg="green")
+                        
+            if len(menumethods.dip_coords)>=2:
+                org = menumethods.dip_coords[0]
+                end = menumethods.dip_coords[1]
+                if org[0]==end[0]:
+                    if end[1]<org[1]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawdipsc(org,end,w,"v","blue")
+                if org[1]==end[1]:
+                    if end[0]<org[0]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawdipsc(org,end,w,"h","blue")
+                menumethods.dip_coords=[]
+        else:
+            print "not adding!"
         
     def xpixtoloc(self,val):
 #        v = val/30
@@ -325,7 +470,19 @@ class gui(tk.Tk):
         
     def ypixtoloc(self,val):
         return (val+22)/30
-        
+
+    def xpixtolocsc(self,val):
+        return val/73
+
+    def xloctopixsc(self,val):
+        return val*73
+
+    def ypixtolocsc(self,val):
+        return (val+11)/65
+    
+    def yloctopixsc(self,val):
+        return (val*65)-11
+
     def drawres(self,origin,end,w,orent,c):
         pixorigin=(self.xloctopix(origin[0]),self.yloctopix(origin[1]))
         pixend=(self.xloctopix(end[0]),self.yloctopix(end[1]))
@@ -341,9 +498,25 @@ class gui(tk.Tk):
             i.destroy()   
     def drawdip(self,origin,end,w,orent,c):
         self.drawres(self,origin,end,w,orent,c)
+#draw functions for the schematic
+    def drawressc(self,origin,end,w,orent,c):
+        pixorigin=(self.xloctopixsc(origin[0]),self.yloctopixsc(origin[1]))
+        pixend=(self.xloctopixsc(end[0]),self.yloctopixsc(end[1]))
+        #w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill="red")     
+        if orent=="v":
+            w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill=c)
+#            resbut = [i for i in self.buttonlist if i.yloc>=origin[1] and i.yloc<=end[1] and i.xloc==origin[0]]
+        elif orent=="h":
+            w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+17+5,pixorigin[1]+16+5,fill=c)
+#            resbut = [i for i in self.buttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc==origin[1]]
+#        self.buttonlist = [i for i in self.buttonlist if i not in resbut]
+#        for i in resbut:
+#            i.destroy()   
+
+    def drawdipsc(self,origin,end,w,orent,c):
+        self.drawressc(self,origin,end,w,orent,c)
         
 if __name__ == "__main__":
     app = gui(None)
     app.title('C.I.R.C.U.I.T')
     app.mainloop()
-    
