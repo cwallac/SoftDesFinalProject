@@ -10,6 +10,7 @@ import Tkinter as tk
 from PIL import Image, ImageTk
 import nodes
 import menumethods
+from Integrate import Model as M
 
 RHEIGHT = 810
 RWIDTH  = 985
@@ -766,19 +767,33 @@ class gui(tk.Tk):
 #        for i in resbut:
 #            i.destroy()
 
-    def addcomponent(self,origin,end,ident):
-        if ident == "r":
-            menumethods.res_coords.append(origin)
-            menumethods.res_coords.append(end)
-        if ident == "c":
-            menumethods.cap_coords.append(origin)
-            menumethods.cap_coords.append(end)
-        if ident == "d":
-            menumethods.dip_coords.append(origin)
-            menumethods.dip_coords.append(end)
-        if ident == "w":
-            menumethods.wire_coords.append(origin)
-            menumethods.wire_coords.append(end)
+    def addcomponent(self,origin,end,ident,loc):
+        if loc=="bb":
+            if ident == "r":
+                menumethods.res_coords.append(origin)
+                menumethods.res_coords.append(end)
+            if ident == "c":
+                menumethods.cap_coords.append(origin)
+                menumethods.cap_coords.append(end)
+            if ident == "d":
+                menumethods.dip_coords.append(origin)
+                menumethods.dip_coords.append(end)
+            if ident == "w":
+                menumethods.wire_coords.append(origin)
+                menumethods.wire_coords.append(end)
+        if loc=="sc":
+            if ident == "r":
+                menumethods.res_coordssc.append(origin)
+                menumethods.res_coordssc.append(end)
+            if ident == "c":
+                menumethods.cap_coordssc.append(origin)
+                menumethods.cap_coordssc.append(end)
+            if ident == "d":
+                menumethods.dip_coordssc.append(origin)
+                menumethods.dip_coordssc.append(end)
+            if ident == "w":
+                menumethods.wire_coordssc.append(origin)
+                menumethods.wire_coordssc.append(end)
        
 if __name__ == "__main__":
     app = gui(None)

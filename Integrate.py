@@ -1,6 +1,7 @@
 from BreadBoardStructure import *
 from ComponentModule import *
 from BreadboardModule import *
+import gui as g
 
 from place import *
 
@@ -21,16 +22,17 @@ class Model():
 
 class Controller():
 	pass
-
-class View():
-	pass
+	
 
 if __name__ == '__main__':
-	
-	Test = Model()
-	print Test.board[3][0].Occupied
-	Resistor1 = resistor(1,0,0,4,5,'h',{1:[],2:[]})
-	Test.placeCompOnBreadBoard(Resistor1,Test.board,Test.compList)
-	print Test.compList[0].x
-	Test.placeCompOnSchema(Test.compList)
-	print Test.compList[0].cx
+    Test = Model()
+    print Test.board[3][0].Occupied
+    Resistor1 = resistor(1,0,0,4,5,'h',{1:[],2:[]})
+    Test.placeCompOnBreadBoard(Resistor1,Test.board,Test.compList)
+    print Test.compList[0].x
+    Test.placeCompOnSchema(Test.compList)
+    print Test.compList[0].cx
+    
+    app = g.gui(None)
+    app.title('C.I.R.C.U.I.T')
+    app.mainloop()
