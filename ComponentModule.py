@@ -24,6 +24,18 @@ class Component(object):
 	def __str__ (self):
 		return '%s of %s' % (self.name,self.value)
 
+	def placing(self,x1,y1,x2,y2,SC_BB = 'BB'):
+		if SC_BB == 'BB':
+			self.x[1] = x1
+			self.x[2] = x2
+			self.y[1] = y1
+			self.y[2] = y2
+		else: 
+			self.cx[1] = x1
+			self.cx[2] = x2
+			self.cy[1] = y1
+			self.cy[2] = y2
+
 
 class resistor(Component):
 	"""A component to be placed on the breadboard. Has a resistance and a size."""
@@ -52,6 +64,14 @@ class trace(object):
 		self.x2 = x2
 		self.y1 = y1
 		self.y2 = y2
+		self.x = {}
+		self.y = {}
+		self.cx = {}
+		self.cy = {}
+		self.x[1] = x1
+		self.x[2] = x2
+		self.y[1] = y1
+		self.y[2] = y2
 		self.value1 = value1
 		self.value2 = value2
 
@@ -70,7 +90,7 @@ class ground(power):
 		super(ground,self).__init__(value,connections)
 		self.name = 'ground'
 
-class guiComponent(Component):
+
     
 		
 if __name__ == '__main__':
