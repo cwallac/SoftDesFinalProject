@@ -558,8 +558,8 @@ class gui(tk.Tk):
                         
             if len(menumethods.wire_coordssc)>=2:
                 col = self.wirecolor
-                org = menumethods.wire_coordssc[0]
                 end = menumethods.wire_coordssc[1]
+                org = menumethods.wire_coordssc[0]
                 if org[0]==end[0]:
                     if end[1]<org[1]:
                         temp = org
@@ -727,7 +727,6 @@ class gui(tk.Tk):
             w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixorigin[0]+13+7,pixend[1]+12+7,fill=c)
             w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)),text = str(self.capval),fill="white")
             w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)+16),text = self.capunits,fill="white")
-            w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,((pixorigin[0]+pixend[0])/2)+8),text = str(self.capval)+" "+self.capunits,fill="white")
 #            resbut = [i for i in self.scbuttonlist if i.yloc>=origin[1] and i.yloc<=end[1] and i.xloc==origin[0]]
         elif orent=="h":
             w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixend[0]+13+7,pixorigin[1]+12+7,fill=c)
