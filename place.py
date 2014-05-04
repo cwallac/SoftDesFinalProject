@@ -17,8 +17,7 @@ def placingCD(list_of_components):
 						update_connections(k[b],1,list_of_components[i])
 						print k[b].connections
 						place_component(k[b],list_of_components[i].cx[2],list_of_components[i].cy[2])
-		 		#k = list_of_components[i].connections[j]
-				#place_component(list_of_components[i],k[0].cx[2],k[0].cy[2])
+		 		
 
 
 
@@ -45,6 +44,7 @@ def update_connections(component1,pnum,component2):
 	else:
 		component1.connections[pnum].append(component2)
 
+def place_power():
 
 
 
@@ -54,5 +54,6 @@ if __name__ == '__main__':
 	resistor2 = resistor(10,10,10,0,0,'h',{})
 	resistor3 = resistor(10,15,15,0,0,'h',{1:[resistor1],2:[]})
 	capacitor1 = capacitor(10,5,5,0,0,'v',{1:[resistor1], 2:[resistor2]})
+	five_volts = power(5,{1:[resistor1]})
 	
  	placingCD([resistor1,resistor2,resistor3,capacitor1])
