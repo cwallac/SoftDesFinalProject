@@ -58,6 +58,8 @@ class trace(object):
 class power(object):
 	def __init__(self,value,connections):
 		self.value = value
+		self.cx = {}
+		self.cy = {}
 		self.x = {}
 		self.y = {}
 		self.connections = {1:[]}

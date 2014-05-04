@@ -17,8 +17,8 @@ def placingCD(list_of_components):
 						update_connections(k[b],1,list_of_components[i])
 						print k[b].connections
 						place_component(k[b],list_of_components[i].cx[2],list_of_components[i].cy[2])
-		 		k = list_of_components[i].connections[j]
-				place_component(list_of_components[i],k[0].cx[2],k[0].cy[2])
+		 		#k = list_of_components[i].connections[j]
+				#place_component(list_of_components[i],k[0].cx[2],k[0].cy[2])
 
 
 
@@ -49,22 +49,10 @@ def update_connections(component1,pnum,component2):
 
 
 if __name__ == '__main__':
-<<<<<<< HEAD
-	resistor1 = resistor(10,0,0,'v',{})
-	resistor2 = resistor(10,10,10,'v',{1:[resistor1]})
-	capacitor1 = capacitor(10,5,5,'h',{1:[resistor1,resistor2]})
-	placingCD([resistor1, resistor2, capacitor1])
-=======
 	breadboard = createBreadboard()
-	resistor1 = resistor(10,0,0,'h',{})
-<<<<<<< HEAD
-	resistor2 = resistor(10,10,10,'h',{})
-	resistor3 = resistor(10,15,15,'h',{1:[resistor1],2:[]})
-	capacitor1 = capacitor(10,5,5,'v',{1:[resistor1], 2:[resistor2]})
+	resistor1 = resistor(10,0,0,0,0,'h',{})
+	resistor2 = resistor(10,10,10,0,0,'h',{})
+	resistor3 = resistor(10,15,15,0,0,'h',{1:[resistor1],2:[]})
+	capacitor1 = capacitor(10,5,5,0,0,'v',{1:[resistor1], 2:[resistor2]})
 	
  	placingCD([resistor1,resistor2,resistor3,capacitor1])
-=======
-	capacitor1 = capacitor(10,5,5,'v',{1:resistor1})
- 	placingCD([resistor1,capacitor1])
->>>>>>> 817b5f53d9e4d0ea81348bdede276c22afde3df5
->>>>>>> 0129cdf61b311150b23add6c3b1e204ace087d98
