@@ -10,7 +10,7 @@ import Tkinter as tk
 from PIL import Image, ImageTk
 import nodes
 import menumethods
-from Integrate import Model as M
+#from Integrate import Model as M
 
 RHEIGHT = 810
 RWIDTH  = 985
@@ -24,6 +24,8 @@ class gui(tk.Tk):
         self.parent = parent
         self.buttonlist = []  
         self.scbuttonlist = []
+        self.bbcomplist = []
+        self.sccomplist = []
         self.DFTCLR = ""
         self.initialize()
 
@@ -58,12 +60,12 @@ class gui(tk.Tk):
         self.editsubMenu.add_command(label='Insert', command=self.quit)
         
         #view submenu commands
-        self.viewsubMenu.add_checkbutton(label='Add Components', command = lambda: self.insert("A"))
+        self.viewsubMenu.add_checkbutton(label='Add Components', command = lambda: self.insert("a",None))
         self.viewsubMenu.add_separator()
-        self.viewsubMenu.add_radiobutton(label='Resistors', command=lambda: self.insert("R"))
-        self.viewsubMenu.add_radiobutton(label='Capacitors', command=lambda: self.insert("C"))
-        self.viewsubMenu.add_radiobutton(label='Dips', command=lambda: self.insert("D"))
-        self.viewsubMenu.add_radiobutton(label='Wires', command=lambda: self.insert("W"))
+        self.viewsubMenu.add_radiobutton(label='Resistors', command=lambda: self.insert("r",None))
+        self.viewsubMenu.add_radiobutton(label='Capacitors', command=lambda: self.insert("c",None))
+        self.viewsubMenu.add_radiobutton(label='Dips', command=lambda: self.insert("d",None))
+        self.viewsubMenu.add_radiobutton(label='Wires', command=lambda: self.insert("w",None))
         
         #tools submenu commands
         self.toolssubMenu.add_command(label='Move', command=self.quit)
@@ -75,23 +77,55 @@ class gui(tk.Tk):
         self.aboutsubMenu.add_command(label='About the Program', command=menumethods.aboutprog)
         self.aboutsubMenu.add_command(label='About the Creators',command=menumethods.aboutcreat)
         
-    def insert(self,ident):
+    def insert(self,ident,loc):
         for i in self.buttonlist:
             i.configure(bg=self.DFTCLR)
         for i in self.scbuttonlist:
             i.configure(bg="black")            
-        if ident=="A":
+        if ident=="a":
             menumethods.addcomps()
-        if ident=="R":
+        if ident=="r":
             self.insertResistor()
-        if ident=="C":
+        if ident=="c":
             self.insertCapacitor()
-        if ident=="D":
+        if ident=="d":
             self.insertDip()
-        if ident=="W":
+        if ident=="w":
             self.insertWire()
-        if ident=="K":
+        if ident=="rK" or  ident=="cK" or  ident=="wK" or  ident=="dK":
+            self.addcomplist(ident,loc)
             menumethods.clearall()
+    
+    def addcomplist(self,ident,loc):
+        coords = [(0,0),(0,0),ident[0],loc]
+        if loc =="sc":
+            if ident == "rK":
+                coords[0]=menumethods.res_coordssc[0]
+                coords[1]=menumethods.res_coordssc[1]
+            if ident == "cK":
+                coords[0]=menumethods.cap_coordssc[0]
+                coords[1]=menumethods.cap_coordssc[1]
+            if ident == "wK":
+                coords[0]=menumethods.wire_coordssc[0]
+                coords[1]=menumethods.wire_coordssc[1]
+            if ident == "dK":
+                coords[0]=menumethods.dip_coordssc[0]
+                coords[1]=menumethods.dip_coordssc[1]
+            self.sccomplist.append(coords)
+        if loc =="bb":
+            if ident == "rK":
+                coords[0]=menumethods.res_coords[0]
+                coords[1]=menumethods.res_coords[1]
+            if ident == "cK":
+                coords[0]=menumethods.cap_coords[0]
+                coords[1]=menumethods.cap_coords[1]
+            if ident == "wK":
+                coords[0]=menumethods.wire_coords[0]
+                coords[1]=menumethods.wire_coords[1]
+            if ident == "dK":
+                coords[0]=menumethods.dip_coords[0]
+                coords[1]=menumethods.dip_coords[1]
+            self.bbcomplist.append(coords)
             
     def insertDip(self):
         global dipopen
@@ -340,14 +374,14 @@ class gui(tk.Tk):
                         temp = org
                         org = end
                         end = temp
-                    self.drawres(org,end,w,"v","red")
+                    self.drawres(org,end,w,"v",'#d2b48c')
                 if org[1]==end[1]:
                     if end[0]<org[0]:
                         temp = org
                         org = end
                         end = temp
-                    self.drawres(org,end,w,"h","red")
-                self.insert("K")
+                    self.drawres(org,end,w,"h",'#d2b48c')
+                self.insert("rK","bb")
                 
             if menumethods.cap_go and len(menumethods.cap_coords)<2:
                 if len(menumethods.cap_coords)==1:
@@ -375,14 +409,14 @@ class gui(tk.Tk):
                         temp = org
                         org = end
                         end = temp
-                    self.drawcap(org,end,w,"v","blue")
+                    self.drawcap(org,end,w,"v",'#730000')
                 if org[1]==end[1]:
                     if end[0]<org[0]:
                         temp = org
                         org = end
                         end = temp
-                    self.drawcap(org,end,w,"h","blue")
-                self.insert("K")  
+                    self.drawcap(org,end,w,"h",'#730000')
+                self.insert("cK","bb")  
                 
             if menumethods.wire_go and len(menumethods.wire_coords)<2:
                 if len(menumethods.wire_coords)==1:
@@ -418,7 +452,7 @@ class gui(tk.Tk):
                         org = end
                         end = temp
                     self.drawwire(org,end,w,"h",col)
-                self.insert("K") 
+                self.insert("wK","bb") 
                 
             if menumethods.dip_go and len(menumethods.dip_coords)<2:
                 if len(menumethods.dip_coords)==1:
@@ -426,7 +460,7 @@ class gui(tk.Tk):
                     if org[0]==8:
                         opt = [i for i in self.buttonlist if (i.xloc==10) and (i.yloc==org[1]+(self.dipsize/2)-1 or i.yloc==org[1]-(self.dipsize/2)+1)]
                     if org[0]==10:
-                        opt = [i for i in self.buttonlist if (i.xloc==10) and (i.yloc==org[1]+(self.dipsize/2)-1 or i.yloc==org[1]-(self.dipsize/2)+1)]
+                        opt = [i for i in self.buttonlist if (i.xloc==8) and (i.yloc==org[1]+(self.dipsize/2)-1 or i.yloc==org[1]-(self.dipsize/2)+1)]
                     locs = [i.getloc() for i in opt]                
                     if (w.xloc,w.yloc) in locs:
                         for i in opt:
@@ -461,8 +495,8 @@ class gui(tk.Tk):
                     if org[1]<end[1]:
                         self.drawdip(org,end,w,"d","black")
                     if org[1]>end[1]:
-                        self.drawdip(org,end,w,"u","black") 
-                self.insert("K")
+                        self.drawdip(org,end,w,"u","black")
+                self.insert("dK","bb")
         else:
             print "not adding at "+ "("+ str(w.xloc) + "," + str(w.yloc) + ")" + "!"
             
@@ -495,14 +529,14 @@ class gui(tk.Tk):
                         temp = org
                         org = end
                         end = temp
-                    self.drawressc(org,end,w,"v","red")
+                    self.drawressc(org,end,w,"v",'#d2b48c')
                 if org[1]==end[1]:
                     if end[0]<org[0]:
                         temp = org
                         org = end
                         end = temp
-                    self.drawressc(org,end,w,"h","red")
-                self.insert("K")
+                    self.drawressc(org,end,w,"h",'#d2b48c')
+                self.insert("rK","sc")
                 
             if menumethods.cap_go and len(menumethods.cap_coordssc)<2:
                 if len(menumethods.cap_coordssc)==1:
@@ -530,14 +564,14 @@ class gui(tk.Tk):
                         temp = org
                         org = end
                         end = temp
-                    self.drawcapsc(org,end,w,"v","blue")
+                    self.drawcapsc(org,end,w,"v",'#730000')
                 if org[1]==end[1]:
                     if end[0]<org[0]:
                         temp = org
                         org = end
                         end = temp
-                    self.drawcapsc(org,end,w,"h","blue")
-                self.insert("K") 
+                    self.drawcapsc(org,end,w,"h",'#730000')
+                self.insert("cK","sc") 
                 
             if menumethods.wire_go and len(menumethods.wire_coordssc)<2:
                 if len(menumethods.wire_coordssc)==1:
@@ -573,7 +607,7 @@ class gui(tk.Tk):
                         org = end
                         end = temp
                     self.drawwiresc(org,end,w,"h",col)
-                self.insert("K")
+                self.insert("wK","sc")
                 
             if menumethods.dip_go and len(menumethods.dip_coordssc)<2:
                 if len(menumethods.dip_coordssc)==1:
@@ -609,7 +643,7 @@ class gui(tk.Tk):
                         self.drawdipsc(org,end,w,"d","black")
                     if org[1]>end[1]:
                         self.drawdipsc(org,end,w,"u","black") 
-                self.insert("K")
+                self.insert("dK","sc")
         else:
             print "not adding at "+ "("+ str(w.xloc) + "," + str(w.yloc) + ")" + "!"
     
