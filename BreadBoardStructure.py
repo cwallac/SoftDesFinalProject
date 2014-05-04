@@ -72,7 +72,8 @@ def identifyConnections(component,breadboard):
 
 def closestConnections(component,breadboard,componentToPlace):
 	print "RUNNING CLOSESTCONNECTIONS"
-	
+	print "COMPONENT IS", component
+	print "WHAT WE ARE PLACING IS", componentToPlace
 	if 1 < component.x[1] < 10:
 		compSide = 2
 	elif 10 < component.x[1] < 17:
@@ -82,6 +83,7 @@ def closestConnections(component,breadboard,componentToPlace):
 		compSide = component.x[1]
 	else:
 		compSide = component.x[1] -13
+	print "OUR COMPONENT IS ON WHAT COMPSIDE (3)", compSide
 	connectionList = []
 	#FIRST CHECK FOR SAME PANEL
 	for panel in range(len(breadboard)):
@@ -100,8 +102,8 @@ def closestConnections(component,breadboard,componentToPlace):
 
 		else:
 			for tile in range(breadboard[0].length):
-				if breadboard[compSide].Occupied[tile] == component:
-					connectionList.append((compSide,component.y[1]))
+				if breadboard[panel].Occupied[tile] == component:
+					connectionList.append((panel,component.y[1]))
 
 	#		for tile in range(len(breadboard[0].length)):
 	#			if breadboard[panel].Occupied[tile] ==
@@ -408,10 +410,13 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail):
 			print "ONE GAP BROSKI"
 			if component.x[1] < 10:
 				#LEFT
-				
-				if breadboard[2][component.y[1]].Occupied[0]  != False:
-					pass
-				else:
+				if component.x[1] > component.connections[2][-1].x[1]:
+					if breadboard[2][component.y[1]].Occupied[0]  != False:
+						moveComponentOneFromEdge(component,breadboard,sideNumber,-1)
+					else:
+						pass
+
+
 					breadboard[2][component.y[1]].Occupied[component.x[1]-breadboard[2][0].xpos] = False
 					component.x[1] = breadboard[2][0].xpos
 					breadboard[2][component.y[1]].Occupied[0] = component
@@ -420,6 +425,24 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail):
 					component.y[2] = component.y[1]
 
 					breadboard[component.connections[2][-1].x[1]].Occupied[component.y[1]] = True
+
+				else:
+					#THIS IS ON THE BOARDSPACE
+					if breadboard[2][component.y[1]].Occupied[4]  != False:
+						moveComponentOneFromEdge(component,breadboard,sideNumber,1)
+					else:
+						pass 
+
+					breadboard[2][component.y[1]].Occupied[component.x[1]-breadboard[2][0].xpos] = False
+					component.x[1] = breadboard[2][0].xpos+4
+					breadboard[2][component.y[1]].Occupied[4] = component
+
+					component.x[2] = breadboard[3][0].xpos
+					component.y[2] = component.y[1]
+
+					breadboard[3][component.y[1]].Occupied[0] = True
+
+
 
 				
 			else:
@@ -587,7 +610,7 @@ def placeComponent(component,breadboard):
 				SetPosValues(breadboard[rail][Row].Occupied[Tile],component,i,1,breadboard)
 				print "BACK IN PLACE COMPONENT"
 				if len(component.connections[2]) != 0:
-					values = closestConnections(component.connections[2][0],breadboard,component) #SHOULD THIS BE THE CONNECTION WE ARE MATCHING TO?
+					values = closestConnections(component.connections[2][-1],breadboard,component) #SHOULD THIS BE THE CONNECTION WE ARE MATCHING TO?
 				else:
 					values = False
 				print "BACK IN PLACE COMPONENT"
@@ -668,11 +691,12 @@ if __name__ == '__main__':
 	board[5].Occupied[0] = V5
 
 
-	Resistor1 = resistor(1,4,5,'h',{1:[],2:[]})
-	Resistor2 = resistor(2,4,7,'h',{1:[],2:[]})
-	Resistor3 = resistor(3,4,5,'h',{1:[],2:[]})
-	Resistor4 = resistor(4,4,5,'h',{1:[],2:[]})
-	DIP = dip(4,5,'h',{},'dip',number_of_pins = 8, pin_gap = 3)
+	Resistor1 = resistor(1,0,0,4,5,'h',{1:[],2:[]})
+	Resistor2 = resistor(2,0,0,4,7,'h',{1:[],2:[]})
+	Resistor3 = resistor(3,0,0,4,5,'h',{1:[],2:[]})
+	Resistor4 = resistor(4,0,0,4,5,'h',{1:[],2:[]})
+	Resistor6 = resistor(6,0,0,4,5,'h',{1:[],2:[]})
+	DIP = dip(0,0,4,5,'h',{},'dip',number_of_pins = 8, pin_gap = 3)
 	#DIP2 = dip(4,5,'h',{3:[Resistor2]},'dip',number_of_pins = 8, pin_gap = 3)
 	
 
@@ -712,11 +736,19 @@ if __name__ == '__main__':
 	GND.connections[1].append(Resistor4)
 	placeComponent(Resistor4,board)
 	print "FOURTH COMPONENT PALCED"
-	Resistor5 = resistor(5,4,5,'h',{1:[],2:[]})
-	DIP.connections[1] = []
-	DIP.connections[1].append(Resistor5)
+	Resistor5 = resistor(5,0,0,4,5,'h',{1:[],2:[]})
+	DIP.connections[3] = []
+	DIP.connections[3].append(Resistor5)
 	Resistor5.connections[1].append(DIP)
 	placeComponent(Resistor5,board)
+
+	Resistor6.connections[1].append(Resistor5)
+	Resistor5.connections[2].append(Resistor6)
+	Resistor6.connections[2].append(Resistor4)
+	Resistor4.connections[2].append(Resistor6)
+	print "PLACING COMPONENT SIX"
+	placeComponent(Resistor6,board)
+
 	#placeComponent(Resistor3,board)
 	#placeComponent(Resistor3,board)
 	#placeComponent(DIP2,board)
@@ -725,12 +757,19 @@ if __name__ == '__main__':
 	print DIP.y
 	print Resistor1.x
 	print Resistor1.y
+	print "RESISTOR 2 STUFF"
 	print Resistor2.x
 	print Resistor2.y
+	print "RESISTOR 3 STUFF"
 	print Resistor3.x
 	print Resistor3.y
+	print "RESISTOR 4 STUFF"
 	print Resistor4.x
 	print Resistor4.y
+	print "RESISTOR 5 STUFF"
+	print Resistor5.x
+	print Resistor5.y
+	print "RESISTOR 6 STUFF"
 	print Resistor5.x
 	print Resistor5.y
 	print board[3][12].Occupied
