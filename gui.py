@@ -13,6 +13,7 @@ import menumethods
 
 RHEIGHT = 810
 RWIDTH  = 980
+dipopen = False
 class gui(tk.Tk):
     def __init__(self,parent): 
         tk.Tk.__init__(self,parent)
@@ -57,7 +58,7 @@ class gui(tk.Tk):
         self.viewsubMenu.add_separator()
         self.viewsubMenu.add_radiobutton(label='Resistors', command=menumethods.insertResistor)
         self.viewsubMenu.add_radiobutton(label='Capacitors', command=menumethods.insertCapacitor)
-        self.viewsubMenu.add_radiobutton(label='Dips', command=menumethods.insertDip)
+        self.viewsubMenu.add_radiobutton(label='Dips', command=lambda: self.insertdip())
         self.viewsubMenu.add_radiobutton(label='Wires', command=menumethods.insertWire)
         
         #tools submenu commands
@@ -271,53 +272,99 @@ class gui(tk.Tk):
                 
                 if len(menumethods.dip_coords)==1:
                     org = menumethods.dip_coords[0]
-                    opt = [i for i in self.buttonlist if (i.xloc==org[0] or i.yloc==org[1]) and not i.getloc() == org]
+                    print org[0]
+                    if org[0]==8:                        
+                        opt = [i for i in self.buttonlist if (i.xloc==10) and (i.yloc==org[1]+(self.dipsize/2)-1 or i.yloc==org[1]-(self.dipsize/2)+1)]
+                    elif org[0]==10:
+                        opt = [i for i in self.buttonlist if (i.xloc==8) and (i.yloc==org[1]+(self.dipsize/2)-1 or i.yloc==org[1]-(self.dipsize/2)+1)]
                     for i in opt:
                         i.configure(bg="green")
                         
             if len(menumethods.dip_coords)>=2:
                 org = menumethods.dip_coords[0]
                 end = menumethods.dip_coords[1]
-                if org[0]==end[0]:
-                    if end[1]<org[1]:
-                        temp = org
-                        org = end
-                        end = temp
-                    self.drawdip(org,end,w,"v","blue")
-                if org[1]==end[1]:
-                    if end[0]<org[0]:
-                        temp = org
-                        org = end
-                        end = temp
-                    self.drawdip(org,end,w,"h","blue")
-                menumethods.dip_coords=[]
+                print org,end
+                if org[0]==8:
+                    if org[1]<end[1]:
+                        print "8 down"
+                        self.drawdip(org,end,w,"d","black")
+                    if org[1]>end[1]:
+                        print "8 up"
+                        self.drawdip(org,end,w,"u","black")
+                if org[0]==10:
+                    temp = org
+                    org = end
+                    end = temp
+                    if org[1]<end[1]:
+                        print "10 up"
+                        self.drawdip(org,end,w,"d","black")
+                    if org[1]>end[1]:
+                        print "10 down"
+                        self.drawdip(org,end,w,"u","black") 
+                menumethods.clearall()
         else:
             print "not adding!"
             
     def processscMouseEvent(self,event):
         w=event.widget
-        if menumethods.add:
+        if menumethods.add: 
+            pass
             
+    def insertdip(self):
+        def handle():
+            pass
+        global dipopen
+        if menumethods.add and not dipopen:
+            dipopen=True
+            popup = tk.Toplevel()
+            popup.title("Dip Size")
+            popup.resizable(False,False)
+            msg = tk.Message(popup,text="Enter the number of Dip Pins:")
+            msg.grid(row=0,column=0,sticky='NEWS')
+            
+            #vcmd = (popup.register(self.validnums),'%d', '%i', '%P', '%s', '%S', '%v', '%V', '%W')
+            #size = tk.Entry(popup,validate = 'key', validatecommand = vcmd)
+            
+            
+            size = tk.Listbox(popup,selectmode = tk.SINGLE,height = 5)
+            for item in ["8", "10", "12", "14","16"]:
+                size.insert(tk.END, item)
+            size.grid(row=0,column=1,sticky='NEWS')
+            size.bind("<Double-Button-1>", lambda notused : self.dipenter(popup,int(size.get(tk.ACTIVE))))
+            
+            enter = tk.Button(popup,text="Enter", command = lambda: self.dipenter(popup,int(size.get(tk.ACTIVE))))
+            enter.grid(row=1,column=0,sticky='NEWS')
+            
+            cancel = tk.Button(popup,text="Cancel", command = lambda: self.kill(popup,"d"))
+            cancel.grid(row=1,column=1,sticky='NEWS')
+            
+#    def validnums(self, action, index, value_if_allowed,prior_value, text, validation_type, trigger_type, widget_name):
+#        if text in '012468' or text in ' ':
+#            try:
+#                float(value_if_allowed)
+#                return True
+#            except ValueError:
+#                return False
+#        else:
+#            return False    
+            
+    def kill(self,pp,ident):
+        if ident == "d":
+            global dipopen
+            dipopen = False
+        pp.destroy()    
+                
+    def dipenter(self,pp,val):
+        global dipopen
+        dipopen = False
+        self.dipsize = val
+        menumethods.insertDip()
+        pp.destroy()        
         
     def xpixtoloc(self,val):
-#        v = val/30
-#        if v>=3:
-#            v-=1
-#        if v>=8:
-#            v-=1
-#        if v>=13:
-#            v-=1
         return val/30#v
         
     def xloctopix(self,val):
-#        v = val
-#        if v>=3:
-#            v+=1
-#        if v>=9:
-#            v+=1
-#        if v>=15:
-#            v+=1
-#        v = v*30
         return val*30#v
         
     def yloctopix(self,val):
@@ -340,7 +387,18 @@ class gui(tk.Tk):
         for i in resbut:
             i.destroy()   
     def drawdip(self,origin,end,w,orent,c):
-        self.drawres(self,origin,end,w,orent,c)
+        pixorigin=(self.xloctopix(origin[0]),self.yloctopix(origin[1]))
+        pixend=(self.xloctopix(end[0]),self.yloctopix(end[1]))
+        #w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill="red")     
+        if orent=="u":
+            w.parent.create_rectangle(pixorigin[0]-5,pixend[1]-5,pixend[0]+17+5,pixorigin[1]+16+5,fill=c)
+            resbut = [i for i in self.buttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc<=origin[1] and i.yloc>=end[1]]
+        elif orent=="d":
+            w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+17+5,pixend[1]+16+5,fill=c)
+            resbut = [i for i in self.buttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc>=origin[1] and i.yloc<=end[1]]
+        self.buttonlist = [i for i in self.buttonlist if i not in resbut]
+        for i in resbut:
+            i.destroy() 
         
 if __name__ == "__main__":
     app = gui(None)

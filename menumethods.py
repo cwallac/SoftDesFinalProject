@@ -38,7 +38,7 @@ def aboutcreat():
         
         button = tk.Button(popup,text="Close", command = lambda: aboutkill(popup,"c"))
         button.pack()
-
+        
 def aboutkill(pp,ident):
     if ident=="p":   
         global aboutprogopen
