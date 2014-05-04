@@ -58,9 +58,17 @@ class trace(object):
 class power(object):
 	def __init__(self,value,connections):
 		self.value = value
+		self.cx = {}
+		self.cy = {}
 		self.x = {}
 		self.y = {}
-		self.connections = {1:[]}
+		self.connections = connections
+		self.name = 'power'
+
+class ground(power):
+	def __init__(self,value,connections):
+		super(ground,self).__init__(value,connections)
+		self.name = 'ground'
 		
 if __name__ == '__main__':
 
