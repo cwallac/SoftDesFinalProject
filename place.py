@@ -4,34 +4,35 @@ from BreadboardModule import *
 def placingCD(new_component,list_of_components):
 	list_of_components.append(new_component)
 	for i in range(len(list_of_components)):
-		if i == 1:
+		if i == 0:
 			if list_of_components[i].connections == {}:
-				place_component(list_of_components[i],5,5)
+				place_component(list_of_components[i],4,4)
 		else: 
 			for j in list_of_components[i].connections:
 		 		if j == 1: 
 					k = list_of_components[i].connections[j]
-					if k == []:
-						place_component(list_of_components[i],list_of_components[i].cx1,list_of_components[i].cy1)
+					if len(k) == 0:
+						place_component(list_of_components[i],i+4,i+4)
 					elif k[0].name == 'power':
 						place_power(k[0],list_of_components[i])
 						place_component(list_of_components[i],list_of_components[i].cx1,list_of_components[i].cy1)
 					else:
 						for b in range(len(k)):
+							print b
 							print k[b]
 							place_component(list_of_components[i],k[b].cx[2],k[b].cy[2])
-				if j > 1:
-					k = list_of_components[i].connections[j]
-					if k == []:
-						place_component(list_of_components[i],list_of_components[i].cx1,list_of_components[i].cy1)
-					elif k[0].name == 'power':
-						place_power(k[0],list_of_components[i])
-						place_component(list_of_components[i],list_of_components[i].cx1,list_of_components[i].cy1)
-					else:
-						for b in range(len(k)):
-							update_connections(k[b],1,list_of_components[i])
-							print k[b].connections
-							place_component(k[b],list_of_components[i].cx[2],list_of_components[i].cy[2])
+			# if j > 1:
+			# 	k = list_of_components[i].connections[j]
+			# 	if k == []:
+			# 		pass
+			# 	elif k[0].name == 'power':
+			# 		place_power(k[0],list_of_components[i])
+			# 		place_component(list_of_components[i],list_of_components[i].cx1,list_of_components[i].cy1)
+			# 	else:
+			# 		for b in range(len(k)):
+			# 			update_connections(k[b],1,list_of_components[i])
+			# 			print k[b].connections
+			# 			place_component(k[b],list_of_components[i].cx[2],list_of_components[i].cy[2])
 
 	 		
 
