@@ -28,15 +28,15 @@ class Controller():
 		self.model = model
 
 	def componentAdded(self,rawData):
-		self.rawList.append(rawData)
-		if rawData[3] == 'bb':
-			self.rawToBread(rawData)
-			self.checkBBConnections
-		else:
-            self.rawToSchema(rawData)
-            self.checkConnections(self.objectList)
-            self.model.placeCompOnBreadBoard(self.objectList[-1],self.model.board,self.model.compList)
-            return self.BBtoGUI(self.model.compList
+         self.rawList.append(rawData)
+         if rawData[3] == 'bb':
+             self.rawToBread(rawData)
+             self.checkBBConnections
+         else:
+             self.rawToSchema(rawData)
+             self.checkConnections(self.objectList)
+             self.model.placeCompOnBreadBoard(self.objectList[-1],self.model.board,self.model.compList)
+             return self.BBtoGUI(self.model.compList)
 
 			
 	

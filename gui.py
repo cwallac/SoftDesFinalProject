@@ -805,38 +805,122 @@ class gui(tk.Tk):
 #        for i in resbut:
 #            i.destroy()
 
-    def addcomponent(self,origin,end,ident,loc):
+    def addcomponent(self,org,end,ident,loc):
         if loc=="bb":
+            w = self.buttonlist[0]
             if ident == "r":
-                menumethods.res_coords.append(origin)
-                menumethods.res_coords.append(end)
+                if org[0]==end[0]:
+                    if end[1]<org[1]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawres(org,end,w,"v",'#d2b48c')
+                if org[1]==end[1]:
+                    if end[0]<org[0]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawres(org,end,w,"h",'#d2b48c')
             if ident == "c":
-                menumethods.cap_coords.append(origin)
-                menumethods.cap_coords.append(end)
+                if org[0]==end[0]:
+                    if end[1]<org[1]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawcap(org,end,w,"v",'#730000')
+                if org[1]==end[1]:
+                    if end[0]<org[0]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawcap(org,end,w,"h",'#730000')
             if ident == "d":
-                menumethods.dip_coords.append(origin)
-                menumethods.dip_coords.append(end)
+                if org[0]==8:
+                    if org[1]<end[1]:
+                        self.drawdip(org,end,w,"d","black")
+                    if org[1]>end[1]:
+                        self.drawdip(org,end,w,"u","black")
+                if org[0]==10:
+                    temp = org
+                    org = end
+                    end = temp
+                    if org[1]<end[1]:
+                        self.drawdip(org,end,w,"d","black")
+                    if org[1]>end[1]:
+                        self.drawdip(org,end,w,"u","black")
             if ident == "w":
-                menumethods.wire_coords.append(origin)
-                menumethods.wire_coords.append(end)
+                if org[0]==end[0]:
+                    if end[1]<org[1]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawwire(org,end,w,"v",self.wirecolor)
+                if org[1]==end[1]:
+                    if end[0]<org[0]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawwire(org,end,w,"h",self.wirecolor)
         if loc=="sc":
             if ident == "r":
-                menumethods.res_coordssc.append(origin)
-                menumethods.res_coordssc.append(end)
+                if org[0]==end[0]:
+                    if end[1]<org[1]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawressc(org,end,w,"v",'#d2b48c')
+                if org[1]==end[1]:
+                    if end[0]<org[0]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawressc(org,end,w,"h",'#d2b48c')
             if ident == "c":
-                menumethods.cap_coordssc.append(origin)
-                menumethods.cap_coordssc.append(end)
+                if org[0]==end[0]:
+                    if end[1]<org[1]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawcapsc(org,end,w,"v",'#730000')
+                if org[1]==end[1]:
+                    if end[0]<org[0]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawcapsc(org,end,w,"h",'#730000')
             if ident == "d":
-                menumethods.dip_coordssc.append(origin)
-                menumethods.dip_coordssc.append(end)
+                if org[0]<end[0]:
+                    if org[1]<end[1]:
+                        self.drawdipsc(org,end,w,"d","black")
+                    if org[1]>end[1]:
+                        self.drawdipsc(org,end,w,"u","black")
+                if org[0]>end[0]:
+                    temp = org
+                    org = end
+                    end = temp
+                    if org[1]<end[1]:
+                        self.drawdipsc(org,end,w,"d","black")
+                    if org[1]>end[1]:
+                        self.drawdipsc(org,end,w,"u","black")
             if ident == "w":
-                menumethods.wire_coordssc.append(origin)
-                menumethods.wire_coordssc.append(end)
+                if org[0]==end[0]:
+                    if end[1]<org[1]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawwiresc(org,end,w,"v",self.wirecolor)
+                if org[1]==end[1]:
+                    if end[0]<org[0]:
+                        temp = org
+                        org = end
+                        end = temp
+                    self.drawwiresc(org,end,w,"h",self.wirecolor)
                 
     def lastcomponent(self,loc):
         if loc=="sc":
             coords = self.controller.componentAdded(self.sccomplist[-1])
             newcomp = coords[-1]
+            print coords
             self.addcomponent(newcomp[0],newcomp[1],newcomp[2],newcomp[3])
         if loc=="bb":
             coords = self.controller.componentAdded(self.bbcomplist[-1])
