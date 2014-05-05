@@ -2,7 +2,9 @@
 """
 Created on Mon Apr  7 03:21:32 2014
 
-@author: dcelik
+@author: Deniz Celik
+
+Note: Most computers will be missing 
 """
 
 import Tkinter as tk
@@ -29,6 +31,8 @@ class gui(tk.Tk):
         self.scbuttonlist = []
         self.bbcomplist = []
         self.sccomplist = []
+        self.bbobjects = []
+        self.scobjects = []
         self.DFTCLR = ""
         self.initialize()
 
@@ -680,13 +684,18 @@ class gui(tk.Tk):
         pixend=(self.xloctopix(end[0],"bb"),self.yloctopix(end[1],"bb"))
         #w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill="red")     
         if orent=="v":
-            w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill=c)
-            w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)),text = str(self.resval),fill="white")
-            w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)+16),text = self.resunits,fill="white")
+            tag = w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill=c)
+            self.bbobjects.append(tag)
+            tag = w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)),text = str(self.resval),fill="white")
+            self.bbobjects.append(tag)
+            tag = w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)+16),text = self.resunits,fill="white")
+            self.bbobjects.append(tag)
             resbut = [i for i in self.buttonlist if i.yloc>=origin[1] and i.yloc<=end[1] and i.xloc==origin[0]]
         elif orent=="h":
-            w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+17+5,pixorigin[1]+16+5,fill=c)
-            w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,pixend[1]+8),text = str(self.resval)+" "+self.resunits,fill="white")
+            tag = w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+17+5,pixorigin[1]+16+5,fill=c)
+            self.bbobjects.append(tag)
+            tag = w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,pixend[1]+8),text = str(self.resval)+" "+self.resunits,fill="white")
+            self.bbobjects.append(tag)
             resbut = [i for i in self.buttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc==origin[1]]
         self.buttonlist = [i for i in self.buttonlist if i not in resbut]
         for i in resbut:
@@ -697,13 +706,18 @@ class gui(tk.Tk):
         pixend=(self.xloctopix(end[0],"bb"),self.yloctopix(end[1],"bb"))
         #w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill="red")     
         if orent=="v":
-            w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill=c)
-            w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)),text = str(self.capval),fill="white")
-            w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)+16),text = self.capunits,fill="white")
+            tag = w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill=c)
+            self.bbobjects.append(tag)
+            tag = w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)),text = str(self.capval),fill="white")
+            self.bbobjects.append(tag)
+            tag = w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)+16),text = self.capunits,fill="white")
+            self.bbobjects.append(tag)
             resbut = [i for i in self.buttonlist if i.yloc>=origin[1] and i.yloc<=end[1] and i.xloc==origin[0]]
         elif orent=="h":
-            w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+17+5,pixorigin[1]+16+5,fill=c)
-            w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,pixend[1]+8),text = str(self.capval)+" "+self.capunits,fill="white")
+            tag = w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+17+5,pixorigin[1]+16+5,fill=c)
+            self.bbobjects.append(tag)
+            tag = w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,pixend[1]+8),text = str(self.capval)+" "+self.capunits,fill="white")
+            self.bbobjects.append(tag)
             resbut = [i for i in self.buttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc==origin[1]]
         self.buttonlist = [i for i in self.buttonlist if i not in resbut]
         for i in resbut:
@@ -714,11 +728,13 @@ class gui(tk.Tk):
         pixend=(self.xloctopix(end[0],"bb"),self.yloctopix(end[1],"bb"))
         #w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill="red")     
         if orent=="u":
-            w.parent.create_rectangle(pixorigin[0]-5,pixend[1]-5,pixend[0]+17+5,pixorigin[1]+16+5,fill=c)
+            tag = w.parent.create_rectangle(pixorigin[0]-5,pixend[1]-5,pixend[0]+17+5,pixorigin[1]+16+5,fill=c)
+            self.bbobjects.append(tag)
             #w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,((pixorigin[0]+pixend[0])/2)+8),text = str(self.resval)+" "+self.resunits,fill="white")
             resbut = [i for i in self.buttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc<=origin[1] and i.yloc>=end[1]]
         elif orent=="d":
-            w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+17+5,pixend[1]+16+5,fill=c)
+            tag = w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+17+5,pixend[1]+16+5,fill=c)
+            self.bbobjects.append(tag)
             #w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,((pixorigin[0]+pixend[0])/2)+8),text = str(self.resval)+" "+self.resunits,fill="white")
             resbut = [i for i in self.buttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc>=origin[1] and i.yloc<=end[1]]
         self.buttonlist = [i for i in self.buttonlist if i not in resbut]
@@ -730,10 +746,12 @@ class gui(tk.Tk):
         pixend=(self.xloctopix(end[0],"bb"),self.yloctopix(end[1],"bb"))
         #w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill="red")     
         if orent=="v":
-            w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill=c)
+            tag = w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill=c)
+            self.bbobjects.append(tag)
             resbut = [i for i in self.buttonlist if i.yloc>=origin[1] and i.yloc<=end[1] and i.xloc==origin[0]]
         elif orent=="h":
-            w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+17+5,pixorigin[1]+16+5,fill=c)
+            tag = w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+17+5,pixorigin[1]+16+5,fill=c)
+            self.bbobjects.append(tag)
             resbut = [i for i in self.buttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc==origin[1]]
         self.buttonlist = [i for i in self.buttonlist if i not in resbut]
         for i in resbut:
@@ -745,14 +763,18 @@ class gui(tk.Tk):
         pixend=(self.xloctopix(end[0],"sc"),self.yloctopix(end[1],"sc"))
         #w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill="red")     
         if orent=="v":
-            w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixorigin[0]+13+7,pixend[1]+12+7,fill=c)
-            w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)),text = str(self.resval),fill="white")
-            w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)+16),text = self.resunits,fill="white")
-            w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,((pixorigin[0]+pixend[0])/2)+8),text = str(self.resval)+" "+self.resunits,fill="white")
+            tag = w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixorigin[0]+13+7,pixend[1]+12+7,fill=c)
+            self.scobjects.append(tag)
+            tag = w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)),text = str(self.resval),fill="white")
+            self.scobjects.append(tag)
+            tag = w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)+16),text = self.resunits,fill="white")
+            self.scobjects.append(tag)
 #            resbut = [i for i in self.scbuttonlist if i.yloc>=origin[1] and i.yloc<=end[1] and i.xloc==origin[0]]
         elif orent=="h":
-            w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixend[0]+13+7,pixorigin[1]+12+7,fill=c)
-            w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,pixend[1]+8),text = str(self.resval)+" "+self.resunits,fill="white")
+            tag = w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixend[0]+13+7,pixorigin[1]+12+7,fill=c)
+            self.scobjects.append(tag)
+            tag = w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,pixend[1]+8),text = str(self.resval)+" "+self.resunits,fill="white")
+            self.scobjects.append(tag)
 #            resbut = [i for i in self.scbuttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc==origin[1]]
 #        self.scbuttonlist = [i for i in self.scbuttonlist if i not in resbut]
 #        for i in resbut:
@@ -763,13 +785,18 @@ class gui(tk.Tk):
         pixend=(self.xloctopix(end[0],"sc"),self.yloctopix(end[1],"sc"))
         #w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill="red")     
         if orent=="v":
-            w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixorigin[0]+13+7,pixend[1]+12+7,fill=c)
-            w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)),text = str(self.capval),fill="white")
-            w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)+16),text = self.capunits,fill="white")
+            tag = w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixorigin[0]+13+7,pixend[1]+12+7,fill=c)
+            self.scobjects.append(tag)
+            tag = w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)),text = str(self.capval),fill="white")
+            self.scobjects.append(tag)
+            tag = w.parent.create_text((pixend[0]+8,((pixorigin[1]+pixend[1])/2)+16),text = self.capunits,fill="white")
+            self.scobjects.append(tag)
 #            resbut = [i for i in self.scbuttonlist if i.yloc>=origin[1] and i.yloc<=end[1] and i.xloc==origin[0]]
         elif orent=="h":
-            w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixend[0]+13+7,pixorigin[1]+12+7,fill=c)
-            w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,pixend[1]+8),text = str(self.capval)+" "+self.capunits,fill="white")
+            tag = w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixend[0]+13+7,pixorigin[1]+12+7,fill=c)
+            self.scobjects.append(tag)
+            tag = w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,pixend[1]+8),text = str(self.capval)+" "+self.capunits,fill="white")
+            self.scobjects.append(tag)
 #            resbut = [i for i in self.scbuttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc==origin[1]]
 #        self.scbuttonlist = [i for i in self.scbuttonlist if i not in resbut]
 #        for i in resbut:
@@ -780,11 +807,13 @@ class gui(tk.Tk):
         pixend=(self.xloctopix(end[0],"sc"),self.yloctopix(end[1],"sc"))
         #w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill="red")     
         if orent=="u":
-            w.parent.create_rectangle(pixorigin[0]-5,pixend[1]-5,pixend[0]+13+5,pixorigin[1]+12+5,fill=c)
+            tag = w.parent.create_rectangle(pixorigin[0]-5,pixend[1]-5,pixend[0]+13+5,pixorigin[1]+12+5,fill=c)
+            self.scobjects.append(tag)
             #w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,((pixorigin[1]+pixend[1])/2)+8),text = str(self.resval)+" "+self.resunits,fill="white")
 #            resbut = [i for i in self.scbuttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc<=origin[1] and i.yloc>=end[1]]
         elif orent=="d":
-            w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+13+5,pixend[1]+12+5,fill=c)
+            tag = w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixend[0]+13+5,pixend[1]+12+5,fill=c)
+            self.scobjects.append(tag)
             #w.parent.create_text((((pixorigin[0]+pixend[0])/2)+8,((pixorigin[1]+pixend[1])/2)+8),text = str(self.resval)+" "+self.resunits,fill="white")
 #            resbut = [i for i in self.scbuttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc>=origin[1] and i.yloc<=end[1]]
 #        self.scbuttonlist = [i for i in self.scbuttonlist if i not in resbut]
@@ -796,10 +825,12 @@ class gui(tk.Tk):
         pixend=(self.xloctopix(end[0],"sc"),self.yloctopix(end[1],"sc"))
         #w.parent.create_rectangle(pixorigin[0]-5,pixorigin[1]-5,pixorigin[0]+17+5,pixend[1]+16+5,fill="red")     
         if orent=="v":
-            w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixorigin[0]+13+7,pixend[1]+12+7,fill=c)
+            tag = w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixorigin[0]+13+7,pixend[1]+12+7,fill=c)
+            self.scobjects.append(tag)
 #            resbut = [i for i in self.scbuttonlist if i.yloc>=origin[1] and i.yloc<=end[1] and i.xloc==origin[0]]
         elif orent=="h":
-            w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixend[0]+13+7,pixorigin[1]+12+7,fill=c)
+            tag = w.parent.create_rectangle(pixorigin[0]-7,pixorigin[1]-7,pixend[0]+13+7,pixorigin[1]+12+7,fill=c)
+            self.scobjects.append(tag)
 #            resbut = [i for i in self.scbuttonlist if i.xloc>=origin[0] and i.xloc<=end[0] and i.yloc==origin[1]]
 #        self.scbuttonlist = [i for i in self.buttonlist if i not in resbut]
 #        for i in resbut:
@@ -918,16 +949,46 @@ class gui(tk.Tk):
                     self.drawwiresc(org,end,w,"h",self.wirecolor)
                 
     def lastcomponent(self,loc):
-        if loc=="sc":
-            coords = self.controller.componentAdded(self.sccomplist[-1])
-            newcomp = coords[-1]
-            print coords
-            self.addcomponent(newcomp[0],newcomp[1],newcomp[2],newcomp[3])
         if loc=="bb":
             coords = self.controller.componentAdded(self.bbcomplist[-1])
-            newcomp = coords[-1]
-            print coords
-            self.addcomponent(newcomp[0],newcomp[1],newcomp[2],newcomp[3])
+            self.sccomplist = coords
+            for i in self.scobjects:
+                self.scanvas.delete(i)
+            for i in self.scbuttonlist:
+                i.destroy()
+            self.scbuttonlist = []    
+            xrag = [i for i in range(12,980,73)]
+            yrag = [i for i in range(11,810,65)]
+            for i in xrag:
+                for j in yrag:
+                    n = nodes.scnode(self.scanvas,i,j,"black")
+                    n.bind("<Button-1>",self.processscMouseEvent)
+                    self.scbuttonlist.append(n)  
+            for i in coords:
+                self.addcomponent(i[0],i[1],i[2],i[3])
+        if loc=="sc":
+            coords = self.controller.componentAdded(self.sccomplist[-1])
+            self.bbcomplist = coords
+            for i in self.bbobjects:
+                self.bbcanvas.delete(i)
+            for i in self.buttonlist:
+                i.destroy()
+            self.buttonlist = []
+            xrag = [i for i in range(120,450,30) if i!=270]
+            for i in xrag:
+                for j in range(8,800,30):
+                    n = nodes.bbnode(self.bbcanvas,i,j,self.DFTCLR)
+                    n.bind("<Button-1>",self.processbbMouseEvent)
+                    self.buttonlist.append(n)
+    
+            yrag = [i for i in range(68,818,30) if i!=218 and i!=398 and i!=578 and i!=758]
+            for i in [30,60,480,510]:
+                for j in yrag:
+                    n=nodes.bbnode(self.bbcanvas,i,j,self.DFTCLR)  
+                    n.bind("<Button-1>",self.processbbMouseEvent)
+                    self.buttonlist.append(n)
+            for i in coords:
+                self.addcomponent(i[0],i[1],i[2],i[3])
             
 if __name__ == "__main__":
     mod = C.Model()

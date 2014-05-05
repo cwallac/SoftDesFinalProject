@@ -30,9 +30,7 @@ def placeFirstComponent(component,breadboard,compList):
 		component.y[i*2+1] = i
 		component.y[i*2+2] = i
 		breadboard[2][i].Occupied[4] = component
-		for j in range(5):
-			if -3+component.pin_gap >= j:
-				breadboard[3][i].Occupied[j] = component
+		breadboard[3][i].Occupied[0] = component
 
 
 
@@ -216,7 +214,7 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 	print "RUNNING DEFAULT SECOND PLACEMENT FAILED"
 	occupiedFlag = 0
 	if component.y[1] < component.pin_gap:
-		if component.x[1] < 10:
+		if component.x[1] < 9:
 			openSpot =findOpenSpace(component,breadboard,2)
 			print "NEXT OPEN SPOT IS", openSpot
 			xpos = component.x[1]
@@ -236,12 +234,15 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 					component.y[2] = openSpot + component.pin_gap
 					breadboard[2][openSpot].Occupied[k] = component
 					breadboard[2][component.y[2]].Occupied[k] = component
+					breadboard[2][component.y[2]+1].Occupied[k] = True
 					return None
 
 
 		else:
+			print "WE ARE ON TEH RIGHT"
 			openSpot =findOpenSpace(component,breadboard,3)
 			print "NEXT OPEN SPOT IS", openSpot
+			print component.x, "LINE 244 THESE ARE X VALUES"
 			xpos = component.x[1]
 			ypos = component.y[1]
 			Trace = trace(xpos,ypos,xpos,openSpot,component.connections[1][-1],component.connections[1][-1])
@@ -253,12 +254,15 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 			for k in range(5):
 				if breadboard[3][openSpot].Occupied[k] == False:
 
-					component.x[1] = breadboard[2][0].xpos + k
+					component.x[1] = breadboard[3][0].xpos + k
 					component.y[1] = openSpot
 					component.x[2] = component.x[1]
 					component.y[2] = openSpot + component.pin_gap
 					breadboard[3][openSpot].Occupied[k] = component
 					breadboard[3][component.y[2]].Occupied[k] = component
+					breadboard[3][component.y[2]+1].Occupied[k] = True
+					print component.x, "THIS IS THE NEW X VALUES"
+					print component.y, "THIS IS THE COMPONENTS Y"
 					return None
 		#FIND NEXT OPEN SPOT TO PLACE COMPONENT THEN DRAW TRACE DO DRAW TRACE FUNCTION
 	else:
@@ -287,6 +291,7 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 				component.x[2] = breadboard[2][0].xpos+4 
 				breadboard[2][openSpot].Occupied[4] = component
 				breadboard[2][openSpot+component.pin_gap].Occupied[4] = component
+				breadboard[2][openSpot+component.pin_gap+1].Occupied[4] = component
 				Tracer = trace(component.x[1],component.y[1],component.x[1],component.y[2],[component.connections[1]],[component.connections[1]])
 				compList.append(Tracer)
 				print "ADDED TRACE LINE 288"
@@ -688,7 +693,7 @@ def placeComponent(component,breadboard,compList):
 			print matchingComponent.connections[Connections]
 			for comp in range(len(matchingComponent.connections[Connections])):
 				if matchingComponent.connections[Connections][comp] == component:
-					CorrectIndex = comp-1
+					CorrectIndex = comp
 					print CorrectIndex, "IS THE CORRECT INDEX"
 
 			print Connections, "THESE ARE THE MATCHED CONNECTIONS"
@@ -713,9 +718,9 @@ def placeComponent(component,breadboard,compList):
 			component.connections[1] = current2
 			component.connections[2] = current1
 			for Connections in matchingComponent.connections:
-				for comp in matchingComponent.connections[Connections]:
-					if comp == component:
-						CorrectIndex = Connections-1
+				for comp in range(len(matchingComponent.connections[Connections])):
+					if matchingComponent.connections[Connections][comp] == component:
+						CorrectIndex = comp #THIS MIGHT BE CONNECTIONS -1 
 						print CorrectIndex, "IS THE CORRECT INDEX"
 
 
@@ -808,15 +813,15 @@ if __name__ == '__main__':
 	board = createBreadboard()
 
 	#SET RAIL VALUES INITIALLY DO THAT
-	GND = power('GROUND',[])
-	V5 = power('5 volts',[])
-	V2 = power('2 volts',[])
-	board[0].Occupied[0] = GND
-	GND.x[1] = 0
-	GND.y[1] = 0
-	board[1].Occupied[0] = V2
-	board[4].Occupied[0] = V2
-	board[5].Occupied[0] = V5
+	#GND = power('GROUND',[])
+	#V5 = power('5 volts',[])
+	#V2 = power('2 volts',[])
+	#board[0].Occupied[0] = GND
+	#GND.x[1] = 0
+	#GND.y[1] = 0
+	#board[1].Occupied[0] = V2
+	#board[4].Occupied[0] = V2
+	#board[5].Occupied[0] = V5
 
 
 	Resistor1 = resistor(1,0,0,4,5,'h',{1:[],2:[]})
@@ -907,14 +912,20 @@ if __name__ == '__main__':
 
 	placeComponent(Resistor4,board,compList)
 	"""
-	placeFirstComponent(DIP,board,compList)
-	for i in range(DIP.number_of_pins+1):
-		DIP.connections[i] = []
-	Resistor1.connections[1].append(DIP)
-	Resistor1.connections[2].append(DIP)
-	DIP.connections[5].append(Resistor1)
-	DIP.connections[8].append(Resistor1)
-	placeComponent(Resistor1,board,compList)
+	placeFirstComponent(Resistor1,board,compList)
+	#for i in range(DIP.number_of_pins+1):
+	#	DIP.connections[i] = []
+	Resistor1.connections[2].append(Resistor2)
+	Resistor2.connections[1].append(Resistor1)
+
+	placeComponent(Resistor2,board,compList)
+
+	Resistor1.connections[2].append(Resistor3)
+	Resistor2.connections[1].append(Resistor3)
+	Resistor3.connections[1].append(Resistor2)
+	Resistor3.connections[1].append(Resistor1)
+	print "PLACING RESISTOR 3"
+	placeComponent(Resistor3,board,compList)
 	print DIP.x
 	print DIP.y
 	print Resistor1.x
