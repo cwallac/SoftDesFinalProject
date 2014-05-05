@@ -64,8 +64,8 @@ class trace(object):
 		self.x2 = x2
 		self.y1 = y1
 		self.y2 = y2
-		self.x = {}
-		self.y = {}
+		self.x = {1:x1,2:x2}
+		self.y = {1:y1,2:y2}
 		self.cx = {}
 		self.cy = {}
 		self.x[1] = x1

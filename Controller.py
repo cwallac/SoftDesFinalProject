@@ -35,12 +35,15 @@ class Controller():
              self.rawToBread(rawData)
              self.checkBBConnections(self.objectList)
              self.model.placeCompOnSchema(self.objectList[-1],self.model.compList)
+
              return self.SCtoGUI(self.model.compList)
 
          else:
              self.rawToSchema(rawData)
              self.checkConnections(self.objectList)
              self.model.placeCompOnBreadBoard(self.objectList[-1],self.model.board,self.model.compList)
+             print self.model.compList, "THESE ARE COMPONENTS IN THE MODEL"
+             
              return self.BBtoGUI(self.model.compList)
 
             
@@ -65,9 +68,10 @@ class Controller():
             elif isinstance(comp,dip):
                 exportData.append('d')
             elif isinstance(comp,trace):
-                exportData.append('t')
+                exportData.append('w')
             exportData.append('bb')
             exportList.append(exportData)
+        print exportList, "THIS IS THE DATA SEND TO THE GUI"
         return exportList
 
     def SCtoGUI(self,componentList):
