@@ -828,7 +828,10 @@ class gui(tk.Tk):
             if ident == "w":
                 menumethods.wire_coordssc.append(origin)
                 menumethods.wire_coordssc.append(end)
-       
+                
+    def lastcomponent(self):
+       pass
+
 if __name__ == "__main__":
     app = gui(None)
     app.title('C.I.R.C.U.I.T')
