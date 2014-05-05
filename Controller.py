@@ -62,6 +62,25 @@ class Controller():
 			exportList.append(exportData)
 		return exportList
 
+	def SCtoGUI(self,componentList):
+		exportList = []
+		exportData = []
+		for comp in componentList:
+			exportData = []
+			exportData.append((comp.cx[1],comp.cy[1])
+			exportData.append((comp.cx[2],comp.cy[2]))
+			if isinstance(comp,resistor):
+				exportData.append('r')
+			elif isinstance(comp,capacitor):
+				exportData.append('c')
+			elif isinstance(comp,dip):
+				exportData.append('d')
+			elif isinstance(comp,trace):
+				exportData.append('t')
+			exportData.append('sc')
+			exportList.append(exportData)
+		return exportList
+
 
 	def rawToSchema(self,rawData):
 		if rawData[2] == 'r':
