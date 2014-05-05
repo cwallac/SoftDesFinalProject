@@ -862,6 +862,7 @@ class gui(tk.Tk):
                         end = temp
                     self.drawwire(org,end,w,"h",self.wirecolor)
         if loc=="sc":
+            w = self.scbuttonlist[0]
             if ident == "r":
                 if org[0]==end[0]:
                     if end[1]<org[1]:
@@ -924,8 +925,10 @@ class gui(tk.Tk):
             self.addcomponent(newcomp[0],newcomp[1],newcomp[2],newcomp[3])
         if loc=="bb":
             coords = self.controller.componentAdded(self.bbcomplist[-1])
-            print "sccoords:"+str(coords)
-
+            newcomp = coords[-1]
+            print coords
+            self.addcomponent(newcomp[0],newcomp[1],newcomp[2],newcomp[3])
+            
 if __name__ == "__main__":
     mod = C.Model()
     con = C.Controller(mod)
