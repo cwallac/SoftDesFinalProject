@@ -163,8 +163,14 @@ class Controller():
             return point
 
     def checkConnections(self,objects):
+
+        for comp in objects:
+            for index in comp.connections:
+                comp.connections[index] = []
         #STILL NEED TO HANDLE DIPS
+
         for component in objects:
+
             print component.connections, "THIS IS THE CONNECTIONS"
             for testComp in objects:
                 if component == testComp:
@@ -178,6 +184,7 @@ class Controller():
                             if component.cx[pins] == testComp.cx[TestPins] and component.cy[pins] == testComp.cy[TestPins]:
                                 print "APPENDING TO CONNECTIONS", pins, TestPins, component
                                 component.connections[pins].append(testComp)
+            print component.connections, "THIS IS THE COMPONENTS CONNECTIONS"
 
     def checkBBConnections(self,objects):
                 for comp1 in objects:

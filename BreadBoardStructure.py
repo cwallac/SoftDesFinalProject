@@ -30,9 +30,7 @@ def placeFirstComponent(component,breadboard,compList):
 		component.y[i*2+1] = i
 		component.y[i*2+2] = i
 		breadboard[2][i].Occupied[4] = component
-		for j in range(5):
-			if -3+component.pin_gap >= j:
-				breadboard[3][i].Occupied[j] = component
+		breadboard[3][i].Occupied[0] = component
 
 
 
