@@ -143,10 +143,7 @@ class Controller():
     def convertBBtoRawCoordinate(self,point):
         if point <=1:
             return point + 1
-        elif 11<= point <= 15:
-            return point -1
-        elif  point >= 17:
-            return point -1
+        
         else:
             return point
 
@@ -155,11 +152,7 @@ class Controller():
     def convertToBreadCoordinate(self,point):
         if point <= 2:
             return point-1
-        elif 10 <= point <= 14:
-            return point + 1
-
-        elif point >= 16:
-            return point +1
+        
         else:
             return point
 
@@ -190,8 +183,8 @@ class Controller():
                                                                                 pass
                                                                         else:
                                                                                 comp1.connections[pins1].append(comp2)
-                                                        elif comp1.cx[pins1] == 17 or comp1.cx[pins1] == 18:
-                                                                if comp2.cx[pins2] != 17 or comp2.cx[pins2] != 18:
+                                                        elif comp1.cx[pins1] == 16 or comp1.cx[pins1] == 17:
+                                                                if comp2.cx[pins2] != 16 or comp2.cx[pins2] != 17:
                                                                         pass
                                                                 else:
                                                                         comp1.connections[pins1].append(comp2)
@@ -199,8 +192,8 @@ class Controller():
                                                                 if comp1.cx[pins1] <=8 and comp1.cx[pins1] >=4:
                                                                         if comp2.cx[pins2] <=8 and comp2.cx[pins2] >=4:
                                                                                 comp1.connections[pins1].append(comp2)
-                                                                elif comp1.cx[pins1] <=16 and comp1.cx[pins1] >=11:
-                                                                        if comp2.cx[pins2] <=16 and comp2.cx[pins2] >=11:
+                                                                elif comp1.cx[pins1] <=15 and comp1.cx[pins1] >=10:
+                                                                        if comp2.cx[pins2] <=15 and comp2.cx[pins2] >=10:
                                                                                 comp1.connections[pins1].append(comp2)
 
 

@@ -46,8 +46,8 @@ def createBreadboard():
 
 	leftRail1 =  rails(0)
 	leftRail2 = rails(1)
-	rightRail1 = rails(17)
-	rightRail2 = rails(18)
+	rightRail1 = rails(16)
+	rightRail2 = rails(17)
 
 	leftBuildZone = []
 
@@ -57,7 +57,7 @@ def createBreadboard():
 	rightBuildZone = []
 
 	for i in range(leftRail1.length):
-		rightBuildZone.append(rows((i),11,'right', 'rightrow' + str(i)))
+		rightBuildZone.append(rows((i),10,'right', 'rightrow' + str(i)))
 
 	breadboard = [leftRail1,leftRail2,leftBuildZone,rightBuildZone,rightRail1,rightRail2]
 
