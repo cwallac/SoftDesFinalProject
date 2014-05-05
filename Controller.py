@@ -1,6 +1,8 @@
 from BreadBoardStructure import *
 from ComponentModule import *
 from BreadboardModule import *
+from random import randint
+
 
 from place import *
 
@@ -31,6 +33,7 @@ class Controller():
          self.rawList.append(rawData)
          if rawData[3] == 'bb':
              self.rawToBread(rawData)
+             self.checkBBConnections(self.objectList)
              self.model.placeCompOnSchema(self.objectList[-1],self.model.compList)
              return self.SCtoGUI(self.model.compList)
 
@@ -50,6 +53,8 @@ class Controller():
         exportData = []
         for comp in componentList:
             exportData = []
+            print comp.x, "X COMPS"
+            print comp.y, "Y COMPS"
             exportData.append((self.convertBBtoRawCoordinate(comp.x[1]),comp.y[1]+1))
             exportData.append((self.convertBBtoRawCoordinate(comp.x[2]),comp.y[2]+1))
             if isinstance(comp,resistor):
@@ -86,7 +91,7 @@ class Controller():
 
     def rawToSchema(self,rawData):
         if rawData[2] == 'r':
-            Res = resistor(5,0,0,0,0,'h',{})
+            Res = resistor(randint(1,1000),0,0,0,0,'h',{})
             Res.cx[1] = rawData[0][0]
             Res.cx[2] = rawData[1][0]
             Res.cy[1] = rawData[0][1]
@@ -94,7 +99,7 @@ class Controller():
             print "ADDED CX"
             self.objectList.append(Res)
         elif rawData[2] == 'w':
-            Trace = trace(5,0,0,0,0,0)
+            Trace = trace(randint(1,1000),0,0,0,0,0)
             Trace.cx[1] = rawData[0][0]
             Trace.cx[2] = rawData[1][0]
             Trace.cy[1] = rawData[0][1]
@@ -103,7 +108,7 @@ class Controller():
         elif rawData[2] == 'd':
             pass
         else:
-            Res = capacitor(5,0,0,0,0,'h',{})
+            Res = capacitor(randint(1,1000),0,0,0,0,'h',{})
             Res.cx[1] = rawData[0][0]
             Res.cx[2] = rawData[1][0]
             Res.cy[1] = rawData[0][1]
@@ -116,7 +121,7 @@ class Controller():
         yori = rawData[0][1] + 1
         yend = rawData[1][1] + 1
         if rawData[2] == 'r':
-            Res = resistor(5,0,0,0,0,'h',{})
+            Res = resistor(randint(1,1000),0,0,0,0,'h',{})
             Res.x[1] = xori
             Res.x[2] = xend
             Res.y[1] = yori
@@ -124,7 +129,7 @@ class Controller():
             print "ADDED CX"
             self.objectList.append(Res)
         elif rawData[2] == 'w':
-            Trace = trace(5,0,0,0,0,0)
+            Trace = trace(randint(1,1000),0,0,0,0,0)
             Trace.x[1] = xori
             Trace.x[2] = xend
             Trace.y[1] = yori
@@ -133,7 +138,7 @@ class Controller():
         elif rawData[2] == 'd':
             pass
         else:
-            Res = capacitor(5,0,0,0,0,'h',{})
+            Res = capacitor(randint(1,1000),0,0,0,0,'h',{})
             Res.cx[1] = xori
             Res.cx[2] = xend
             Res.cy[1] = yori
@@ -141,6 +146,7 @@ class Controller():
             self.objectList.append(Res)
 
     def convertBBtoRawCoordinate(self,point):
+
         if point <=1:
             return point + 1
         
@@ -159,6 +165,7 @@ class Controller():
     def checkConnections(self,objects):
         #STILL NEED TO HANDLE DIPS
         for component in objects:
+            print component.connections, "THIS IS THE CONNECTIONS"
             for testComp in objects:
                 if component == testComp:
                     pass
@@ -167,7 +174,9 @@ class Controller():
                     for pins in component.cx:
                         print pins
                         for TestPins in testComp.cx:
+
                             if component.cx[pins] == testComp.cx[TestPins] and component.cy[pins] == testComp.cy[TestPins]:
+                                print "APPENDING TO CONNECTIONS", pins, TestPins, component
                                 component.connections[pins].append(testComp)
 
     def checkBBConnections(self,objects):

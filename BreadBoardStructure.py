@@ -55,9 +55,11 @@ def identifyConnections(component,breadboard):
 				for row in range(breadboard[0].length):
 					for tile in range(5):
 						if breadboard[rail][row].Occupied[tile] == component:
+							print "WITHIN IDENTIFY WE HAVE A MATCH"
 							returnRail.append(rail)
 							returnRow.append(row)
 							returnTile.append(tile)
+							print returnRail, returnRow, returnTile
 
 
 
@@ -648,7 +650,9 @@ def placeComponent(component,breadboard,compList):
 	compList.append(component)
 	print "RUNNNING PLACE COMPONENT"
 	#CURRENTLY NOT DEALING WIHT POWER RAILS
-	if component.name == 'dip':
+	if component.name == 'trace':
+		print "NOT PLACING A TRACE"
+	elif component.name == 'dip':
 		#DIP PLACEMENT
 		offset = dipStartingPoint(breadboard,component)
 		for i in range(component.number_of_pins+1):
@@ -681,9 +685,10 @@ def placeComponent(component,breadboard,compList):
 		print "BACK IN PLACE COMPONENT", identifyingTuple
 		for Connections in matchingComponent.connections:
 			print matchingComponent.connections, "THESE ARE TEH CONNECTIONS WHY IS THERE AN ERROR"
-			for comp in matchingComponent.connections[Connections]:
-				if comp == component:
-					CorrectIndex = Connections-1
+			print matchingComponent.connections[Connections]
+			for comp in range(len(matchingComponent.connections[Connections])):
+				if matchingComponent.connections[Connections][comp] == component:
+					CorrectIndex = comp-1
 					print CorrectIndex, "IS THE CORRECT INDEX"
 
 			print Connections, "THESE ARE THE MATCHED CONNECTIONS"
@@ -749,7 +754,7 @@ def leftOrRight(component,pin):
 	
 	if 1 < component.x[pin] <= 8:
 		return 'LEFT'
-	elif 10 <component.x[pin] < 17: 
+	elif 9 <component.x[pin] < 17: 
 		return 'RIGHT'
 
 	else :

@@ -72,6 +72,7 @@ class trace(object):
 		self.x[2] = x2
 		self.y[1] = y1
 		self.y[2] = y2
+		self.name = 'trace'
 		self.connections = {1:[],2:[]}
 		self.value1 = value1
 		self.value2 = value2
@@ -95,9 +96,10 @@ class ground(power):
     
 		
 if __name__ == '__main__':
-
-	RES = resistor(45,1,1,{1:'GRD',2:'VSS'},5)
-	print RES.pin_gap
-	DIP = dip(1,1,{1:'VREF'},'POOP')
-	print DIP.name
-	print DIP.number_of_pins
+	TRA = trace(1,1,2,2,0,0)
+	#RES = resistor(45,1,1,{1:'GRD',2:'VSS'},5)
+	#print RES.pin_gap
+	#DIP = dip(1,1,{1:'VREF'},'POOP')
+	#print DIP.name
+	#print DIP.number_of_pins
+	print TRA.connections
