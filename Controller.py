@@ -31,6 +31,7 @@ class Controller():
 		self.rawList.append(rawData)
 		if rawData[3] == 'bb':
 			self.rawToBread(rawData)
+			self.checkBBConnections
 		else:
 			self.rawToSchema(rawData)
 			self.checkConnections(self.objectList)
@@ -45,8 +46,8 @@ class Controller():
 		exportData = []
 		for comp in componentList:
 			exportData = []
-			exportData.append((self.convertBBtoRawCoordinate(comp.x[1]),comp.y[1]))
-			exportData.append((self.convertBBtoRawCoordinate(comp.x[2]),comp.y[2]))
+			exportData.append((self.convertBBtoRawCoordinate(comp.x[1]),comp.y[1]+1))
+			exportData.append((self.convertBBtoRawCoordinate(comp.x[2]),comp.y[2]+1))
 			if isinstance(comp,resistor):
 				exportData.append('r')
 			elif isinstance(comp,capacitor):
@@ -152,6 +153,32 @@ class Controller():
 						for TestPins in testComp.cx:
 							if component.cx[pins] == testComp.cx[TestPins] and component.cy[pins] == testComp.cy[TestPins]:
 								component.connections[pins].append(testComp)
+
+	def checkBBConnections(self,objects):
+                for comp1 in objects:
+                        for comp2 in objects:
+                                if comp2 == comp1:
+                                        pass
+                                else:
+                                        for pins1 in comp1.cx:
+                                                for pins2 in comp2.cx:
+                                                        if comp1.cx[pins1] == 0 or comp1.cx[pins1] == 1:
+                                                                        if comp2.cx[pins2] !=0 or comp2.cx[pins2]!=1:
+                                                                                pass
+                                                                        else:
+                                                                                comp1.connections[pins1].append(comp2)
+                                                        elif comp1.cx[pins1] == 17 or comp1.cx[pins1] == 18:
+                                                                if comp2.cx[pins2] != 17 or comp2.cx[pins2] != 18:
+                                                                        pass
+                                                                else:
+                                                                        comp1.connections[pins1].append(comp2)
+                                                        elif comp1.cy[pins1] == comp2.cy[pins2]:
+                                                                if comp1.cx[pins1] <=8 and comp1.cx[pins1] >=4:
+                                                                        if comp2.cx[pins2] <=8 and comp2.cx[pins2] >=4:
+                                                                                comp1.connections[pins1].append(comp2)
+                                                                elif comp1.cx[pins1] <=16 and comp1.cx[pins1] >=11:
+                                                                        if comp2.cx[pins2] <=16 and comp2.cx[pins2] >=11:
+                                                                                comp1.connections[pins1].append(comp2)
 
 
 
