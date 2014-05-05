@@ -185,4 +185,3 @@ if __name__ == '__main__':
 	print Cont.BBtoGUI(Test.compList)
 	print Cont.objectList[1].connections
 	print Test.compList[0].x
-
