@@ -106,10 +106,10 @@ class Controller():
             self.objectList.append(Res)
         elif rawData[2] == 'w':
             Trace = trace(randint(1,1000),0,0,0,0,0)
-            Trace.cx[1] = rawData[0][0]
-            Trace.cx[2] = rawData[1][0]
-            Trace.cy[1] = rawData[0][1]
-            Trace.cy[2] = rawData[1][1]
+            Trace.cx[1] = []
+            Trace.cx[2] = []
+            Trace.cy[1] = []
+            Trace.cy[2] = []
             self.objectList.append(Trace)
         elif rawData[2] == 'd':
             numberOfPins = (rawData[1][1]-rawData[0][1])*2+2

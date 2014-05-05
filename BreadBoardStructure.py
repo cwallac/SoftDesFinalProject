@@ -43,6 +43,8 @@ def placeFirstComponent(component,breadboard,compList):
 def identifyConnections(component,breadboard):
 	'''Returns a tuple of rail connection found at,row connection found at and assoaicated tile it was found at '''
 	print "RUNNING IDENTIFY CONNECTIONS"
+	if component == None:
+		return ([],[],[])
 	returnRail = []
 	returnRow = []
 	returnTile = []
@@ -248,10 +250,10 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 			Trace = trace(xpos,ypos,xpos,openSpot,component.connections[1][-1],component.connections[1][-1])
 			compList.append(Trace)
 			print "ADDED TRACE LINE 246"
-			breadboard[3][ypos].Occupied[xpos-breadboard[2][0].xpos] = Trace
-			breadboard[3][openSpot].Occupied[xpos-breadboard[2][0].xpos] = Trace
+			breadboard[3][ypos].Occupied[xpos-breadboard[3][0].xpos] = Trace
+			breadboard[3][openSpot].Occupied[xpos-breadboard[3][0].xpos] = Trace
 			print "WE PLACED A TRACE"
-			for k in range(5):
+			for k in range(4,1,-1):
 				if breadboard[3][openSpot].Occupied[k] == False:
 
 					component.x[1] = breadboard[3][0].xpos + k
@@ -279,6 +281,7 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 					
 				component.x[2] = component.x[1]
 				breadboard[2][component.y[1]-component.pin_gap].Occupied[component.x[2]-breadboard[2][0].xpos] = component
+				breadboard[2][component.y[1]-component.pin_gap+1].Occupied[component.x[2]-breadboard[2][0].xpos] = component
 				return 'PLACED'
 			else: 
 				
@@ -619,14 +622,15 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail,compList):
 					
 				upOrDown = conComp.y[value] - component.y[2]
 				print "CONNECTION IS EITHER UP OR DOWN", upOrDown
+				print rail, "THIS SI THE RAIL OF THE BOARD WE ARE ON"
 				if upOrDown != 0:
 					for k in range(5):
-						if breadboard[rail][component.y[2]].Occupied[k] == False and breadboard[rail][component.y[2]+upOrDown].Occupied[k] == False:
-							Trace = trace(breadboard[rail][0].xpos + k, component.y[2], breadboard[rail][0].xpos + k, component.y[2]+upOrDown,component,component)
+						if breadboard[rail+direction][component.y[2]].Occupied[k] == False and breadboard[rail+direction][component.y[2]+upOrDown].Occupied[k] == False:
+							Trace = trace(breadboard[rail+direction][0].xpos + k, component.y[2], breadboard[rail+direction][0].xpos + k, component.y[2]+upOrDown,component,component)
 							compList.append(Trace)
 							print "ADDED RACE LINE 618"
-							breadboard[rail][component.y[2]].Occupied[k] = component
-							breadboard[rail][component.y[2]+upOrDown].Occupied[k] = component
+							breadboard[rail+direction][component.y[2]].Occupied[k] = component
+							breadboard[rail+direction][component.y[2]+upOrDown].Occupied[k] = component
 							return None
 
 
@@ -637,6 +641,23 @@ def placeSecondPin(coordinate,distance,component,breadboard,rail,compList):
 
 			else:
 				print "WE ARE ON THE SAME SIDE"
+				if breadboard[rail][component.y[1]+component.pin_gap].Occupied[component.x[1]-breadboard[rail][0].xpos] == False:
+					index = indexFinder(component,component.connections[2][-1])
+					
+					print index
+
+					component.x[2] = component.x[1]
+					component.y[2] = component.y[1] + component.pin_gap
+					breadboard[rail][component.y[2]].Occupied[component.x[1]-breadboard[rail][0].xpos] = component
+					for k in range(5):
+						if breadboard[rail][component.y[2]].Occupied[k] == False and breadboard[rail][component.connections[2][-1].y[index]].Occupied[k] == False:
+							Trace = trace(breadboard[rail][0].xpos+k,component.y[2],breadboard[rail][0].xpos+k,component.connections[2][-1].y[index],component,component)
+							breadboard[rail][component.y[2]].Occupied[k] = component
+							breadboard[rail][component.connections[2][-1].y[index]].Occupied[k] = component
+							compList.append(Trace)
+							return None
+				else:
+					print "THIS IS OCCUPIED"
 def dipStartingPoint(breadboard,placeDip):
 	print "RUNNING DIPSTARTINGPOINT"
 	for i in range(30):
@@ -685,74 +706,77 @@ def placeComponent(component,breadboard,compList):
 	else:
 		flag = 0
 		CorrectIndex = 0
-		matchingComponent = component.connections[1][-1]
-		print matchingComponent , "IS THE MATCHING COMPONENT WHY DO WE HAVE AN ERROR"
-		identifyingTuple = identifyConnections(matchingComponent,breadboard)
-		print "BACK IN PLACE COMPONENT", identifyingTuple
-		for Connections in matchingComponent.connections:
-			print matchingComponent.connections, "THESE ARE TEH CONNECTIONS WHY IS THERE AN ERROR"
-			print matchingComponent.connections[Connections]
-			for comp in range(len(matchingComponent.connections[Connections])):
-				if matchingComponent.connections[Connections][comp] == component:
-					CorrectIndex = comp
-					print CorrectIndex, "IS THE CORRECT INDEX"
-
-			print Connections, "THESE ARE THE MATCHED CONNECTIONS"
-		# FIND PIN IN EACH SPOT, CHECK ITS CONNECTION, RAIL ROW AND TILE BECOME THE TUPLE THAT MATCHES IT
-		rail = identifyingTuple[0][CorrectIndex]#THIS IS THE PROBLEM
-		Row = identifyingTuple[1][CorrectIndex]
-		Tile = identifyingTuple[2][CorrectIndex]
-		print rail, Row, Tile
-		print identifyingTuple[0],identifyingTuple[1],identifyingTuple[2]
-		if rail ==2 or rail ==3:
+		if len(component.connections[1]) == 0:
 			pass
 		else:
-			matchingComponent = component.connections[2][0]
-			print matchingComponent
+			matchingComponent = component.connections[1][-1]
+			print matchingComponent , "IS THE MATCHING COMPONENT WHY DO WE HAVE AN ERROR"
 			identifyingTuple = identifyConnections(matchingComponent,breadboard)
-			print identifyingTuple, "This is teh spot of the connection"
+			print "BACK IN PLACE COMPONENT", identifyingTuple
+			for Connections in matchingComponent.connections:
+				print matchingComponent.connections, "THESE ARE TEH CONNECTIONS WHY IS THERE AN ERROR"
+				print matchingComponent.connections[Connections]
+				for comp in range(len(matchingComponent.connections[Connections])):
+					if matchingComponent.connections[Connections][comp] == component:
+						CorrectIndex = comp
+						print CorrectIndex, "IS THE CORRECT INDEX"
+
+				print Connections, "THESE ARE THE MATCHED CONNECTIONS"
+			# FIND PIN IN EACH SPOT, CHECK ITS CONNECTION, RAIL ROW AND TILE BECOME THE TUPLE THAT MATCHES IT
 			rail = identifyingTuple[0][CorrectIndex]#THIS IS THE PROBLEM
 			Row = identifyingTuple[1][CorrectIndex]
 			Tile = identifyingTuple[2][CorrectIndex]
-			current1 = component.connections[1]
-			current2 = component.connections[2]
-			component.connections[1] = current2
-			component.connections[2] = current1
-			for Connections in matchingComponent.connections:
-				for comp in range(len(matchingComponent.connections[Connections])):
-					if matchingComponent.connections[Connections][comp] == component:
-						CorrectIndex = comp #THIS MIGHT BE CONNECTIONS -1 
-						print CorrectIndex, "IS THE CORRECT INDEX"
+			print rail, Row, Tile
+			print identifyingTuple[0],identifyingTuple[1],identifyingTuple[2]
+			if rail ==2 or rail ==3:
+				pass
+			else:
+				matchingComponent = component.connections[2][0]
+				print matchingComponent
+				identifyingTuple = identifyConnections(matchingComponent,breadboard)
+				print identifyingTuple, "This is teh spot of the connection"
+				rail = identifyingTuple[0][CorrectIndex]#THIS IS THE PROBLEM
+				Row = identifyingTuple[1][CorrectIndex]
+				Tile = identifyingTuple[2][CorrectIndex]
+				current1 = component.connections[1]
+				current2 = component.connections[2]
+				component.connections[1] = current2
+				component.connections[2] = current1
+				for Connections in matchingComponent.connections:
+					for comp in range(len(matchingComponent.connections[Connections])):
+						if matchingComponent.connections[Connections][comp] == component:
+							CorrectIndex = comp #THIS MIGHT BE CONNECTIONS -1 
+							print CorrectIndex, "IS THE CORRECT INDEX"
 
 
-		for i in breadboard[rail][Row].Occupied[Tile].connections:
-			print breadboard[rail][Row].Occupied[Tile].connections[i], "IS ITS CONNECTIONS"
-			print component
-			for test in range(len(breadboard[rail][Row].Occupied[Tile].connections[i])):
-				if breadboard[rail][Row].Occupied[Tile].connections[i][test] == component: 
-					print "FLAG RAISED" #THIS WORKS
-					flag = 1
-			if flag ==1:	
+			for i in breadboard[rail][Row].Occupied[Tile].connections:
+				print breadboard[rail][Row].Occupied[Tile].connections[i], "IS ITS CONNECTIONS"
+				print component
+				for test in range(len(breadboard[rail][Row].Occupied[Tile].connections[i])):
+					if breadboard[rail][Row].Occupied[Tile].connections[i][test] == component: 
+						print "FLAG RAISED" #THIS WORKS
+						flag = 1
+				if flag ==1:	
 				
-				SetPosValues(breadboard[rail][Row].Occupied[Tile],component,i,1,breadboard)
-				print "BACK IN PLACE COMPONENT"
-				if len(component.connections[2]) != 0:
-					values = closestConnections(component.connections[2][-1],breadboard,component) #SHOULD THIS BE THE CONNECTION WE ARE MATCHING TO?
-				else:
-					values = False
-				print "BACK IN PLACE COMPONENT"
-				if values == False:
-					distance = False
-					coordinate = False
-				else:
-					print values, "THESE ARE THE CLOSEST REFERENCE OF RESISTOR 2"
-					distance = values[1]
-					coordinate = values[0]
-				print component, "Trying to place second pin"
-				placeSecondPin(coordinate,distance,component,breadboard,rail,compList)
-				print "BACK IN PLACE COMPONENT"
-				print component.x[1]
-				return None
+					SetPosValues(breadboard[rail][Row].Occupied[Tile],component,i,1,breadboard)
+					print "BACK IN PLACE COMPONENT"
+					if len(component.connections[2]) != 0:
+						values = closestConnections(component.connections[2][-1],breadboard,component) #SHOULD THIS BE THE CONNECTION WE ARE MATCHING TO?
+					else:
+						values = False
+					print "BACK IN PLACE COMPONENT"
+					if values == False:
+						distance = False
+						coordinate = False
+					else:
+						print values, "THESE ARE THE CLOSEST REFERENCE OF RESISTOR 2"
+						distance = values[1]
+						coordinate = values[0]
+					print component, "Trying to place second pin"
+					placeSecondPin(coordinate,distance,component,breadboard,rail,compList)
+					print "BACK IN PLACE COMPONENT"
+					print component.x[1]
+					return None
 				
 
 			
