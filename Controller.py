@@ -69,8 +69,8 @@ class Controller():
         exportData = []
         for comp in componentList:
             exportData = []
-            exportData.append((comp.cx[1],comp.cy[1]))
-            exportData.append((comp.cx[2],comp.cy[2]))
+            exportData.append((comp.cx[1]+1,comp.cy[1]+1))
+            exportData.append((comp.cx[2]+1,comp.cy[2]+1))
             if isinstance(comp,resistor):
                 exportData.append('r')
             elif isinstance(comp,capacitor):
