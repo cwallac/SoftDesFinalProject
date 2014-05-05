@@ -170,40 +170,36 @@ class Controller():
                 if component == testComp:
                     pass
                 else:
-
                     for pins in component.cx:
                         print pins
                         for TestPins in testComp.cx:
-
                             if component.cx[pins] == testComp.cx[TestPins] and component.cy[pins] == testComp.cy[TestPins]:
                                 print "APPENDING TO CONNECTIONS", pins, TestPins, component
                                 component.connections[pins].append(testComp)
 
     def checkBBConnections(self,objects):
-                for comp1 in objects:
-                        for comp2 in objects:
-                                if comp2 == comp1:
-                                        pass
-                                else:
-                                        for pins1 in comp1.cx:
-                                                for pins2 in comp2.cx:
-                                                        if comp1.cx[pins1] == 0 or comp1.cx[pins1] == 1:
-                                                                        if comp2.cx[pins2] !=0 or comp2.cx[pins2]!=1:
-                                                                                pass
-                                                                        else:
-                                                                                comp1.connections[pins1].append(comp2)
-                                                        elif comp1.cx[pins1] == 16 or comp1.cx[pins1] == 17:
-                                                                if comp2.cx[pins2] != 16 or comp2.cx[pins2] != 17:
-                                                                        pass
-                                                                else:
-                                                                        comp1.connections[pins1].append(comp2)
-                                                        elif comp1.cy[pins1] == comp2.cy[pins2]:
-                                                                if comp1.cx[pins1] <=8 and comp1.cx[pins1] >=4:
-                                                                        if comp2.cx[pins2] <=8 and comp2.cx[pins2] >=4:
-                                                                                comp1.connections[pins1].append(comp2)
-                                                                elif comp1.cx[pins1] <=15 and comp1.cx[pins1] >=10:
-                                                                        if comp2.cx[pins2] <=15 and comp2.cx[pins2] >=10:
-                                                                                comp1.connections[pins1].append(comp2)
+        for i in range(len(objects)):
+            for pin in objects[i].x:
+                for pin2 in objects[-1].x:
+                    if objects[i].x[pin] == 0 or objects[i].x[pin] == 1:
+                        print "nothing"
+                        if objects[-1].x[pin2] == objects[i].x[pin]:
+                            objects[i].connections[pin].append(objects[-1])
+                    elif objects[i].x[pin] == 16 or objects[i].x[pin] == 17:
+                        print "something"
+                        if objects[-1].x[pin2] == objects[i].x[pin]:
+                            objects[i].connections[pin].append(objects[-1])
+                    elif objects[i].y[pin] == objects[-1].y[pin2]:
+                        print "something else"
+                        if objects[i].x[pin] <=8 and objects[i].x[pin] >=4:
+                            if objects[-1].x[pin2] <=8 and objects[-1].x[pin2] >=4:
+                                objects[i].connections[pin].append(objects[-1])
+                        elif objects[i].x[pin] <=15 and objects[i].x[pin] >=10:
+                                if objects[-1].x[pin2] <=15 and objects[-1].x[pin2] >=10:
+                                        objects[i].connections[pin].append(objects[-1])
+                    else:
+                        print "FUCK"
+            print objects[i].connections
 
 
 
