@@ -234,6 +234,7 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 					component.y[2] = openSpot + component.pin_gap
 					breadboard[2][openSpot].Occupied[k] = component
 					breadboard[2][component.y[2]].Occupied[k] = component
+					breadboard[2][component.y[2]+1].Occupied[k] = True
 					return None
 
 
@@ -259,6 +260,7 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 					component.y[2] = openSpot + component.pin_gap
 					breadboard[3][openSpot].Occupied[k] = component
 					breadboard[3][component.y[2]].Occupied[k] = component
+					breadboard[3][component.y[2]+1].Occupied[k] = True
 					print component.x, "THIS IS THE NEW X VALUES"
 					print component.y, "THIS IS THE COMPONENTS Y"
 					return None
@@ -289,6 +291,7 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 				component.x[2] = breadboard[2][0].xpos+4 
 				breadboard[2][openSpot].Occupied[4] = component
 				breadboard[2][openSpot+component.pin_gap].Occupied[4] = component
+				breadboard[2][openSpot+component.pin_gap+1].Occupied[4] = component
 				Tracer = trace(component.x[1],component.y[1],component.x[1],component.y[2],[component.connections[1]],[component.connections[1]])
 				compList.append(Tracer)
 				print "ADDED TRACE LINE 288"
