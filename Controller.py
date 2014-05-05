@@ -31,7 +31,9 @@ class Controller():
          self.rawList.append(rawData)
          if rawData[3] == 'bb':
              self.rawToBread(rawData)
-             self.checkBBConnections
+             self.model.placeCompOnSchema(self.objectList[-1],self.model.compList)
+             return self.SCtoGUI(self.model.compList)
+
          else:
              self.rawToSchema(rawData)
              self.checkConnections(self.objectList)
