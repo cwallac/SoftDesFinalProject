@@ -10,7 +10,9 @@ import Tkinter as tk
 from PIL import Image, ImageTk
 import nodes
 import menumethods
-#from Integrate import Model as M
+import Controller as C
+#from Controller import Controller as C
+#from Controller import Model as M
 
 RHEIGHT = 810
 RWIDTH  = 985
@@ -19,9 +21,10 @@ resopen = False
 capopen = False
 wireopen = False
 class gui(tk.Tk):
-    def __init__(self,parent): 
+    def __init__(self,parent,controller): 
         tk.Tk.__init__(self,parent)
         self.parent = parent
+        self.controller = controller
         self.buttonlist = []  
         self.scbuttonlist = []
         self.bbcomplist = []
@@ -94,6 +97,7 @@ class gui(tk.Tk):
             self.insertWire()
         if ident=="rK" or  ident=="cK" or  ident=="wK" or  ident=="dK":
             self.addcomplist(ident,loc)
+            self.lastcomponent(loc)
             menumethods.clearall()
     
     def addcomplist(self,ident,loc):
@@ -829,10 +833,18 @@ class gui(tk.Tk):
                 menumethods.wire_coordssc.append(origin)
                 menumethods.wire_coordssc.append(end)
                 
-    def lastcomponent(self):
-       pass
+    def lastcomponent(self,loc):
+        if loc=="sc":
+            coords = self.controller.componentAdded(self.sccomplist[-1])
+            newcomp = coords[-1]
+            self.addcomponent(newcomp[0],newcomp[1],newcomp[2],newcomp[3])
+        if loc=="bb":
+            coords = self.controller.componentAdded(self.bbcomplist[-1])
+            print "sccoords:"+str(coords)
 
 if __name__ == "__main__":
-    app = gui(None)
+    mod = C.Model()
+    con = C.Controller(mod)
+    app = gui(None,con)
     app.title('C.I.R.C.U.I.T')
     app.mainloop()
