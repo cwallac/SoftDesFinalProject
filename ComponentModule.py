@@ -9,6 +9,9 @@ class Component(object):
 		self.cx1 = cx1
 		self.cy1 = cy1
 		self.connections = connections
+		for i in range(self.number_of_pins):
+			self.connections[i+1] = []
+		
 		self.orientation = orientation
 		self.pin_gap = pin_gap
 		self.value = value
@@ -24,18 +27,15 @@ class Component(object):
 	def __str__ (self):
 		return '%s of %s' % (self.name,self.value)
 
-	def placing(self,x1,y1,x2,y2,SC_BB = 'BB'):
-		if SC_BB == 'BB':
-			self.x[1] = x1
-			self.x[2] = x2
-			self.y[1] = y1
-			self.y[2] = y2
-		else: 
-			self.cx[1] = x1
-			self.cx[2] = x2
-			self.cy[1] = y1
-			self.cy[2] = y2
-
+	def placingSc(self,X1,Y1): 
+		self.cx[1] = X1
+		self.cy[1] = Y1
+		if self.orientation == 'h':
+			self.cy[2] = Y1
+			self.cx[2] = X1+1
+		else:
+			self.cx[2] = X1
+			self.cy[2] = Y1+1
 
 class resistor(Component):
 	"""A component to be placed on the breadboard. Has a resistance and a size."""
