@@ -9,6 +9,9 @@ class Component(object):
 		self.cx1 = cx1
 		self.cy1 = cy1
 		self.connections = connections
+		for i in range(self.number_of_pins):
+			self.connections[i] = []
+		
 		self.orientation = orientation
 		self.pin_gap = pin_gap
 		self.value = value
