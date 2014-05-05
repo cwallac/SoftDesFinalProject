@@ -6,7 +6,7 @@ def placingCD(new_component,list_of_components):
 	for i in range(len(list_of_components)):
 		if i == 1:
 			if list_of_components[i].connections == {}:
-				place_component(list_of_components[i],list_of_components[i].cx1,list_of_components[i].cy1)
+				place_component(list_of_components[i],5,5)
 		else: 
 			for j in list_of_components[i].connections:
 		 		if j == 1: 
