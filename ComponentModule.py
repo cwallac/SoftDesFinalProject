@@ -10,7 +10,7 @@ class Component(object):
 		self.cy1 = cy1
 		self.connections = connections
 		for i in range(self.number_of_pins):
-			self.connections[i] = []
+			self.connections[i+1] = []
 		
 		self.orientation = orientation
 		self.pin_gap = pin_gap
