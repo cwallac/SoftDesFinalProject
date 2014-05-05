@@ -35,6 +35,7 @@ class gui(tk.Tk):
         self.scobjects = []
         self.DFTCLR = ""
         self.initialize()
+        self.wirecolor = "green"
 
     def makemenu(self):
         #creating submenus for each item        
