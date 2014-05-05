@@ -72,6 +72,7 @@ class trace(object):
 		self.x[2] = x2
 		self.y[1] = y1
 		self.y[2] = y2
+		self.connections = {1:[],2:[]}
 		self.value1 = value1
 		self.value2 = value2
 
