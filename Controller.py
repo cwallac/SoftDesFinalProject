@@ -33,13 +33,15 @@ class Controller():
 			self.rawToBread(rawData)
 			self.checkBBConnections
 		else:
-			self.rawToSchema(rawData)
-			self.checkConnections(self.objectList)
-			self.BBtoGUI
-			self.model.placeCompOnBreadBoard(self.objectList[-1],self.model.board,self.model.compList)
+            self.rawToSchema(rawData)
+            self.checkConnections(self.objectList)
+            self.model.placeCompOnBreadBoard(self.objectList[-1],self.model.board,self.model.compList)
+            return self.BBtoGUI(self.model.compList
 
 			
 	
+
+             
 
 	def BBtoGUI(self,componentList):
 		exportList = []
