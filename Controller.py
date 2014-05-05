@@ -55,8 +55,9 @@ class Controller():
             exportData = []
             print comp.x, "X COMPS"
             print comp.y, "Y COMPS"
+            
             exportData.append((self.convertBBtoRawCoordinate(comp.x[1]),comp.y[1]+1))
-            exportData.append((self.convertBBtoRawCoordinate(comp.x[2]),comp.y[2]+1))
+            exportData.append((self.convertBBtoRawCoordinate(comp.x[len(comp.x)]),comp.y[len(comp.y)]+1))
             if isinstance(comp,resistor):
                 exportData.append('r')
             elif isinstance(comp,capacitor):
@@ -90,6 +91,7 @@ class Controller():
 
 
     def rawToSchema(self,rawData):
+        print "RAW DATA IS", rawData
         if rawData[2] == 'r':
             Res = resistor(randint(1,1000),0,0,0,0,'h',{})
             Res.cx[1] = rawData[0][0]
@@ -106,7 +108,33 @@ class Controller():
             Trace.cy[2] = rawData[1][1]
             self.objectList.append(Trace)
         elif rawData[2] == 'd':
-            pass
+            numberOfPins = (rawData[1][1]-rawData[0][1])*2+2
+
+            direction = (rawData[1][0]-rawData[0][0])/abs(rawData[1][0]-rawData[0][0])
+            component = dip(0,0,0,0,'h',{},'dip',numberOfPins, pin_gap = 2)
+            for i in range(numberOfPins):
+                if direction > 0:
+
+                    if (i +1)%2 == 0:
+                        component.cx[i+1]=rawData[1][0]
+                        component.cy[i+1] = rawData[0][1]+i/2
+                    else:
+                        component.cx[i+1]=rawData[0][0]
+                        component.cy[i+1] = rawData[0][1]+i/2
+
+                else:
+                    if (i +1)%2 == 0:
+                        component.cx[i+1]=rawData[0][0]
+                        component.cy[i+1] = rawData[0][1]+i/2
+                    else:
+                        component.cx[i+1]=rawData[1][0]
+                        component.cy[i+1] = rawData[0][1]+i/2
+            print component.cx, "DIPS XPOS"
+            self.objectList.append(component)
+
+
+
+
         else:
             Res = capacitor(randint(1,1000),0,0,0,0,'h',{})
             Res.cx[1] = rawData[0][0]

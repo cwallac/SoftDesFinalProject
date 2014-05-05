@@ -321,6 +321,7 @@ def defaultSecondPlacementFailed(breadboard,component,side,compList):
 				component.x[2] = breadboard[3][0].xpos+4 
 				breadboard[3][openSpot].Occupied[0] = component
 				breadboard[3][openSpot+component.pin_gap].Occupied[0] = component
+				breadboard[3][openSpot+1].Occupied[0] = True
 				Trace = trace(component.x[1],component.y[1],component.x[1],component.y[2],[component.connections[1]],[component.connections[1]])
 				compList.append(Trace)
 				print "ADDED TRACE LINE 315"
