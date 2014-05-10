@@ -1,4 +1,4 @@
-from BreadBoardStructure import *
+from BreadBoardStructureRevised import *
 from ComponentModule import *
 from BreadboardModule import *
 from random import randint
@@ -16,7 +16,7 @@ class Model():
         if len(compList) == 0:
             placeFirstComponent(component,board,compList)
         else:
-            placeComponent(component,board,compList)
+            PlaceComponent(component,board,compList)
 
     def placeCompOnSchema(self,component,compList):
         placingCD(component,compList)
