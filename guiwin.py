@@ -4,16 +4,12 @@ Created on Mon Apr  7 03:21:32 2014
 
 @author: Deniz Celik
 
-Note: Most computers will be missing the ImageTK library that is needed
-to convert the breadboard picture into usable format. Please run a
-sudo apt-get install python-imaging-tk in the terminal to get the
-necessary modules. Thank you!
-
+Note: Most computers will be missing 
 """
 
 import Tkinter as tk
 #import ttk
-from PIL import Image, ImageTk
+#from PIL import Image#, ImageTk
 import nodes
 import menumethods
 import Controller as C
@@ -37,6 +33,7 @@ class gui(tk.Tk):
         self.sccomplist = []
         self.bbobjects = []
         self.scobjects = []
+        self.objvals = []
         self.DFTCLR = ""
         self.initialize()
         self.wirecolor = "green"
@@ -243,6 +240,7 @@ class gui(tk.Tk):
         global dipopen
         dipopen = False
         self.dipsize = val
+        self.objvals.append(val)
         menumethods.insertDip()
         pp.destroy()
         
@@ -315,10 +313,10 @@ class gui(tk.Tk):
         self.makemenu()    
         
         #creating breadboard
-        self.bbimage = Image.open("bb1.bmp")
+        #self.bbimage = Image.open("bb1.bmp")
         
-        self.bbphoto = ImageTk.PhotoImage(self.bbimage)
-        self.bbcanvas.create_image(self.bbimagewidth/2,self.bbimageheight/2,image=self.bbphoto)
+        #self.bbphoto = ImageTk.PhotoImage(self.bbimage)
+        #self.bbcanvas.create_image(self.bbimagewidth/2,self.bbimageheight/2,image=self.bbphoto)
           
         #column weight configuration
         #self.grid_columnconfigure(0,weight=1)
