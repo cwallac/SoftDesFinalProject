@@ -4,16 +4,12 @@ Created on Mon Apr  7 03:21:32 2014
 
 @author: Deniz Celik
 
-Note: Most computers will be missing the ImageTK library that is needed
-to convert the breadboard picture into usable format. Please run a
-sudo apt-get install python-imaging-tk in the terminal to get the
-necessary modules. Thank you!
-
+Note: Most computers will be missing 
 """
 
 import Tkinter as tk
 #import ttk
-from PIL import Image, ImageTk
+#from PIL import Image#, ImageTk
 import nodes
 import menumethods
 import Controller as C
@@ -37,6 +33,7 @@ class gui(tk.Tk):
         self.sccomplist = []
         self.bbobjects = []
         self.scobjects = []
+        self.objvals = []
         self.DFTCLR = ""
         self.initialize()
         self.wirecolor = "green"
@@ -243,6 +240,7 @@ class gui(tk.Tk):
         global dipopen
         dipopen = False
         self.dipsize = val
+        self.objvals.append(val)
         menumethods.insertDip()
         pp.destroy()
         
@@ -315,10 +313,10 @@ class gui(tk.Tk):
         self.makemenu()    
         
         #creating breadboard
-        self.bbimage = Image.open("bb1.bmp")
+        #self.bbimage = Image.open("bb1.bmp")
         
-        self.bbphoto = ImageTk.PhotoImage(self.bbimage)
-        self.bbcanvas.create_image(self.bbimagewidth/2,self.bbimageheight/2,image=self.bbphoto)
+        #self.bbphoto = ImageTk.PhotoImage(self.bbimage)
+        #self.bbcanvas.create_image(self.bbimagewidth/2,self.bbimageheight/2,image=self.bbphoto)
           
         #column weight configuration
         #self.grid_columnconfigure(0,weight=1)
@@ -955,63 +953,25 @@ class gui(tk.Tk):
                 
     def lastcomponent(self,loc):
         if loc=="bb":
-            print "doesn't fucking work you fucker"
-            return None
-#            newcoords = self.controller.componentAdded(self.bbcomplist[-1])
-#            oldcoords = self.sccomplist
-#            print newcoords +"list of newcoords"
-#            s = set(newcoords)
-#            print s +"newcoords"
-#            moved = [i for i in oldcoords if i not in s]
-#            s = set(oldcoords)
-#            print s +"oldcoords"
-#            newlocs = [i for i in newcoords if i not in s]
-#            indexes = [oldcoords.index(i) for i in moved]
-#            print indexes +"indexes"
-#            indices = [newcoords.index(i) for i in newlocs]
-#            print indices +"indices"
-#            if len(moved)==1:
-#                new = newcoords[-1]
-#                print new
-#                self.addcomponent(new[0],new[1],new[1],new[2])
-#            elif len(moved)>1:
-#                print indices
-#                    
-#            for i in self.scobjects:
-#                self.scanvas.delete(i)
-#            for i in self.scbuttonlist:
-#                i.destroy()
-#            self.scbuttonlist = []    
-#            xrag = [i for i in range(12,980,73)]
-#            yrag = [i for i in range(11,810,65)]
-#            for i in xrag:
-#                for j in yrag:
-#                    n = nodes.scnode(self.scanvas,i,j,"black")
-#                    n.bind("<Button-1>",self.processscMouseEvent)
-#                    self.scbuttonlist.append(n)  
-#            for i in coords:
-#                self.addcomponent(i[0],i[1],i[2],i[3])
-        if loc=="sc":            
-            newcoords = self.controller.componentAdded(self.sccomplist[-1])
-            oldcoords = self.bbcomplist
-            print newcoords +"list of newcoords"
-            s = set(newcoords)
-            print s +"newcoords"
-            moved = [i for i in oldcoords if i not in s]
-            s = set(oldcoords)
-            print s +"oldcoords"
-            newlocs = [i for i in newcoords if i not in s]
-            indexes = [oldcoords.index(i) for i in moved]
-            print indexes +"indexes"
-            indices = [newcoords.index(i) for i in newlocs]
-            print indices +"indices"
-            if len(moved)==1:
-                new = newcoords[-1]
-                print new
-                self.addcomponent(new[0],new[1],new[1],new[2])
-            elif len(moved)>1:
-                print indices
-                
+            coords = self.controller.componentAdded(self.bbcomplist[-1])
+            self.sccomplist = coords
+            for i in self.scobjects:
+                self.scanvas.delete(i)
+            for i in self.scbuttonlist:
+                i.destroy()
+            self.scbuttonlist = []    
+            xrag = [i for i in range(12,980,73)]
+            yrag = [i for i in range(11,810,65)]
+            for i in xrag:
+                for j in yrag:
+                    n = nodes.scnode(self.scanvas,i,j,"black")
+                    n.bind("<Button-1>",self.processscMouseEvent)
+                    self.scbuttonlist.append(n)  
+            for i in coords:
+                self.addcomponent(i[0],i[1],i[2],i[3])
+        if loc=="sc":
+            coords = self.controller.componentAdded(self.sccomplist[-1])
+            self.bbcomplist = coords
             for i in self.bbobjects:
                 self.bbcanvas.delete(i)
             for i in self.buttonlist:

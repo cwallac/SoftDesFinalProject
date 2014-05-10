@@ -57,7 +57,9 @@ def createBreadboard():
 	rightBuildZone = []
 
 	for i in range(leftRail1.length):
+
 		rightBuildZone.append(rows((i),9,'right', 'rightrow' + str(i)))
+
 
 	breadboard = [leftRail1,leftRail2,leftBuildZone,rightBuildZone,rightRail1,rightRail2]
 
