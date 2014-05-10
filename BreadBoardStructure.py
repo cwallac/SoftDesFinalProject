@@ -820,7 +820,7 @@ if __name__ == '__main__':
 	Resistor4 = resistor(4,0,0,4,5,'h',{1:[],2:[]})
 	Resistor5 = resistor(5,0,0,4,5,'h',{1:[],2:[]})
 	Resistor6 = resistor(6,0,0,4,5,'h',{1:[],2:[]})
-	DIP = dip(0,0,4,5,'h',{},'dip',number_of_pins = 8, pin_gap = 3)
+	DIP = dip(0,0,4,5,'h',{},'dip',number_of_pins = 8, pin_gap = 2)
 	#DIP2 = dip(4,5,'h',{3:[Resistor2]},'dip',number_of_pins = 8, pin_gap = 3)
 	
 

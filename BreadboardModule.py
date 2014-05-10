@@ -11,7 +11,7 @@ class rails(object):
 		pinDictionary = {}
 		for i in range(self.length):
 			
-			pinDictionary[i] = False 
+			pinDictionary[i] = [False] 
 		self.Occupied = pinDictionary
 		self.pin_gap = 0
 		self.value = ''
@@ -33,7 +33,7 @@ class rows(object):
 		pinDictionary = {}
 		for i in range(self.number_of_pins):
 			
-			pinDictionary[i] = False
+			pinDictionary[i] = [False]
 		
 		self.Occupied = pinDictionary
 		self.value = ''
@@ -46,18 +46,18 @@ def createBreadboard():
 
 	leftRail1 =  rails(0)
 	leftRail2 = rails(1)
-	rightRail1 = rails(17)
-	rightRail2 = rails(18)
+	rightRail1 = rails(16)
+	rightRail2 = rails(17)
 
 	leftBuildZone = []
 
 	for i in range(leftRail1.length):
-		leftBuildZone.append(rows((i),4,'left', 'leftrow' + str(i)))
+		leftBuildZone.append(rows((i),3,'left', 'leftrow' + str(i)))
 
 	rightBuildZone = []
 
 	for i in range(leftRail1.length):
-		rightBuildZone.append(rows((i),11,'right', 'rightrow' + str(i)))
+		rightBuildZone.append(rows((i),9,'right', 'rightrow' + str(i)))
 
 	breadboard = [leftRail1,leftRail2,leftBuildZone,rightBuildZone,rightRail1,rightRail2]
 
