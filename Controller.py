@@ -216,6 +216,14 @@ class Controller():
                                 component.connections[pins].append(testComp)
             print component.connections, "THIS IS THE COMPONENTS CONNECTIONS"
 
+        for traceCheck in objects:
+            if traceCheck.name == 'trace':
+                for connect1 in traceCheck.connections[1]:
+                    for connect2 in traceCheck.connections[2]:
+                        connect1.connections.append(connect2)
+                        connect2.connections.append(connect1)
+
+
     def checkBBConnections(self,objects):
         for i in range(len(objects)):
             for pin in objects[i].x:

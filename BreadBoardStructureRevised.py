@@ -366,7 +366,7 @@ def PlaceSecondPin(component,breadboard,pinToPlace,PlacedPin,compList):
 
 def FindCrossSpaceOpenAndPlace(component,breadboard,startY,direction,placedPin,OrigSide,compList,finalY):
 	print "RUNNING FIND CROSS OPEN AND PALCE"
-	if direction == 0 or direction == 1:
+	if direction == 0 or direction == 1 or direction == -1: #EVENTUALLY WILL ADD SUPPORT FOR GOING BACKWARD
 		for row in range (startY,30):
 			leftFlag = 0
 			rightFlag = 0
@@ -467,11 +467,53 @@ def FindCrossSpaceOpenAndPlace(component,breadboard,startY,direction,placedPin,O
 								drawTrace((2,row),[2,finalY],breadboard,component,placedPin,compList)
 								return None
 
+	else:
+
+
 					
 
 def moveComponent(breadboard,row,leftFlag,rightFlag):
 	if leftFlag == 1 and rightFlag == 1:
 		return False
+	elif leftFlag == 1:
+		component = breadboard[2][row].Occupied[4][0]
+		if component == True:
+			return False
+		
+		row1 = component.y[1]
+		row2 = component.y[2]
+		direction = (row2 - row1)/abs(row2-row1)
+		for k in range(5):
+			if breadboard[2][row1].Occupied[k][0] == False and breadboard[2][row2].Occupied[k][0] == False:
+				breadboard[2][row1].Occupied[4] == [False]
+				breadboard[2][row2].Occupied[4] == [False]
+				breadboard[2][row1+direction].Occupied[4] == [False]
+				breadboard[2][row1].Occupied[k] == [component,1]
+				breadboard[2][row2].Occupied[k] == [component,2]
+				breadboard[2][row1+direction].Occupied[k] == [True]
+				component.x[1] = 3 + k
+				component.x[2] = 3 + k
+				return None
+	elif rightFlag ==1:
+		component = breadboard[3][row].Occupied[0][0]
+		if component == True:
+			return False
+		
+		row1 = component.y[1]
+		row2 = component.y[2]
+		direction = (row2 - row1)/abs(row2-row1)
+		for k in range(5):
+			if breadboard[3][row1].Occupied[k][0] == False and breadboard[3][row2].Occupied[k][0] == False:
+				breadboard[3][row1].Occupied[0] == [False]
+				breadboard[3][row2].Occupied[0] == [False]
+				breadboard[3][row1+direction].Occupied[0] == [False]
+				breadboard[3][row1].Occupied[k] == [component,1]
+				breadboard[3][row2].Occupied[k] == [component,2]
+				breadboard[3][row1+direction].Occupied[k] == [True]
+				component.x[1] = 9 + k
+				component.x[2] = 9 + k
+				return None
+
 
 def PlaceFirstPin(component,breadboard,location,pin):
 

@@ -994,7 +994,7 @@ class gui(tk.Tk):
         if loc=="sc":            
             newcoords = self.controller.componentAdded(self.sccomplist[-1])
             oldcoords = self.bbcomplist
-            print newcoords +"list of newcoords"
+            print str(newcoords) +"list of newcoords"
             s = set(newcoords)
             print s +"newcoords"
             moved = [i for i in oldcoords if i not in s]
