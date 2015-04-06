@@ -467,7 +467,7 @@ def FindCrossSpaceOpenAndPlace(component,breadboard,startY,direction,placedPin,O
 								drawTrace((2,row),[2,finalY],breadboard,component,placedPin,compList)
 								return None
 
-	else:
+	#else:
 
 
 					

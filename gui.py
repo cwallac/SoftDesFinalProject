@@ -955,7 +955,7 @@ class gui(tk.Tk):
                 
     def lastcomponent(self,loc):
         if loc=="bb":
-            print "doesn't fucking work you fucker"
+            print "doesn't really work you silly goose"
             return None
 #            newcoords = self.controller.componentAdded(self.bbcomplist[-1])
 #            oldcoords = self.sccomplist

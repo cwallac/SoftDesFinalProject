@@ -245,7 +245,7 @@ class Controller():
                                 if objects[-1].x[pin2] <=15 and objects[-1].x[pin2] >=10:
                                         objects[i].connections[pin].append(objects[-1])
                     else:
-                        print "FUCK"
+                        print "OOPS"
             print objects[i].connections
 
 
